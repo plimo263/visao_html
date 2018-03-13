@@ -548,7 +548,7 @@ Selecao.prototype.addItens = function(arrayItens){
 Selecao.prototype.getSelecao = function(){
 	var select = "<select name='"+this.nome+"' id='"+this.id+"' class='"+this.classe+"' "+this.getAtributo()+">";
 	for(var x = 0;x < this.itens.length;x++){
-		if(this.itens[x][0] == this.autoSelecionado){
+		if(this.itens[x][0] == this.autoSelecionado || this.itens[x][1] == this.autoSelecionado){
 			select += "<option selected value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";
 		} else {
 			select += "<option value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";

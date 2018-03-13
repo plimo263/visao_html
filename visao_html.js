@@ -518,6 +518,7 @@ Botao.prototype.getBotao = function(){
 var Selecao = function(nome, classe, id){
 	this.itens = [];
 	this.nome = nome;
+	this.autoSelecionado;
 	ClasseId.call(this, "",classe, id);
 };
 
@@ -547,12 +548,19 @@ Selecao.prototype.addItens = function(arrayItens){
 Selecao.prototype.getSelecao = function(){
 	var select = "<select name='"+this.nome+"' id='"+this.id+"' class='"+this.classe+"' "+this.getAtributo()+">";
 	for(var x = 0;x < this.itens.length;x++){
-		select += "<option value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";
+		if(this.itens[x][0] == this.autoSelecionado){
+			select += "<option selected value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";
+		} else {
+			select += "<option value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";
+		}
 	}
 	select += "</select>";
 	return select;
 };
-
+// Metodo que define o valor que vai ser selecionado por padrao
+Selecao.prototype.setSelecionado = function(valorSelecionado){
+	this.autoSelecionado = valorSelecionado;
+}
 // Classe usada para criar um DivRow no sistema de grids do bootstrap
 var DivRow = function(classe, id){this.tamanho = 0; this.corpo = new Array(); ClasseId.call(this, "", classe, id); };
 

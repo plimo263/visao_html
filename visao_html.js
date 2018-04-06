@@ -58,7 +58,7 @@ var Titulo = function(conteudo, tamanho, classe, id){ClasseId.call(this, conteud
 
 Titulo.prototype = new ClasseId();
 Titulo.prototype.constructor = Titulo;
-Titulo.prototype.setTitulo = function(titulo){ this.titulo = titulo; }
+Titulo.prototype.setTitulo = function(titulo){ this.conteudo = titulo; }
 Titulo.prototype.getTitulo = function(){
 	var atributos = '';	
 	for(var i = 0;i < this.attr.length;i++){ 
@@ -93,7 +93,16 @@ Img.prototype.getImg = function(){
 };
 
 // Classe que instancia uma tabela
-var Tabela = function(cabecalho, corpo, classe, id, classeCabecalho){this.rodape = []; this.classeCabecalho = classeCabecalho; this.cabecalho = cabecalho instanceof Array ? cabecalho : []; this.corpo = corpo ? corpo : [[]]; ClasseId.call(this, '', classe, id);}
+var Tabela = function(cabecalho, corpo, classe, id, classeCabecalho){
+	this.rodape = []; 
+	this.classeCabecalho = classeCabecalho; this.cabecalho = cabecalho instanceof Array ? cabecalho : []; 
+	this.corpo = corpo ? corpo : [[]]; 
+	ClasseId.call(this, '', classe, id);
+	this.opcoes = {"bPaginate": false, "ordering" : true,"colReorder" : true, "scrollY": 250, "scrollCollapse": true,
+  "scrollX": true, "info" : false, "responsive": true,"autoWidth": false,
+  "search" : {"regex": true }, retrieve: true, "language": { "search": "Procurar na tabela",
+    "emptyTable" : "Nao ha dados", "zeroRecords": "Sem registros com valor informado","decimal":",","thousands":"."}};
+}
 
 Tabela.prototype = new ClasseId();
 Tabela.prototype.constructor = Tabela; 
@@ -382,45 +391,12 @@ Tabela.prototype.filtro = function(palavra){
 Tabela.prototype.desenhaDataTable = function(){
 	// Destruindo a tabela se ela existir
 	$('#'+this.id).DataTable().destroy();
-
-	$('#'+this.id).DataTable({
-           // Remove a paginacao da tabela
-          "bPaginate": false,
-          // Remove ordenacao
-          "ordering" : true,
-          //"order" : [1],
-          //"fixedColumns":[1],
-          // Este recurso define a largura das colunas
-                // Ativar a movimentaÃ§Ã£o das colunas
-          "colReorder" : true,
-          // Ativa a barra de rolagem vertical
-          "scrollY": 250,
-          // se o eixo Y for menor que onde a tabela deve estar, entÃ£o nÃ£o colocar barra de rolagem
-          "scrollCollapse": true,
-          // E ordena em rolagem horizontal
-          "scrollX": true,
-          
-          // Retira a informacao inferior
-          "info" : false,
-          // Ativa a responsividade
-	  "responsive": true,
-          // Desativar largura inteligente
-          "autoWidth": false,
-          
-          // Utilizar expressoes regulares
-          "search" : {
-              "regex": true
-           },
-          // Reiniciar o datatables
-          retrieve: true,
-          // Atualiza campos no texto informado
-          "language": {
-    "search": "Procurar na tabela",
-    "emptyTable" : "Nao ha dados",
-    "zeroRecords": "Sem registros com valor informado",
-	"decimal":",",
-	"thousands":"."}
-	});
+	var opt = this.opcoes
+	$('#'+this.id).DataTable(opt);
+}
+// Metodo usado para definir as opcoes do DataTable, quando deseja enviar opcoes personalizadas
+Tabela.prototype.setOpcoes = function(opcoes){
+	this.opcoes = opcoes;
 }
 // Metodo que calcula o rodape passando por todo o corpo
 Tabela.prototype.calculaRodape = function(camposNaoCalculaveis, valorCamposNaoCalculaveis, camposMonetarios){

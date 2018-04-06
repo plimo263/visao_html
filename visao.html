@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head><title>MANUAL CLASSES</title>
@@ -7,6 +8,11 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+   <script type="text/javascript" src="http://191.252.113.208/visao_html.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+ <script type='text/javascript'>
+google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br'});
+ </script>
 </head>
 <body>
 
@@ -27,6 +33,8 @@
 			<li><a href="#DivTabs" class="classes">DivTabs</a></li>
 			<li><a href="#Modal" class="classes">Modal</a></li>
 			<li><a href="#Grafico" class="classes">Grafico</a></li>
+			<li><a href="#Formulario" class="classes">Formulario</a></li>
+			<li><a href="#Diversos" class="classes">Diversos</a></li>
 			</ul>
 		</div>
 		<div class="col-sm-10">
@@ -72,6 +80,7 @@
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#paraAtributo">Atributos</a></li>
 					<li><a data-toggle="tab" href="#paraMetodo">Métodos</a></li>
+					<li><a data-toggle="tab" href="#paraTeste">Testes</a></li>
 					
 				</ul>
   				<div class="tab-content">
@@ -92,6 +101,14 @@
   						<p>Retorna uma representação do elemento p</p>
 						<pre>p.getPara();</pre>
   					</div>
+  					<div class="text-center tab-pane fade" id="paraTeste"><br/>
+  						<p>DIGITE CODIGOS PARA TESTES. Separe-os por ponto-virgula(;) E DEPOIS CLIQUE EM EXECUTAR
+  							</p>
+  					<textarea rows=5 cols=100></textarea><br/>
+  					<button class="executaTeste btn btn-success btn-xs">EXECUTAR</button>
+  					<br/><br/><br/>
+  					<div id="paraResult" style="border:'1px solid black'" width='600px' height='450px' ><p>QUANDO ESTIVER EXECUTANDO OS COMANDOS QUE RETORNAM REPRESENTACOES INFORME O ID paraResult PARA RECEBER ESTAS REPRESENTACOES.</p><p> EX $('#paraResult').html(p.getPara());</p></div>
+  					</div>
   				</div>
 			</div>
 			<div class="classes" style="display:none" id="Titulo">
@@ -101,6 +118,7 @@
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#tituloAtributo">Atributos</a></li>
 					<li><a data-toggle="tab" href="#tituloMetodo">Métodos</a></li>
+					<li><a data-toggle="tab" href="#tituloTeste">Testes</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade in active" id="tituloAtributo"><br/>
@@ -120,6 +138,14 @@
 						<p>Retorna a representação do elemento h*</p>
 						<pre>t.getTitulo();</pre>
 					</div>
+					<div class="text-center tab-pane fade" id="tituloTeste"><br/>
+  						<p>DIGITE CODIGOS PARA TESTES. Separe-os por ponto-virgula(;) E DEPOIS CLIQUE EM EXECUTAR
+  							</p>
+  					<textarea rows=5 cols=100></textarea><br/>
+  					<button class="executaTeste btn btn-success btn-xs">EXECUTAR</button>
+  					<br/><br/><br/>
+  					<div id="tituloResult" style="border:'1px solid black'" width='600px' height='450px' ><p>QUANDO ESTIVER EXECUTANDO OS COMANDOS QUE RETORNAM REPRESENTACOES INFORME O ID paraResult PARA RECEBER ESTAS REPRESENTACOES.</p><p> EX $('#tituloResult').html(p.getPara());</p></div>
+  					</div>
 				</div>
 			</div>
 			<div class="classes" style="display: none" id="Div">
@@ -185,6 +211,7 @@
 						<p>String: classe -> Uma classe para a tabela html.</p>
 						<p>String: id -> Um id para a tabela html.</p>
 						<p>String: classeCabecalho -> A classe do cabecalho (thead) da tabela.</p>
+						<p>Objeto: opcoes -> Opções usadas pelo DataTable no momento de criacao da tabela.</p>
 					</div>
 					<div class="tab-pane fade" id="tabelaMetodo"><br/>
 						<p class="bg-info">CONSTRUTOR: Tabela(Array cabecalho, Array[Array] corpo, String classe, String id, String classeCabecalho)</p>
@@ -217,6 +244,11 @@
 						<p class="bg-info">filtro(String palavraChave)</p>
 						<p>Metodo usado para retornar cabecalho e corpo de dados filtrados. Recebe uma string para filtro e retorna [[cabecalho],[[corpo],[corpo]]]</p>
 						<pre>var recebeNovaTabela = t.filtro('Marcos');</pre>
+						<p class="bg-info">setOpcoes(Objeto opcoes)</p>
+						<p>Permite enviar um objeto "{}" de parametros para ser usado pelo datatables (usar antes de chamar o metodo desenhaDataTable()).</p><pre>t.setOpcoes({'order':true, 'bPaginate':false});</pre>
+						<p class="bg-info">calculaRodape(Array camposNaoCalculaveis, Array valorDosCamposNaoCalculaveis, Array camposMonetarios)</p>
+						<p>Este metodo faz o calculo da tabela e coloca as informações no rodape. Ele permite que se envie um array com os indices dos campos que nao serao calculaveis, um array contendo o valor destes campos que nao serao calculaveis (este precisa ter o mesmo tamanho do array dos camposNaoCalculaveis) e também um array com os indices das colunas que contem valores monetarios. Já campos com valores de números inteiros são somados de forma correta. Qualquer campos que não esteja listado será somado como se fosse valores inteiros.Isto faz os valores do rodape serem calculados e preechidos de forma correta sem erros.</p>
+						<pre>t.calculaRodape([0,1,2], [' -- ', ' -- ', 'TOTAL'], [3,4]);</pre>
 					</div>
 				</div>
 			</div>
@@ -278,6 +310,7 @@
 						<p>String: nome -> Um nome para o select, este é o valor do atributo name</p>
 						<p>String: classe -> Define uma classe para o elemento select.</p>
 						<p>String: id -> Define um id para o elemento select.</p>
+						<p>String: autoSelecionado -> Define um valor autoSelecionado no select.</p>
 					</div>
 					<div class="tab-pane fade" id="selecaoMetodo"><br/>
 						<p class="bg-info">CONSTRUTOR Selecao(String nome, String classe, String id)</p>
@@ -288,6 +321,8 @@
 						<p>Apenda todos os itens do array ao select. Deve ser um array com outro array alinhado e o tamanho de cada array alinhado deve ser 2.</p><pre>selecao.setItens([['2','DOIS'],['3','TRES']]);</pre>
 						<p class="bg-info">getSelecao()</p>
 						<p>Retorna a representação de uma tag select com todos o itens (option) disponveis.</p><pre>selecao.getSelecao();</pre>
+						<p class="bg-info">setSelecionado(String selecionado)</p>
+						<p>Define que se existir este valor no array de itens, então ele será o campo que vem selecionado por padrão no select. EX: Se quero que o campo JAN venha selecionado, chamo este metodo antes mesmo de obter a representacao do select (getSelecao).</p><pre>selecao.setSelecionado('JAN');</pre>
 					</div>
 				</div>
 			</div>
@@ -386,6 +421,7 @@
 			<div class="classes" style="display:none" id="Grafico"><br>
 				<h3>Class Grafico</h3>
 				<p>Descrição: Classe usada para instanciar um objeto Grafico que vai representar graficos do google charts</p>
+				<p>NOTA: PARA FUNCIONAR É NECESSÁRIO QUE O GOOGLE CHARTS ESTEJA PRESENTE NO DOCUMENTO HTML.</p>
 				<p>A classe Modal herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#graficoAtributo">Atributos</a></li>
@@ -400,14 +436,83 @@
 					</div>
 					<div class="tab-pane fade" id="graficoMetodo"><br/>
 					<p class="bg-info">CONSTRUTOR Grafico(Array[Array] dados, Object opcoes, String classe, String id)</p>
-					<p>Inicia um objeto que vai representar um grafico, é importante que o ID do objeto seja informado pois ele é reponsavel por especificar o local exato da criação do grafico.</p>
-					<p class="bg-info"></p>
-					<p class="bg-info"></p>
-					<p class="bg-info"></p>
-					<p class="bg-info"></p>
-					<p class="bg-info"></p>
-
+					<p>Inicia um objeto que vai representar um grafico, é importante que o ID do objeto seja informado pois ele é reponsavel por especificar o local exato da criação do grafico. Para funcionar corretamente é necessário que exista uma div com um id, e este ID seja informado na criacao do objeto grafico.</p>
+					<pre>var g = new Grafico([['NOME', 'TOTAL'],['MARCOS',250.00]], {title:'VENDAS DE PRODUTOS'}, '', 'graf');</pre>
+					<p class="bg-info">addColuna(Array dadosColuna);</p>
+					<p>Ao enviar um array pode-se incluir uma terceira coluna para os dados, casos usados quando a terceira coluna ainda não havia sido criada e ela precisa ser inclusa no grafico. Este array tem que ter o mesmo tamanho da quantidade de arrays dentro do arrayDados.</p>
+					<pre>g.addColuna(['PERCENTUAL', 50.0]);</pre>
+					<p class="bg-info">setCores(Array cores)</p>
+					<p>Caso queira definir as cores do grafico pode-se enviar as cores desejadas como um array simples e o mesmo será usados para gerar as cores.</p>
+					<pre>g.setCores(['red','green']);</pre>
+					<p class="bg-info">getPizza()</p>
+					<p>Este metodo cria um grafico de pizza na div com o ID informado no momento da criação do objeto.</p>
+					<pre>g.getPizza();</pre>
+					<p class="bg-info">getBarra()</p>
+					<p>Este metodo cria um grafico de barra na div com o ID informado no momento da criação do objeto.</p>
+					<pre>g.getBarra()</pre>
+					<p class="bg-info">getColuna()</p>
+					<p>Este método cria um grafico de coluna na div com o ID informado no momento da criação do objeto.</p>
+					<pre>g.getColuna()</pre>
+					<p class="bg-info">getLinha()</p>
+					<p>Este método cria um grafico de linha na div com o ID informado no momento da criação do objeto. Este gráfico de linha para ser desenhado corretamente precisa que o arrayDados seja algo constante no eixo X.Ex: Se quero desenhar os rendimentos mensais de uma loja, devo informar que a primeira coluna sera o nome do mes, a segunda no titulo sera o nome da loja(Valor do rotulo) e cada array apos este será a fusao do mes e o valor daquela loja no referente mes. Como uma tabela.</p>
+					<table class="table table-hover table-responsive table-bordered"><thead><tr><th>MES</th><th>LOJA 01</th></tr></thead>
+						<tbody><tr><td>JAN</td><td>250.00</td></tr>
+						<tr><td>FEV</td><td>200.00</td></tr><tr><td>MAR</td><td>650.00</td></tr>
+				<tr><td>ABR</td><td>250.00</td></tr><tr><td>MAI</td><td>260.00</td></tr>
+				<tr><td>JUN</td><td>450.00</td></tr></tbody></table>
+					<p>Desta forma da tabela os dados são descritos na forma correta para o exemplo do grafico</p>
+					<pre>g.getLinha();</pre>
 					</div>
+				</div>
+			</div>
+			<div class="classes" style="display:none" id="Formulario"><br>
+				<h3>Class Formulario</h3>
+				<p>Descrição: Classe usada para instanciar um objeto Formulario que vai validar campos de formularios.</p>
+				<p>A classe Modal herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#formularioAtributo">Atributos</a></li>
+					<li><a data-toggle="tab" href="#formularioMetodo">Métodos</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="formularioAtributo"><br>
+						
+					</div>
+					<div class="tab-pane fade" id="formularioMetodo"><br/>
+					<p class="bg-info">CONSTRUTOR Formulario()</p>
+					<p>Inicia um objeto formulario que é capaz de validar datas e campos. Ele não recebe nenhum parametro.</p>
+					<pre>var f = new Formulario();</pre>
+					<p class="bg-info">validaData(idOuClasse);</p>
+					<p>Valida a data informada retornando um objeto Date se a data estiver correta, senão retorna false.</p>
+					<pre>var da = f.validaData('data1');</pre>
+					<p class="bg-info">deMenorQueAte(data1, data2)</p>
+					<p>Verifica se a data1 é menor que a data2. Usado para validar campos de data em filtros de/ate. Os parametros enviados são idOuClasse de cada campo de formulario date. Se tudo ocorreu bem retorna true e atribui ao objeto Formulario os valores de data1 e data2, sendo que cria os atributos de = data1 e ate = data2.</p>
+					<pre>var validou = f.deMenorQueAte('data1', 'data2);</pre>
+					<p class="bg-info">validaCampo(idOuClasse)</p>
+					<p>Este metodo valida o campo recebendo um id ou classe. Verifica se o campo não esta em branco, se ele esta retorna false, senão atribui o campo ao objeto do Formulario de dados e retorna true.</p>
+					<pre>var validou = f.validaCampo('grupos');</pre>
+					<p class="bg-info">validaArquivo(ID, arrayDeTipos)</p>
+					<p>Este metodo valida se o arquivo ou arquivos enviados no campo file onde o ID foi informado atende aos tipos de arquivos listado no arrayDeTipos. Se todos atendem retorna true, senão exibem uma mensagem dizendo que tem arquivo de tipo incorreto e retorna false.</p>
+					<pre>var validou = f.validaArquivo('arquivo', ['.png', '.PNG', '.JPG', '.jpg', '.JPEG', '.jpeg']);</pre>
+					<p class="bg-info">O objeto dados do Formulario</p>
+					<p>Quando você utiliza metodos como deMenorQueAte() e validaCampo() eles depois de validados criam atributos no objeto de Formulario chamado dados. Para recuperar os dados que foram validados basta você chamar o atributo dados. Usando nosso exemplo vamos chama-lo em f.</p>
+					<pre>var dados = f.dados</pre>
+					<p>Os dados retornados são um par de chave e valor, sendo que deMenorQueAte cria as chaves de e ate, e validaCampo cria a chave do nome do idOuClasse do campo. f.dados.de;f.dados.ate;</p>
+					</div>
+				</div>
+			</div>
+			<div class="classes" style="display:none" id="Diversos"><br>
+				<h3>Diversos</h3>
+				<p>Descrição: Aqui reune varias funcoes que não se encaixam em nenhuma classe informada.</p>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#funcoesDiversos">Funções</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="funcoesDiversos"><br>
+						<p class="bg-info">converter(valor)</p>
+						<p>Converte um valor repassado como string em um monetario com a sigla R$ e o retorna. Caso seja um float pode converte-lo usando o metodo toFixed(2) de parseFloat para envia-lo corretamente.</p>
+						<pre>var valor = 15000.00;var conv = converter(parseFloat(valor).toFixed(2));</pre>
+					</div>
+					
 				</div>
 			</div>
 	</div>
@@ -421,7 +526,19 @@ $('a.classes').click(function(){
 
 });
 
+$('.executaTeste').bind('click', function(e){
+	e.preventDefault();
+	// Recuperando o texto de textArea
+	var comando = $(this).parent().find('textarea').val();
+	// Executa os comandos e exibe o resultado dentro da div informada.
+	eval(comando);
+});
 </script>
 </body>
-
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/fh-3.1.2/datatables.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/fh-3.1.2/datatables.min.css"/> 
+ <!-- plugin de fixacao da coluna -->
+ <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/fc-3.2.2/datatables.min.js"></script>
+ <!-- plugin de reordenacao das colunas -->
+ <script type="text/javascript" src="https://cdn.datatables.net/v/dt/cr-1.3.2/datatables.min.js"></script>
 </html>

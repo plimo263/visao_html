@@ -1176,3 +1176,56 @@ Usuario.prototype.getGrupoParaUrl = function(){
 Usuario.prototype.getLojaParaUrl = function(){
 	return lj = this.dados.loja_selecionada.replace(',', '!').replace(/"/g,'');
 }
+
+// Classe usada para criar e manipular uma barra de progresso
+var BarraDeProgresso = function(){
+      this.contador = 0;
+      this.barra = '<div class="campo_barra"><p class="text-center">\
+      Aguarde, estamos atualizando os dados</p><div class="progress">\
+      <div class="progress-bar progress-bar-striped active" role="progressbar" \
+      aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:1%">0%</div></div></div>';
+      this.alvo = '';
+      this.tempoIntervalo = 0;
+};
+// Método que apenda a barra de progressso eliminando o conteudo do alvo
+BarraDeProgresso.prototype.incluirBarra = function(idOuClasse){
+  if(typeof idOuClasse === "string"){
+    // OK, agora vamos coloca-lo no alvo
+    this.alvo = idOuClasse;
+    // Limpando o campo para apendar a barra
+    if($(idOuClasse).length < 1){console.log('Não encontrado o elemento ');return false;}
+    $(idOuClasse).empty();$(idOuClasse).html(this.barra);
+  } else{
+    console.log('O idOuClasse enviado não é uma string.');
+    return false;
+  }
+};
+// Método que inicia a barra de progresso. Se desejar pode passar um tempo inicial
+BarraDeProgresso.prototype.ativarBarra = function(contador, intervalo){
+  // Vendo se tempo foi definido e atribuindo ele ao contador
+  if(typeof contador !== "number"){this.contador = 0;} else{
+    this.contador = contador;}
+    var obj = this;
+    // Funcao criada para executar o cronometro e alterar os valores
+    function crono(){ obj.cronometro(); };
+    // Recupera o numero retornado por setInteval. Vamos usa-lo para interromper o tempo
+    this.tempoIntervalo = setInterval(crono, intervalo);
+};
+// Metodo para stopar a barra de vez
+BarraDeProgresso.prototype.pararBarra = function(){
+  this.contador = 100;
+
+}
+
+// Metodo que ativa o contador de fato e vai monitorando(Metodo interno da classe)
+BarraDeProgresso.prototype.cronometro = function(){
+  // Se o tempo for menor que 100 vamos modificando os valores da barra
+  if(this.contador < 101){
+    $('.progress-bar').attr('aria-valuenow', this.contador);
+    $('.progress-bar').attr('style', "width:"+this.contador+"%");
+    $('.progress-bar').text(this.contador+"% Completo");
+    this.contador++;
+  } else {
+    clearInterval(this.tempoIntervalo);
+  }
+}

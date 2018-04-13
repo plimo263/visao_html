@@ -400,6 +400,7 @@ Tabela.prototype.getColuna = function(indice) {
 			arrTemp.push(this.corpo[x][indice]);
 		}
 	}
+	return arrTemp;
 };
 
 // Metodo que recebe o apoio da biblioteca Datatable e coloca a tabela de forma representativa na tela <>

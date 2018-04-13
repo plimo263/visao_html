@@ -402,6 +402,24 @@ Tabela.prototype.getColuna = function(indice) {
 	}
 	return arrTemp;
 };
+// Metodo usado para realizar copia de colunas solicitadas e retorna-las
+Tabela.prototype.getColunas = function(arrIndice){
+	if(!Array.isArray(arrIndice)){
+		console.log('FAVOR INFORNAR UM ARRAY DE INDICES.');
+		return false;
+	}
+	var arrTemp = [];
+	for(var x = 0;x < this.corpo.length;x++){
+		arrTemp[x] = new Array();
+		for(var i = 0; i < this.corpo[x].length;i++){
+			if(arrIndice.indexOf(i) != -1){
+				arrTemp[x].push(this.corpo[x][i]);
+			}
+		}
+	}
+	return arrTemp;
+
+};
 
 // Metodo que recebe o apoio da biblioteca Datatable e coloca a tabela de forma representativa na tela <>
 Tabela.prototype.desenhaDataTable = function(){

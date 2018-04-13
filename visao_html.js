@@ -387,6 +387,21 @@ Tabela.prototype.filtro = function(palavra){
 	var cabecalhoComCorpo = [this.cabecalho, filtrados];
 	return cabecalhoComCorpo;
 };
+// Metodo usado para realizar um copia da coluna solicitada e retorna-la
+Tabela.prototype.getColuna = function(indice) {
+	if(typeof indice !== "number"){
+		console.log('FAVOR INFORMAR UM INDICE INICIANDO DO ZERO.');
+		return false;
+	}
+	var arrTemp = [];
+	// Agora vamos copiar o corpo para retornar os dados deste indice
+	for(var x = 0; x < this.corpo.length;x++){
+		if(this.corpo[x][indice]){
+			arrTemp.push(this.corpo[x][indice]);
+		}
+	}
+};
+
 // Metodo que recebe o apoio da biblioteca Datatable e coloca a tabela de forma representativa na tela <>
 Tabela.prototype.desenhaDataTable = function(){
 	// Destruindo a tabela se ela existir

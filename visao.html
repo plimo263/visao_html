@@ -241,6 +241,13 @@ google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br
 						<p class="bg-info">removeColuna(int indexColuna)</p>
 						<p>Remove a coluna da tabela recebendo seu indice, o valor do indice inicia-se por 0, sendo que a primeira coluna tem indice 0.</p>
 						<pre>t.removeColuna(1);</pre>
+						<p class="bg-info">getColuna(int indexColuna)</p>
+						<p>Método usado para retornar uma copia do corpo da tabela na coluna solicitada.</p>
+						<pre>var colu = t.getColuna(1);</pre>
+						<p class="bg-info">getColunas(Array colunas)</p>
+						<p>Método usado para retornar uma copia do corpo da tabela nas colunas solicitadas.</p>
+						<p>O exemplo abaixo retorna tres campos da tabela.</p>
+						<pre>var colu = t.getColunas([1,2,3]);</pre>
 						<p class="bg-info">filtro(String palavraChave)</p>
 						<p>Metodo usado para retornar cabecalho e corpo de dados filtrados. Recebe uma string para filtro e retorna [[cabecalho],[[corpo],[corpo]]]</p>
 						<pre>var recebeNovaTabela = t.filtro('Marcos');</pre>

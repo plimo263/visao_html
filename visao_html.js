@@ -13,6 +13,7 @@ v1.2: 23-10-2017 Inclusao da classe Formulario
 v1.3: 26-10-2017 Inclusos os metodos filtro e removeColuna para a classe tabela.
 v1.4: 17-11-2017 Funcao que converter monetario de tabelas
 v1.5: 24-01-2018 Inclusao de metodo para calcular corpo e gerar rodape na classe Tabela
+v1.7: 17-04-2018 Inclusao de funcao usada para desconverter um valor monetario
 
 ************************* ------ CLASSES ------ ******************************************
 */
@@ -1262,4 +1263,11 @@ BarraDeProgresso.prototype.cronometro = function(){
   } else {
     clearInterval(this.tempoIntervalo);
   }
+}
+
+function desconverter(valor){
+	if(typeof valor != "string"){ console.log('FAVOR ENVIAR STRING.'); return false;}
+	// Removendo o cifrao, ponto e a virgula e retornando um float
+	valor = parseFloat(valor.replace('R$', '').replace(/\./i, '').replace(',','.'));
+	return valor;
 }

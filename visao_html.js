@@ -1268,6 +1268,6 @@ BarraDeProgresso.prototype.cronometro = function(){
 function desconverter(valor){
 	if(typeof valor != "string"){ console.log('FAVOR ENVIAR STRING.'); return false;}
 	// Removendo o cifrao, ponto e a virgula e retornando um float
-	valor = parseFloat(valor.replace('R$', '').replace(/\./i, '').replace(',','.'));
+	valor = parseFloat(valor.replace('R$', '').replace(/\./i, '').replace(',','.')).toFixed(2);
 	return valor;
 }

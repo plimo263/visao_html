@@ -743,6 +743,7 @@ var Grafico = function(dados, opcoes, classe, id){
 	this.opcoes = opcoes;
 	this.cores = []; // Define o array de cores
 	this.total = 0; // Define a variavel total somando todos os atendimentos
+	this.refGraf = ''; // Define uma referencia para o grafico quando ligar envento de clicks
 	ClasseId.call(this, "", classe, id);
 }
 
@@ -949,6 +950,7 @@ Grafico.prototype.getPizza = function(){
 		var dado = this.getDados(); // Recebendo o array de dados para montar o grafico
 		var chart = new google.visualization.PieChart(document.getElementById(this.id));
 		chart.draw(dado, this.opcoes);
+		this.refGraf = chart; //Recuperando referencia do grafico
 	
 }
 // Metodo que cria grafico de coluna
@@ -956,20 +958,26 @@ Grafico.prototype.getColuna = function(percent, linha){
 	var dado = this.getDados(percent, linha);
 	var chart = new google.visualization.ColumnChart(document.getElementById(this.id));
 	chart.draw(dado, this.opcoes);
-	
+	this.refGraf = chart; //Recuperando referencia do grafico
 }
 //Metodo que cria grafico de barra
 Grafico.prototype.getBarra = function(percent, linha){
 	var dado = this.getDados(percent, linha);
 	var chart = new google.visualization.BarChart(document.getElementById(this.id));
 	chart.draw(dado, this.opcoes);
+	this.refGraf = chart; //Recuperando referencia do grafico
 }
 // Metodo para criar grafico de linha
 Grafico.prototype.getLinha = function(percent, linha){
 	var dado = this.getDados(percent, linha);
 	var chart = new google.visualization.LineChart(document.getElementById(this.id));
 	chart.draw(dado, this.opcoes);
+	this.refGraf = chart; //Recuperando referencia do grafico
 }
+// Retorna a referencia do grafico
+Grafico.prototype.getRefGraf = function(){
+	return this.refGraf;
+};
 
 /*
 	CLASSE UTILIZADA PARA VALIDAR DADOS DE UM FORMULARIO

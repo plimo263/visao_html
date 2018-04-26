@@ -14,6 +14,7 @@ v1.3: 26-10-2017 Inclusos os metodos filtro e removeColuna para a classe tabela.
 v1.4: 17-11-2017 Funcao que converter monetario de tabelas
 v1.5: 24-01-2018 Inclusao de metodo para calcular corpo e gerar rodape na classe Tabela
 v1.7: 17-04-2018 Inclusao de funcao usada para desconverter um valor monetario
+v1.8: 24-04-2018 Inclusao da classe de barra de progresso e o controlador(especifico de projetos grupo/loja)
 
 ************************* ------ CLASSES ------ ******************************************
 */
@@ -892,58 +893,7 @@ Grafico.prototype.setCores = function(cores){
 		this.dadosModificados = novo;
 	}
 }
-// Metodo para colocar rotulo em anotacoes 
-/* METODO DESATIVADO NO MOMENTO
-Grafico.prototype.setRotulo = function(){
-	
-	var arrayLocal = [];
-	if(this.dadosModificados.length > 1){ // Verifica se vamos usar o array modificado ou nao para gerar os novos dados
-		arrayLocal = this.dadosModificados;
-	} else {
-		arrayLocal = this.dados;
-	}
 
-	var novo = []; // Novo array bidimensional para formatar os dados
-	for(var i = 2;i < arrayLocal[0].length;i++){ 
-		if(arrayLocal[0][i].role == "annotation"){ // Verificando se o campo pesquisado tem
-			// o atributo role com valor annotation.
-			// Fazer um loop no array e excluir o campo de referencia
-			for(var e = 0;e < arrayLocal.length;e++){
-				arrayLocal[e].splice(i, 1); // Removendo a coluna do array
-			}
-	  	}
-	}
-	//novo.push(arrayLocal[0]);
-	// Iniciar a movimentacao das colunas para que possamos colocar as anotacoes nos locais corretos
-	var coluna = [];
-	for(var x = 1;x < arrayLocal[1].length;x++){
-		// Verificando se o campo é um numero, se for incluir um role:annotation apos o numero de indice
-		if(typeof arrayLocal[1][x] == "number"){
-			if(arrayLocal[1][x+1]){
-				coluna[x+1] = {role:"annotation"};
-				coluna[x+2] = null;
-			} else {
-				coluna[x+1] = {role:"annotation"};
-			}
-		} else {
-			if(typeof arrayLocal[1][x-1] == "number"){
-				coluna[x+2] = arrayLocal[1][x];
-			} else {
-				coluna[x+1] = arrayLocal[1][x];;
-			}
-		}
-	}
-	return coluna;
-	novo[0].push({role:'annotation'});
-	// Iniciando o loop para preencher o rotulo
-	for(var y = 1;y < arrayLocal.length;y++){
-		novo.push(arrayLocal[y]); // Insere o conteudo do array original
-		novo[y].push(arrayLocal[y][1]); // Insere o rotulo na posicao correta
-	}
-	
-	this.dadosModificados = novo; // Apenda o array ao array personalizado
-}
-*/
 // Metodo para ajustar a variavel total
 Grafico.prototype.setTotal = function(coluna, linhaNaoRegistrada){
 
@@ -1265,9 +1215,80 @@ BarraDeProgresso.prototype.cronometro = function(){
   }
 }
 
+// Esta funcao desconverte o valor monetario para um float.toFixed2
 function desconverter(valor){
 	if(typeof valor != "string"){ console.log('FAVOR ENVIAR STRING.'); return false;}
 	// Removendo o cifrao, ponto e a virgula e retornando um float
 	valor = parseFloat(valor.replace('R$', '').replace(/\./i, '').replace(',','.')).toFixed(2);
 	return valor;
 }
+
+// Objeto que controla as acoes da pagina
+var Controlador = function(){
+    this.grupos;
+    this.lojas;
+    this.de;
+    this.ate;
+    this.barra = new BarraDeProgresso();
+    this.opcoesDataTable = {
+           "bPaginate": false,"ordering" : true,
+          //"order" : [1],
+          "fixedColumns":{ leftColumns: 3 },
+          "colReorder" : true, "scrollY": "400px",
+          "scrollCollapse": true, "scrollX": true,
+          "info" : false, "responsive": true,
+          "autoWidth": true,     
+          "search" : { "regex": true },
+          "language": {"search": "Procurar na tabela",
+    "emptyTable" : "Nao ha dados",
+    "zeroRecords": "Sem registros com valor informado","decimal":",","thousands":"."}
+    };
+};
+// Metodo que controla o botao de pesquisa
+Controlador.prototype.pesquisar = function(paginaALvo){
+    if(typeof paginaALvo !== "string"){
+        console.log('FAVOR DEFINIR A PAGINA ALVO');
+        return false;
+    }
+    var ref = this;
+    $('#pesquisar').bind('click', function(){
+                
+        var grupo, filial, dataDe, dataAte;
+        grupo = $('#grupos').val();
+        filial = $('#lojas').val();
+        dataDe = $('#data1').val();dataAte = $('#data2').val();
+        // Enviando dados para validacao
+        if(!ref.validarCampos(grupo, filial, dataDe, dataAte)){
+            return false;
+        }
+        // Ativando a barra de progresso
+        ref.barra.incluirBarra('#corpo_pagina2');
+        ref.barra.ativarBarra(0, 1000);
+        // Campos validados, agora vamos submeter os dados para o servidor
+        $.ajax({method:'POST', url:paginaALvo, data:{
+            'grupos':ref.grupos, 'lojas':ref.lojas, 'de':ref.de, 'ate':ref.ate}
+        }).done(function(data){
+            // Deu tudo certo, enviar os dados para o metodo de criacao de tabela o criar
+            ref.criarTabela(data); 
+        }).fail(function(){
+            alert('ERRO AO ENVIAR OS DADOS, CASO PERSISTA ENTRAR EM CONTATO COM O ADMINISTRADOR DO SITE.');
+        });
+    });
+};
+
+// Metodo que valida os campos do relatorio
+Controlador.prototype.validarCampos = function(grupos, lojas, de, ate){
+    var ref = this;
+    var dDe = new Date(de); var dAte = new Date(ate);
+
+    if(!(grupos instanceof Array) || (grupos.length < 1) || !(lojas instanceof Array) || 
+        (lojas.length < 1)){alert('GRUPO(S) E/OU LOJA(S) NÃƒO SELECIONADOS. VERIFICAR.');
+        return false;
+    // Verificar as datas de e ate
+    } else if(dDe > dAte){alert('A DATA DE NÃO PODE SER MAIOR QUE A DATA ATÉ.');
+        return false;}
+    // Tudo ok, retorne verdadeiro
+    ref.grupos = grupos.join(',');ref.lojas = lojas.join(',');
+    ref.de = de; ref.ate = ate;
+    return true;
+};

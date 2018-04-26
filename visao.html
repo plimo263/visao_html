@@ -35,6 +35,8 @@ google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br
 			<li><a href="#Grafico" class="classes">Grafico</a></li>
 			<li><a href="#Formulario" class="classes">Formulario</a></li>
 			<li><a href="#Diversos" class="classes">Diversos</a></li>
+			<li><a href="#BarraDeProgresso" class="classes">BarraDeProgresso</a></li>
+			<li><a href="#Controlador" class="classes">Controlador</a></li>
 			</ul>
 		</div>
 		<div class="col-sm-10">
@@ -515,11 +517,66 @@ google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade in active" id="funcoesDiversos"><br>
-						<p class="bg-info">converter(valor)</p>
+						<p class="bg-info">converter(String valor)</p>
 						<p>Converte um valor repassado como string em um monetario com a sigla R$ e o retorna. Caso seja um float pode converte-lo usando o metodo toFixed(2) de parseFloat para envia-lo corretamente.</p>
 						<pre>var valor = 15000.00;var conv = converter(parseFloat(valor).toFixed(2));</pre>
+						<p class="bg-info">desconverter(String valor)</p>
+						<p>Esta função desconverte o valor enviado como string e retorna uma string numerica com 2 casas decimais. Geralmente o valor recebido é um 'R$ 00,0' e o valor retornado é "0.00"</p>
+						<pre>var valor = 'R$ 25,00'; var desconv = desconverter(valor);</pre>
 					</div>
 					
+				</div>
+			</div>
+			<div class="classes" style="display:none" id="BarraDeProgresso"><br>
+				<h3>Class BarraDeProgresso</h3>
+				<p>Descrição: Classe usada para instanciar um objeto BarraDeProgresso que cria uma visualização de barra, se atendido alguns parametros.</p>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#BarraDeProgressoAtributo">Atributos</a></li>
+					<li><a data-toggle="tab" href="#BarraDeProgressoMetodo">Métodos</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="BarraDeProgressoAtributo"><br>
+						
+					</div>
+					<div class="tab-pane fade" id="BarraDeProgressoMetodo"><br/>
+					<p class="bg-info">CONSTRUTOR BarraDeProgresso()</p>
+					<p>Inicia um objeto BarraDeProgresso que é capaz de criar uma barra de progresso, definir tempo de mudança e interromper a barra.</p>
+					<pre>var barra = new BarraDeProgresso();</pre>
+					<p class="bg-info">incluirBarra(String idOuClasse);</p>
+					<p>Este metodo cria barra de progresso substiuindo o conteudo do objeto idOuClasse informado. Assim que o metodo ativarBarra for chamado, a barra de progresso começa a caminhar devido ao valor dos saltos.</p>
+					<p>Lembrando que a notação deve ser um seletor css.</p>
+					<pre>barra.incluirBarra('#corpo_pagina')</pre>
+					<p class="bg-info">ativarBarra(Number contador, Number intervalo)</p>
+					<p>Quando este metodo é chamado, já assumimos que você tenha definido um alvo chamando o metodo incluirBarra. Ele recebe dois parametos, o contador(onde a barra vai iniciar) até 100 e um intervalo em milisegundos que a barra vai saltar para o proximo numero. Sendo que o intervalo 1000 quer dizer que de 1 em 1 segundo a barra vai andar.</p>
+					<pre>barra.ativarBarra(0, 1500); // Barra salta de 1.5 segundo em 1.5 segundos</pre>
+					<p class="bg-info">pararBarra()</p>
+					<p>Este método para a execução da barra colocando ela como 100% completo.</p>
+					<pre>barra.pararBarra();</pre>
+					</div>
+				</div>
+			</div>
+			<div class="classes" style="display:none" id="Controlador"><br>
+				<h3>Class Controlador</h3>
+				<p>Descrição: Classe usada para instanciar um objeto Controlador mantem atividades de solicitacao de dados e validação de parametros.</p>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#ControladorAtributos">Atributos</a></li>
+					<li><a data-toggle="tab" href="#ControladorMetodos">Métodos</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="ControladorAtributos"><br>
+						
+					</div>
+					<div class="tab-pane fade" id="ControladorMetodos"><br/>
+					<p class="bg-info">CONSTRUTOR Controlador()</p>
+					<p>Inicia um objeto Controlador que vai manipular com seus metodos rotinas padrão de validação de campos.</p>
+					<pre>var con = new Controlador();</pre>
+					<p class="bg-info">pesquisar(String paginaAlvo);</p>
+					<p>Este método depende de um formulario de 4 campos #grupos, #lojas, #data1 e #data2 na pagina para que ele possa fazer a validação destes campos, enviar os dados para a paginaAlvo informada e depois chamar criarTabela() passando como parametros os dados de retorno json do servidor.</p>
+					<pre>con.pesquisar('/pagina_alvo');</pre>
+					<p class="bg-info">criarTabela(dados)</p>
+					<p>Este método é chamado em pesquisar e ele precisa ser sobreescrito, pois recebera os dados retornados em forma de json da pagina alvo.</p>
+					<p>Nota: Não tem regra, este método pode ser implantado atendendo as necessidades da pagina. A unica regra é que o parametro dados seja convertido usando JSON.parse(dados).</p>
+					</div>
 				</div>
 			</div>
 	</div>

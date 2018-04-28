@@ -981,15 +981,13 @@ Grafico.prototype.setAnotacoes = function(){
     	arrTemp2.push([]);// Cria novo array no temp2
     	var marcador = 1; // Inicializa o marcador de linha
     	value.forEach(function(val, ind){
-      		if(ind < 1){ arrTemp[index+1][ind] = val;}
+      		if(ind < 1){ arrTemp2[index+1][ind] = val;}
       		else{ // utilizando o marcador atual, passa o valor desconvertido
       			if(val.search('R$') != -1){
         			arrTemp2[index+1][marcador] = parseFloat(desconverter(val));
         		} else {
         			arrTemp2[index+1][marcador] = val;
         		}
-        		// valor a ser rotulado
-        		arrTemp2[index+1][marcador+1] = val;
         		marcador += 2; // Sempre aumenta o contador em 2 para criar o proximo campo
         	}
     	});

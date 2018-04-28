@@ -6,15 +6,6 @@ data: 24-01-2018
 
 Objetivo: Reune as principais tags e as exibe pelas chamadas das funcoes
 ------------------------------------------------------------------------------------
-Historico de versao:
-v1.0: 26-04-2017 Inclusao das classes div,para,titulo,classeid,img,link
-v1.1: 17-10-2017 Inclusao das classes divrow, divtabs, vendedor, grafico, modal
-v1.2: 23-10-2017 Inclusao da classe Formulario
-v1.3: 26-10-2017 Inclusos os metodos filtro e removeColuna para a classe tabela.
-v1.4: 17-11-2017 Funcao que converter monetario de tabelas
-v1.5: 24-01-2018 Inclusao de metodo para calcular corpo e gerar rodape na classe Tabela
-v1.7: 17-04-2018 Inclusao de funcao usada para desconverter um valor monetario
-v1.8: 24-04-2018 Inclusao da classe de barra de progresso e o controlador(especifico de projetos grupo/loja)
 
 ************************* ------ CLASSES ------ ******************************************
 */
@@ -978,6 +969,45 @@ Grafico.prototype.getLinha = function(percent, linha){
 Grafico.prototype.getRefGraf = function(){
 	return this.refGraf;
 };
+// Metodo que define anotacoes {role:annotarion}
+Grafico.prototype.setAnotacoes = function(){
+	var arrTemp = [];
+	// Verificando quais dados vou utilizar
+	if(this.dadosModificados.length > 0){arrTemp = this.dadosModificados;
+	} else { arrTemp = this.dados;}
+
+	var arrTemp2 = [];	
+  	arrTemp.forEach(function(value, index){
+    	arrTemp2.push([]);// Cria novo array no temp2
+    	var marcador = 1; // Inicializa o marcador de linha
+    	value.forEach(function(val, ind){
+      		if(ind < 1){ arrTemp[index+1][ind] = val;}
+      		else{ // utilizando o marcador atual, passa o valor desconvertido
+      			if(val.search('R$') != -1){
+        			arrTemp2[index+1][marcador] = parseFloat(desconverter(val));
+        		} else {
+        			arrTemp2[index+1][marcador] = val;
+        		}
+        		// valor a ser rotulado
+        		arrTemp2[index+1][marcador+1] = val;
+        		marcador += 2; // Sempre aumenta o contador em 2 para criar o proximo campo
+        	}
+    	});
+  	});
+  	// Agora o ajuste o cabecalho para ter role:annotation
+  	var tempC = [];var cont = 1;
+  	// A logica aqui e a mesma, a diferenca e que o contador e array temp estao fora
+  	arrTemp[0].forEach(function(value, ind){ 
+    	if(ind < 1){ tempC.push(value);
+  		} else { 
+  			tempC[cont] = value;  // Colocando o valor usando contador atual
+  			tempC[cont+1] = {'role':'annotation'}; // colocando o role:annotation
+    		cont += 2; // Atualizando o contador
+    	}
+  	});
+  
+  	arrTemp[0] = tempC;
+}
 
 /*
 	CLASSE UTILIZADA PARA VALIDAR DADOS DE UM FORMULARIO

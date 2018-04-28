@@ -971,31 +971,44 @@ Grafico.prototype.getRefGraf = function(){
 };
 // Metodo que define anotacoes {role:annotarion}
 Grafico.prototype.setAnotacoes = function(){
-	var arrTemp = [];
+	var arrTempNovo, listaCampos = [];
 	// Verificando quais dados vou utilizar
-	if(this.dadosModificados.length > 0){arrTemp = this.dadosModificados;
-	} else { arrTemp = this.dados;}
+	if(this.dadosModificados.length > 0){
+		arrTempNovo = this.dadosModificados;
+	} else { arrTempNovo = this.dados;
+		console.log(JSON.stringify(this.dados));
+	}
+	listaCampos.push(arrTempNovo[0]);
 
-	var arrTemp2 = [arrTemp[0]];	
-  	arrTemp.forEach(function(value, index){
-    	arrTemp2.push([]);// Cria novo array no temp2
-    	var marcador = 1; // Inicializa o marcador de linha
-    	value.forEach(function(val, ind){
-      		if(ind < 1){ arrTemp2[index+1][ind] = val;}
-      		else{ // utilizando o marcador atual, passa o valor desconvertido
-      			if(val.search('R$') != -1){
-        			arrTemp2[index+1][marcador] = parseFloat(desconverter(val));
-        		} else {
-        			arrTemp2[index+1][marcador] = val;
-        		}
-        		marcador += 2; // Sempre aumenta o contador em 2 para criar o proximo campo
-        	}
-    	});
+  	arrTempNovo.forEach(function(value, index){
+  		if(index > 0){
+    		listaCampos.push([]);// Cria novo array no temp2
+	    	var marcador = 1; // Inicializa o marcador de linha
+	    	value.forEach(function(val, ind){
+	    		//console.log('PASSA AQUI');
+	      		if(ind < 1){ 
+	      			listaCampos[index][ind] = val;
+	      		}else{ // utilizando o marcador atual, passa o valor desconvertido
+
+	      			if(typeof val == "string" && val.search('R') != -1){
+	      				console.log(val);
+	      				listaCampos[index][marcador] = parseFloat(desconverter(val));
+	      			}else{
+	      				listaCampos[index][marcador] = val;
+	      			}
+	        		// Colocando o valor no campo do role:annotation
+	        		listaCampos[index][marcador+1] = val;
+	        		marcador += 2; // Sempre aumenta o contador em 2 para criar o proximo campo
+	        	}
+	        	
+	    	});
+	    }
   	});
+  	
   	// Agora o ajuste o cabecalho para ter role:annotation
   	var tempC = [];var cont = 1;
   	// A logica aqui e a mesma, a diferenca e que o contador e array temp estao fora
-  	arrTemp2[0].forEach(function(value, ind){ 
+  	listaCampos[0].forEach(function(value, ind){ 
     	if(ind < 1){ tempC.push(value);
   		} else { 
   			tempC[cont] = value;  // Colocando o valor usando contador atual
@@ -1004,8 +1017,13 @@ Grafico.prototype.setAnotacoes = function(){
     	}
   	});
   
-  	arrTemp2[0] = tempC;
-  	arrTemp = arrTemp2;
+  	listaCampos[0] = tempC;
+  	console.log(listaCampos);
+  	this.dados = listaCampos;
+  		// Verificando quais dados vou utilizar
+	if(this.dadosModificados.length > 0){this.dadosModificados = listaCampos;}
+	 else { this.dados = listaCampos;}
+
 }
 
 /*

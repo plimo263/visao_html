@@ -976,7 +976,7 @@ Grafico.prototype.setAnotacoes = function(){
 	if(this.dadosModificados.length > 0){arrTemp = this.dadosModificados;
 	} else { arrTemp = this.dados;}
 
-	var arrTemp2 = [];	
+	var arrTemp2 = [arrTemp[0]];	
   	arrTemp.forEach(function(value, index){
     	arrTemp2.push([]);// Cria novo array no temp2
     	var marcador = 1; // Inicializa o marcador de linha
@@ -995,7 +995,7 @@ Grafico.prototype.setAnotacoes = function(){
   	// Agora o ajuste o cabecalho para ter role:annotation
   	var tempC = [];var cont = 1;
   	// A logica aqui e a mesma, a diferenca e que o contador e array temp estao fora
-  	arrTemp[0].forEach(function(value, ind){ 
+  	arrTemp2[0].forEach(function(value, ind){ 
     	if(ind < 1){ tempC.push(value);
   		} else { 
   			tempC[cont] = value;  // Colocando o valor usando contador atual
@@ -1004,7 +1004,8 @@ Grafico.prototype.setAnotacoes = function(){
     	}
   	});
   
-  	arrTemp[0] = tempC;
+  	arrTemp2[0] = tempC;
+  	arrTemp = arrTemp2;
 }
 
 /*

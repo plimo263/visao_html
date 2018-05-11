@@ -1318,7 +1318,7 @@ Controlador.prototype.pesquisar = function(paginaALvo){
         }
         // Ativando a barra de progresso
         ref.barra.incluirBarra('#corpo_pagina2');
-        ref.barra.ativarBarra(0, 1000);
+        ref.barra.ativarBarra(0, 2000);
         // Campos validados, agora vamos submeter os dados para o servidor
         $.ajax({method:'POST', url:paginaALvo, data:{
             'grupos':ref.grupos, 'lojas':ref.lojas, 'de':ref.de, 'ate':ref.ate}

@@ -576,6 +576,15 @@ google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br
 					<p class="bg-info">criarTabela(dados)</p>
 					<p>Este método é chamado em pesquisar e ele precisa ser sobreescrito, pois recebera os dados retornados em forma de json da pagina alvo.</p>
 					<p>Nota: Não tem regra, este método pode ser implantado atendendo as necessidades da pagina. A unica regra é que o parametro dados seja convertido usando JSON.parse(dados).</p>
+					<p class="bg-info">baixarEmExcel(String idBotao, String idTabela, String nomeArmazenamentoLocal, String localParaBaixar)</p>
+					<p>Este metodo implementa o download de uma tabela que esta sendo exibida na tela em excel. Ele espera encontrar os quatro parametros enviados</p>
+					<ul>
+						<li>idBotao -> O ID do botao que vai iniciar a comunicação para o download</li>
+						<li>idTabela -> O ID da tabela que vai liberar os dados </li>
+						<li>nomeArmazenamentoLocal -> Nome para usar no salvamento de dados locais(casos de lembrar as colunas selecionadas)</li>
+						<li>localParaBaixar -> Esta é a URL que vai retornar o caminho onde arquivo xlsx foi gerado. O servidor precisa estar esperando dados JSON com um objeto chamado 'objeto', e retornar uma string do caminho para obter o arquivo xlsx</li>
+					</ul>
+					<p>Nota: Não tem regra, este método pode ser implantado atendendo as necessidades da pagina. A unica regra é que o parametro dados seja convertido usando JSON.parse(dados).</p>
 					</div>
 				</div>
 			</div>

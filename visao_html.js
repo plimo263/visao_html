@@ -1347,3 +1347,109 @@ Controlador.prototype.validarCampos = function(grupos, lojas, de, ate){
     ref.de = de; ref.ate = ate;
     return true;
 };
+
+// Este metodo lida com o download de arquivos em excel dando a opçao de escolher as colunas
+Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazenamentoLocal, localParaBaixar){
+  // Verificar se o botao existe
+  if($(idBotao).length < 1){ alert('ESTE BOTÃO NÃO EXISTE. '+idBotao); return false; }
+  if($(idTabela).length < 1){ alert('ESTA TABELA NAO EXISTE '+idTabela); return false; }
+  if($(idTabela+' tbody tr').length < 1){ alert('ESTA TABELA NÃO TEM DADOS '+idTabela); return false;}
+  
+  // Se clicar em baixar o customizado, vamos baixa-lo
+  $(idBotao).bind('click', function(e){
+    e.preventDefault();
+    // Vendo se tem o armazenamento local
+    if(typeof(Storage) === "undefined"){ 
+      alert('NÃO será possivel escolher as colunas desejadas para baixar.');
+      // Agora criar o objeto que vai comportar o cabecalho e o corpo da tabela
+        var objTabelaBaixar = {'cabe':[], 'corpo':[]};
+        $(idTabela+' thead tr').children().each(function(i,v){
+            objTabelaBaixar.cabe.push($(this).text());
+        });
+        $(idTabela+' tbody').children().each(function(i,v){
+            var tempQ = [];
+            $(this).children().each(function(ia,va){
+                tempQ.push($(this).text());
+            });
+            objTabelaBaixar.corpo.push(tempQ);
+        });
+
+        // Agora despachando o objeto para o servidor, que vai captura-lo e retornar a planilha em excel
+        $.ajax({method:'POST', url:localParaBaixar, data:{'objeto':JSON.stringify(objTabelaBaixar)}
+        }).done(function(data){
+            window.location.href = data;
+        }).fail(function(){
+          alert('ERRO AO BAIXAR EM EXCEL. SE PERSISTIR ENTRAR EM CONTATO COM O ADMINISTRADOR DO SITE.');
+        });
+        return false;
+    }
+    // Verificamos se temos dados no armazenamento interno
+    var asColunasSelecionadas = [];
+    if(localStorage.getItem(nomeArmazenamentoLocal)){
+      asColunasSelecionadas = JSON.parse(localStorage.getItem('colunas_selecionadas'));
+    }
+    
+    // Recupera todas as colunas e permite o usuario a escolher quais ele quer
+    var tempA = '';var entrada = '<input class="checa_colunas" type="checkbox" value="indice" /> VALOR<br/>';
+    $(idTabela+' thead tr').children().each(function(ind, val){
+        if(asColunasSelecionadas.indexOf(Number(ind).toString()) != -1){
+          tempA += '<input class="checa_colunas" checked type="checkbox" value="'+ind+'" />'+$(this).text()+'<br/>';
+        } else {
+          tempA += entrada.replace('VALOR', $(this).text()).replace('indice', ind);
+        }
+    });
+    tempA += '<p class="text-center">'+new Botao('BAIXAR', 'btn btn-xs btn-danger', 'baixar_selecionados').getBotao()+'</p>';
+    // Agora cria o modal permitindo que o usuario escolhas as colunas que ele deseja fazer o download
+    var modTitulo = new Titulo('ESCOLHA AS COLUNAS A BAIXAR', 4, 'text-center text-danger').getTitulo();
+    var modRodape = '<button class="btn btn-xs btn-default" data-dismiss="modal">FECHAR</button>';
+    var mod = new Modal(modTitulo, tempA, modRodape, '', 'modalExcel');
+    mod.setTipoModal(true);
+    $('#modalExcel').remove();
+    $('body').append(mod.getModal());
+    mod.executaModal();
+
+    // Clica no botao para baixar_selecionados e então é permitido gerar um excel disto
+    $('#baixar_selecionados').bind('click', function(e){
+        var $_CHECADOS = $('.checa_colunas');
+        var escolhidas = [];
+        $($_CHECADOS).each(function(ind,val){
+            if($(this).prop('checked')){
+              escolhidas.push($(this).val());
+            }
+        });
+
+        localStorage.setItem(nomeArmazenamentoLocal, JSON.stringify(escolhidas));
+        // Agora criar o objeto que vai comportar o cabecalho e o corpo da tabela
+        var objTabelaBaixar = {'cabe':[], 'corpo':[]};
+        // Obtendo o cabecalho
+        $(idTabela+' thead tr').children().each(function(ind, val){
+            if(escolhidas.indexOf(Number(ind).toString()) != -1){
+              objTabelaBaixar.cabe.push($(this).text());
+            }
+        });
+        // Agora obtendo o corpo
+        $(idTabela+' tbody').children().each(function(i, v){
+          // Passando pelos filhos do registro
+          var tempInternoTab = [];
+          $(this).children().each(function(ix, vx){
+              if(escolhidas.indexOf(Number(ix).toString()) != -1){
+                tempInternoTab.push($(this).text());
+              }
+          });
+          objTabelaBaixar.corpo.push(tempInternoTab);
+        });
+
+        $('[data-dismiss="modal"]').trigger('click');
+
+        // Agora despachando o objeto para o servidor, que vai captura-lo e retornar a planilha em excel
+        $.ajax({method:'POST', url:localParaBaixar, data:{'objeto':JSON.stringify(objTabelaBaixar)}
+        }).done(function(data){
+            window.location.href = data;
+        }).fail(function(){
+          alert('ERRO AO BAIXAR EM EXCEL. SE PERSISTIR ENTRAR EM CONTATO COM O ADMINISTRADOR DO SITE.');
+        });
+
+    });
+      
+  });
+}

@@ -258,6 +258,14 @@ google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br
 						<p class="bg-info">calculaRodape(Array camposNaoCalculaveis, Array valorDosCamposNaoCalculaveis, Array camposMonetarios)</p>
 						<p>Este metodo faz o calculo da tabela e coloca as informações no rodape. Ele permite que se envie um array com os indices dos campos que nao serao calculaveis, um array contendo o valor destes campos que nao serao calculaveis (este precisa ter o mesmo tamanho do array dos camposNaoCalculaveis) e também um array com os indices das colunas que contem valores monetarios. Já campos com valores de números inteiros são somados de forma correta. Qualquer campos que não esteja listado será somado como se fosse valores inteiros.Isto faz os valores do rodape serem calculados e preechidos de forma correta sem erros.</p>
 						<pre>t.calculaRodape([0,1,2], [' -- ', ' -- ', 'TOTAL'], [3,4]);</pre>
+						
+						<p class="bg-info">baixarEmExcel(String nomeArmazenamentoLocal, String localParaBaixar)</p>
+						<p>Este metodo implementa o download de uma tabela que esta sendo exibida na tela em excel. Ele espera encontrar os dois parametros enviados nomeArmazenamentoLocal e localParaBaixar.</p>
+						<ul>
+							<li>nomeArmazenamentoLocal -> Nome para usar no salvamento de dados locais(casos de lembrar as colunas selecionadas)</li>
+							<li>localParaBaixar -> Esta é a URL que vai retornar o caminho onde arquivo xlsx foi gerado. O servidor precisa estar esperando dados JSON com um objeto chamado 'objeto', e retornar uma string do caminho para obter o arquivo xlsx</li>
+						</ul>
+						<p>O usuario define os campos da tabela que deseja baixar, e então baixa, o metodo solicita a variavel localParaBaixar o arquivo em xlsx.</p>
 					</div>
 				</div>
 			</div>
@@ -575,15 +583,6 @@ google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br
 					<pre>con.pesquisar('/pagina_alvo');</pre>
 					<p class="bg-info">criarTabela(dados)</p>
 					<p>Este método é chamado em pesquisar e ele precisa ser sobreescrito, pois recebera os dados retornados em forma de json da pagina alvo.</p>
-					<p>Nota: Não tem regra, este método pode ser implantado atendendo as necessidades da pagina. A unica regra é que o parametro dados seja convertido usando JSON.parse(dados).</p>
-					<p class="bg-info">baixarEmExcel(String idBotao, String idTabela, String nomeArmazenamentoLocal, String localParaBaixar)</p>
-					<p>Este metodo implementa o download de uma tabela que esta sendo exibida na tela em excel. Ele espera encontrar os quatro parametros enviados</p>
-					<ul>
-						<li>idBotao -> O ID do botao que vai iniciar a comunicação para o download</li>
-						<li>idTabela -> O ID da tabela que vai liberar os dados </li>
-						<li>nomeArmazenamentoLocal -> Nome para usar no salvamento de dados locais(casos de lembrar as colunas selecionadas)</li>
-						<li>localParaBaixar -> Esta é a URL que vai retornar o caminho onde arquivo xlsx foi gerado. O servidor precisa estar esperando dados JSON com um objeto chamado 'objeto', e retornar uma string do caminho para obter o arquivo xlsx</li>
-					</ul>
 					<p>Nota: Não tem regra, este método pode ser implantado atendendo as necessidades da pagina. A unica regra é que o parametro dados seja convertido usando JSON.parse(dados).</p>
 					</div>
 				</div>

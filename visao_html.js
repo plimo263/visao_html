@@ -121,7 +121,7 @@ Tabela.prototype.setCorpo = function(corpo){
 }
 // Obtem uma tabela de forma simples <>
 Tabela.prototype.getTabela = function(){
-	var tabe = '<table class="'+this.classe+'" id="'+this.id+'">'; 
+	var tabe = '<div class="tabe table-responsive small"><table class="'+this.classe+'" id="'+this.id+'">'; 
 	var corpo = '<tbody>'; 
 	var cabe = '<thead><tr class="'+this.classeCabecalho+'">'; 
 	var cabecalho = this.cabecalho; 
@@ -150,7 +150,7 @@ Tabela.prototype.getTabela = function(){
 		}
 		corpo += '</tr></tfoot>';
 	}
-	tabe += cabe + corpo + '</table>'; 
+	tabe += cabe + corpo + '</table></div>'; 
 	return tabe; 
 };
 // Metodo que cria uma tabela dinamica recebendo a coluna chave e as colunas de valores monetarios
@@ -482,7 +482,7 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
   	// Verificar se o botao existe
   	if($(idBotao).length < 1){ 
   		// Nao existe, vamos criar o Elemento
-  		$(idTabela+'_wrapper').prepend(new Botao('Baixar', 'btn btn-xs btn-danger', idBotao.replace('#', '')).getBotao());
+  		$(idTabela+'_wrapper').prepend(new Botao('<span class="glyphicon glyphicon-download-alt"></span> BAIXAR', 'btn btn-xs btn-danger', idBotao.replace('#', '')).getBotao());
   	}
   	// Se a tabela nao tiver dados, vamos retornar false
   	if($(idTabela+' tbody tr').length < 1){ alert('ESTA TABELA NÃO TEM DADOS '+idTabela); return false;}

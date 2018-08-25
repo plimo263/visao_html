@@ -1563,3 +1563,14 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
       
   });
 }
+
+/**
+ *  ESTA CLASSE TRAZ FUNCIONALIDADES COMO CONVERSAO E DESCONVERSAO DE VALORES
+*/
+var Utilitario = {};
+Utilitario.prototype.converter = function(valor){
+
+};
+Utilitario.prototype.desconverter = function(valor){
+	
+}

@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <title>API E MODULOS BI</title>
+  <title>API VISAO_HTML</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdn.rawgit.com/plimo263/visao_html/last/visao_html.js"></script>
+  <script src="https://rawgit.com/plimo263/visao_html/master/visao_html.js"></script>
   <style>
     .classe_selecionada {
         cursor:pointer;
@@ -43,12 +43,9 @@
       <a class="navbar-brand" href="#">API VISAO_HTML</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
+      <ul class="menu nav navbar-nav">
         <li class="active"><a href="#">Classes</a></li>
-        <li><a class="modulo_ativar" href="#">modelo</a></li>
-        <li><a class="modulo_ativar" href="#">visao_html</a></li>
-        <li><a class="modulo_ativar" href="#">api_consultas</a></li>
-        <li><a class="modulo_ativar" href="#">template_pagina</a></li>
+
       </ul>
     </div>
   </div>
@@ -57,49 +54,102 @@
   <div class="row content">
 	  <br/>
     <div class="col-sm-2 sidenav hidden-xs">
-	  <ul class="nav  nav-pills nav-stacked">
-			<li><h4 class="text-center text-info">API VISAO_HTML</h4></li>
+	  <ul class="menu nav nav-pills nav-stacked">
+		<li><h4 class="text-center text-info">API VISAO_HTML</h4></li>
         <li class="active"><a href="#">Classes</a></li>
-        <li><a class="modulo_ativar" href="#">modelo</a></li>
-        <li><a class="modulo_ativar" href="#">visao_html</a></li>
-        <li><a class="modulo_ativar" href="#">api_consultas</a></li>
-        <li><a class="modulo_ativar" href="#">template_pagina</a></li>
+
       </ul>
       <br>
     </div>
     <div class="col-sm-10">
       <div class="well">
-        <h4 class="text-danger text-uppercase" id="titulo_classe"></h4>
-        <p id="descricao_classe"></p>
-        </div>
+        <h3 class="bg-info text-center" id="titulo_classe"></h3>
+		<p id="descricao_classe"></p>
+		<p id="heranca_classe"></p>
+      </div>
         <div id="conteudo_classes">
 			<ul class="list-group">
-				<li class="list-group-item">bla</li>
-				<li class="list-group-item">bla 2</li>
 			</ul>
 		</div>
         <hr>
-      <div class="row">
-        <div class="col-sm-12">
-          <h4 class="text-center text-uppercase bg-danger" id="classe_selecionada"></h4>
-            <p class="text-center" id="descricao_classe"></p> 
-          <div style="display:none" id="conteudo_metodos"></div>
-      </div>
-    </div>
+  	</div>
   </div>
-</div>
 </div>
  <footer class="container-fluid text-center">
   <p style="font-family: cursive;" class="text-danger pull-right">Desenvolvido por: Marcos Felipe da Silva Jardim </p>
 </footer>
 <script>
+	// Cria objetos para que possam ser usados na representacao dos manuais
 	let classes, metodos;
 	classes = {
-		ClasseId:{descricao:'', 'Heranca':'', 'metodos':['setClasse', '']},
-
+		ClasseId:{descricao:'Esta classe tem como objetivo disponibilizar metodos \
+		 que possam ser usados para incluir atributos, classes  e ids em outras \
+		 classes deste projeto. Praticamente todas as classes Herdão desta.', heranca:'NENHUM', 'metodos':Object.keys(ClasseId.prototype).filter(function(val){ if(typeof ClasseId.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Para: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag paragrafo (p)', 
+		heranca: 'ClasseId',metodos: Object.keys(Para.prototype).filter(function(val){ if(typeof Para.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Titulo: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag titulo (h{n})', 
+		heranca: 'ClasseId',metodos: Object.keys(Titulo.prototype).filter(function(val){ if(typeof Titulo.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Div: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag div (div)', 
+		heranca: 'ClasseId',metodos: Object.keys(Div.prototype).filter(function(val){ if(typeof Div.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Img: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag img (img)', 
+		heranca: 'ClasseId',metodos: Object.keys(Img.prototype).filter(function(val){ if(typeof Img.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Tabela: {descricao:'Esta classe tem por finalidade representar uma tabela, tem metodos interessantes \
+		como filtrar dados da tabela, ordena-la, converter os valores de um campo para monetario entre outros. \
+		Nota: Algumas funcionalidades são dependentes do plugin DataTables', 
+		heranca: 'ClasseId',metodos: Object.keys(Tabela.prototype).filter(function(val){ if(typeof Tabela.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Link: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag a (a)', 
+		heranca: 'ClasseId',metodos: Object.keys(Link.prototype).filter(function(val){ if(typeof Link.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Lista: {descricao:'Esta classe tem por finalidade retornar a representacao de uma lista (ul)', 
+		heranca: 'ClasseId',metodos: Object.keys(Lista.prototype).filter(function(val){ if(typeof Lista.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Botao: {descricao:'Esta classe tem por finalidade retornar a representacao de um botao (button)', 
+		heranca: 'ClasseId',metodos: Object.keys(Botao.prototype).filter(function(val){ if(typeof Botao.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Selecao: {descricao:'Esta classe tem por finalidade retornar a representacao de uma selecao', 
+		heranca: 'ClasseId',metodos: Object.keys(Selecao.prototype).filter(function(val){ if(typeof Selecao.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		DivRow: {descricao:'Esta classe tem por finalidade retornar a representacao de uma divRow usada pelo bootstrap', 
+		heranca: 'ClasseId',metodos: Object.keys(DivRow.prototype).filter(function(val){ if(typeof DivRow.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		DivTabs: {descricao:'Esta classe tem por finalidade retornar a representacao de uma divTabs usada pelo bootstrap', 
+		heranca: 'ClasseId',metodos: Object.keys(DivTabs.prototype).filter(function(val){ if(typeof DivTabs.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Modal: {descricao:'Esta classe tem por finalidade retornar a representacao de um modal usado pelo bootstrap', 
+		heranca: 'ClasseId',metodos: Object.keys(Modal.prototype).filter(function(val){ if(typeof Modal.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Grafico: {descricao:'Esta classe tem por finalidade interagir com a api de \
+		graficos do google de forma a facilitar o trabalho da criacao de graficos', 
+		heranca: 'ClasseId',metodos: Object.keys(Grafico.prototype).filter(function(val){ if(typeof Grafico.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Formulario: {descricao:'Esta classe tem por finalidade validar dados de um formulario', 
+		heranca: 'ClasseId',metodos: Object.keys(Formulario.prototype).filter(function(val){ if(typeof Formulario.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Utilitario: {descricao:'Esta classe reune uma suite de metodos que podem ser usados para \
+		fazer as mais diferentes configuracoes e ajustes', heranca: 'NENHUM',metodos: Object.keys(Utilitario.prototype).filter(function(val){ if(typeof Utilitario.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		BarraDeProgresso: {descricao:'Esta classe tem por finalidade possibilitar uma barra de \
+		progresso e controlar a barra com atualizacoes dinamicas', heranca: 'ClasseId',metodos: Object.keys(BarraDeProgresso.prototype).filter(function(val){ if(typeof BarraDeProgresso.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		Controlador: {descricao:'Esta classe tem por finalidade facilitar processos dentro da aplicacao como validacao de dados, \
+		desenho de barra de progresso entre outros.', heranca: 'NENHUM',metodos: Object.keys(Controlador.prototype).filter(function(val){ if(typeof Controlador.prototype[val] === "function" && val !== "constructor" ) return true; }) },
 	};
 	
 	metodos = {};
+</script>
+<script>
+	// Criando dinamicamente os itens do menu
+	function criarItensMenu(){
+		for(let c in classes){
+			$('.menu').append(`<li><a class="classe_ativar" href="#">${c}</a></li>`);
+		}
+	}
+
+	function eventos(){
+		// Quando uma classe for clicada, exiba suas informacoes
+		$('.classe_ativar').bind('click', function(e){
+			e.preventDefault();
+			let nome = $(this).text();
+			// Apenda no titulo, na descricao e na lista de metodos
+			$('#titulo_classe').html(nome);		
+			$('#descricao_classe').html(`<span class="text-danger"> DESCRICAO</span>: ${classes[nome].descricao}`);
+			$('#heranca_classe').html(`<span class="text-danger">HERDA DE</span>: ${classes[nome].heranca}`);
+			$('#conteudo_classes > ul.list-group').empty();
+			classes[nome].metodos.forEach(element => {
+				$('#conteudo_classes > ul.list-group').append(`<li style="cursor:pointer" class="item_metodo list-group-item"><span class="text-danger glyphicon glyphicon-book"></span> ${element}</li>`);	
+			});
+		});
+	}
+	window.onload = function(){ criarItensMenu(); eventos(); }
 </script>
 </body>
 </html>

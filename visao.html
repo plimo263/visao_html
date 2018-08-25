@@ -1,616 +1,105 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head><title>MANUAL CLASSES</title>
- 	<meta charset="utf-8" />
- 	<link rel='shortcut icon' href='../../_imagem/favicon.ico' type='image/x-icon'/>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-   <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-   <script type="text/javascript" src="http://191.252.113.208/visao_html.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
- <script type='text/javascript'>
-google.charts.load('current', {'packages':['corechart','bar'], 'language':'pt-br'});
- </script>
+<html lang="pt-br">
+<head>
+  <title>API E MODULOS BI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.rawgit.com/plimo263/visao_html/last/visao_html.js"></script>
+  <style>
+    .classe_selecionada {
+        cursor:pointer;
+    }
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 590px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+      width:auto;
+    }
+
+        
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;} 
+    }
+  </style>
 </head>
 <body>
 
-<h2 class="text-center bg-success">MANUAL DE UTILIZACAO CLASSES DO MODULO visao_html.js</h2>
-	<div class="row">
-		<div class="col-sm-1">
-			<ul style="list-style: none">
-			<li><a class="classes" href="#ClasseId">ClasseId</a></li>
-			<li><a class="classes" href="#Para">Para</a></li>
-			<li><a class="classes" href="#Titulo">Titulo</a></li>
-			<li><a class="classes" href="#Div">Div</a></li>
-			<li><a href="#Img" class="classes">Img</a></li>
-			<li><a href="#Tabela" class="classes">Tabela</a></li>
-			<li><a href="#Lista" class="classes">Lista</a></li>
-			<li><a href="#Botao" class="classes">Botao</a></li>
-			<li><a href="#Selecao" class="classes">Selecao</a></li>
-			<li><a href="#DivRow" class="classes">DivRow</a></li>
-			<li><a href="#DivTabs" class="classes">DivTabs</a></li>
-			<li><a href="#Modal" class="classes">Modal</a></li>
-			<li><a href="#Grafico" class="classes">Grafico</a></li>
-			<li><a href="#Formulario" class="classes">Formulario</a></li>
-			<li><a href="#Diversos" class="classes">Diversos</a></li>
-			<li><a href="#BarraDeProgresso" class="classes">BarraDeProgresso</a></li>
-			<li><a href="#Controlador" class="classes">Controlador</a></li>
+<nav class="navbar navbar-inverse visible-xs">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">API VISAO_HTML</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Classes</a></li>
+        <li><a class="modulo_ativar" href="#">modelo</a></li>
+        <li><a class="modulo_ativar" href="#">visao_html</a></li>
+        <li><a class="modulo_ativar" href="#">api_consultas</a></li>
+        <li><a class="modulo_ativar" href="#">template_pagina</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="row content">
+	  <br/>
+    <div class="col-sm-2 sidenav hidden-xs">
+	  <ul class="nav  nav-pills nav-stacked">
+			<li><h4 class="text-center text-info">API VISAO_HTML</h4></li>
+        <li class="active"><a href="#">Classes</a></li>
+        <li><a class="modulo_ativar" href="#">modelo</a></li>
+        <li><a class="modulo_ativar" href="#">visao_html</a></li>
+        <li><a class="modulo_ativar" href="#">api_consultas</a></li>
+        <li><a class="modulo_ativar" href="#">template_pagina</a></li>
+      </ul>
+      <br>
+    </div>
+    <div class="col-sm-10">
+      <div class="well">
+        <h4 class="text-danger text-uppercase" id="titulo_classe"></h4>
+        <p id="descricao_classe"></p>
+        </div>
+        <div id="conteudo_classes">
+			<ul class="list-group">
+				<li class="list-group-item">bla</li>
+				<li class="list-group-item">bla 2</li>
 			</ul>
 		</div>
-		<div class="col-sm-10">
-			<div class="classes" id="ClasseId">
-				<h3 class="">Class ClasseId</h3>
-				<p>Descrição: Esta classe tem o objetivo de disponibilizar atributos comuns entre elementos de uma pagina. O atributo class, id, e algum atributo personalizado.</p>
-				<p><span class="text-danger glyphicon glyphicon-asterisk"></span> NOTA: ESTA CLASSE É USADA COMO HERANÇA DAS DEMAIS, NÃO TEM UTILIDADE, SOMENTE SEUS METODOS E ATRIBUTOS SAO HERDADOS PARA SIMPLIFICAR A CRIAÇÃO DE CLASSES MAIS ESPECIFICAS.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#classeIdAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#classeIdMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="classeIdAtributo"><br/>
-						<p>String: classe -> Uma string que representa a classe de qualquer elemento html.</p>
-						<p>String: id -> Uma string que representa o id de qualquer elemento.</p>
-					</div>
-					<div class="tab-pane fade" id="classeIdMetodo"><br/>
-						<p class="bg-info">CONSTRUTOR: ClasseId(String classe, String id)</p>
-						<p>Constrói um objeto que vai conter representações de classe, id e atributos.</p>
-						<p class="bg-info">setClasse(String classe)</p>
-						<p>Define o valor do atributo class.</p>
-						<p class="bg-info">setId(String id)</p>
-						<p>Define o valor do atributo id.</p>
-						<p class="bg-info">setConteudo(String conteudo)</p>
-						<p>Define o conteudo de um elemento html.</p>
-						<p class="bg-info">addAtributo(String atributo)</p>
-						<p>Adiciona atributos ao elemento html em questão.</p>
-						<p class="bg-info">getClasse()</p>
-						<p>Recupera o valor da classe</p>
-						<p class="bg-info">getId()</p>
-						<p>Recupera o valor do Id</p>
-						<p class="bg-info">getConteuto()</p>
-						<p>Recupera o valor do conteudo</p>
-						<p class="bg-info">getAtributo()</p>
-						<p>Recupera o valor dos atributos.</p>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none" id=Para>
-				<h3 class="">Class Para</h3>
-				<p>Descrição: Esta classe tem objetivo de gerar uma representação do elemento p.</p>
-				<p>A classe Para herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#paraAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#paraMetodo">Métodos</a></li>
-					<li><a data-toggle="tab" href="#paraTeste">Testes</a></li>
-					
-				</ul>
-  				<div class="tab-content">
-  					<div class="tab-pane fade in active" id="paraAtributo"><br/>
-  						<p>String: conteudo -> Conteudo que sera anexado entre o elemento p</p>
-						<p>String: classe -> Nomes de classes para ser usado pelo elemento p</p>
-						<p>String: id -> Nome para ser usado como id do elemento p.</p>
-					</div>
-  					<div class="tab-pane fade" id="paraMetodo"><br/>
-  						<p class="bg-info">CONSTRUTOR: Para(String conteudo, String classe, String id)</p>
-  						<p>Constrói o objeto da Classe Para enviando o conteudo a classe e o id do elemento p.</p>
-  						<p>Exemplo:</p>
-  						<pre>var p = new Para('Ola', 'text-center, 'paragrafo1')</pre>
-  						<p class="bg-info">setPara(String conteudo) </p>
-  						<p>Recebe uma string que será o conteúdo dentro da tag p.</p>
-  						<pre>p.setPara('OLA MUNDO');</pre>
-  						<p class="bg-info">getPara()</p>
-  						<p>Retorna uma representação do elemento p</p>
-						<pre>p.getPara();</pre>
-  					</div>
-  					<div class="text-center tab-pane fade" id="paraTeste"><br/>
-  						<p>DIGITE CODIGOS PARA TESTES. Separe-os por ponto-virgula(;) E DEPOIS CLIQUE EM EXECUTAR
-  							</p>
-  					<textarea rows=5 cols=100></textarea><br/>
-  					<button class="executaTeste btn btn-success btn-xs">EXECUTAR</button>
-  					<br/><br/><br/>
-  					<div id="paraResult" style="border:'1px solid black'" width='600px' height='450px' ><p>QUANDO ESTIVER EXECUTANDO OS COMANDOS QUE RETORNAM REPRESENTACOES INFORME O ID paraResult PARA RECEBER ESTAS REPRESENTACOES.</p><p> EX $('#paraResult').html(p.getPara());</p></div>
-  					</div>
-  				</div>
-			</div>
-			<div class="classes" style="display:none" id="Titulo">
-				<h3>Class Titulo</h3>
-				<p>Descrição: Esta classe tem objetivo de gerar uma representação do elemento de titulo.</p>
-				<p>A classe Titulo herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#tituloAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#tituloMetodo">Métodos</a></li>
-					<li><a data-toggle="tab" href="#tituloTeste">Testes</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="tituloAtributo"><br/>
-						<p>String: conteudo -> Conteudo que vai ficar entre a tag h*.</p>
-						<p>String: tamanho -> Define o tamanho do elemento h.</p>
-						<p>String: classe -> Nomes de classes para ser usado pelo elemento p</p>
-						<p>String: id -> Nome para ser usado como id do elemento p.</p>
-					</div>
-					<div class="tab-pane fade" id="tituloMetodo"><br/>
-						<p class="bg-info">Construtor: Titulo(String conteudo, Number tamanho, String classe, String id)</p>
-						<p>Constrói o objeto da Classe Titulo enviando o conteudo, tamanho, classe e id do elemento h.</p>
-						<pre>var t = new Titulo('OLA MUNDO', 2, '', '');</pre>
-						<p class="bg-info">setTitulo(String conteudo)</p>
-						<p>Atualiza o conteudo do objeto</p>
-						<pre>t.setTitulo('ESTE É UM PARAGRAFO DE TESTE');</pre>
-						<p class="bg-info">getTitulo()</p>
-						<p>Retorna a representação do elemento h*</p>
-						<pre>t.getTitulo();</pre>
-					</div>
-					<div class="text-center tab-pane fade" id="tituloTeste"><br/>
-  						<p>DIGITE CODIGOS PARA TESTES. Separe-os por ponto-virgula(;) E DEPOIS CLIQUE EM EXECUTAR
-  							</p>
-  					<textarea rows=5 cols=100></textarea><br/>
-  					<button class="executaTeste btn btn-success btn-xs">EXECUTAR</button>
-  					<br/><br/><br/>
-  					<div id="tituloResult" style="border:'1px solid black'" width='600px' height='450px' ><p>QUANDO ESTIVER EXECUTANDO OS COMANDOS QUE RETORNAM REPRESENTACOES INFORME O ID paraResult PARA RECEBER ESTAS REPRESENTACOES.</p><p> EX $('#tituloResult').html(p.getPara());</p></div>
-  					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none" id="Div">
-				<h3>Class Div</h3>
-				<p>Descrição: Esta classe tem como objetivo gerar uma representação de um elemento div.</p>
-				<p>A classe Div herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#divAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#divMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="divAtributo"><br>
-						<p>String: conteudo -> Conteudo que vai ficar entre a tag div.</p>
-						<p>String: classe -> Define a classe da tag div.</p>
-						<p>String: id -> Define o id da tag div.</p>
-					</div>
-					<div class="tab-pane fade" id="divMetodo"><br/>
-						<p class="bg-info">CONSTRUTOR: Div(String conteudo, String classe, String id)</p>
-						<p>Constrói o objeto da classe Div enviando conteudo, classe e id do elemento div.</p>
-						<pre>var d = new Div('OLA','text-center', '');</pre>
-						<p class="bg-info">getDiv()</p>
-						<p>Retorna a representação do elemento div</p>
-						<pre>d.getDiv();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none" id="Img">
-				<h3>Class Img</h3>
-				<p>Descrição: Esta classe tem como objetivo gerar uma representação do elemento img.</p>
-				<p>A classe Img herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#imgAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#imgMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="imgAtributo"><br/>
-						<p>String: origem -> De onde o arquivo vem.</p>
-						<p>String: classe -> Define a classe do elemento Img.</p>
-						<p>String: id -> Define o id do elemento Img.</p>
-					</div>
-					<div class="tab-pane fade" id="imgMetodo"><br>
-						<p class="bg-info">CONSTRUTOR: Img(String origem, String classe, String id)</p>
-						<p>Constrói o objeto da classe Img enviando a origem a classe e o id do elemento Img</p>
-						<pre>var i = new Img('/imagem/foto.png', 'img', '');</pre>
-						<p class="bg-info">getImg()</p>
-						<p>Retorna a representação de uma tag img.</p>
-						<pre>i.getImg();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none" id="Tabela"><br/>
-				<h3>Class Tabela</h3>
-				<p>Descrição: Esta classe cria objetos que conseguem representar um elemento de tabela html.</p>
-				<p>A classe Tabela herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#tabelaAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#tabelaMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="tabelaAtributo"><br/>
-						<p>Array: cabecalho -> Este define o cabecalho de uma tabela html (thead). Um array simples.</p>
-						<p>Array[Array] : corpo -> Este define o corpo da tabela html (tbody). Varios arrays dentro de um array, cada array será como uma linha da tabela. <span class="glyphicon glyphicon-asterisk text-danger"></span> NOTA: O TAMANHO (array.length) DE CADA ARRAY INTERNO DEVE SER O MESMO DO CABECALHO.</p>
-						<p>String: classe -> Uma classe para a tabela html.</p>
-						<p>String: id -> Um id para a tabela html.</p>
-						<p>String: classeCabecalho -> A classe do cabecalho (thead) da tabela.</p>
-						<p>Objeto: opcoes -> Opções usadas pelo DataTable no momento de criacao da tabela.</p>
-					</div>
-					<div class="tab-pane fade" id="tabelaMetodo"><br/>
-						<p class="bg-info">CONSTRUTOR: Tabela(Array cabecalho, Array[Array] corpo, String classe, String id, String classeCabecalho)</p>
-						<p>Instancia um objeto Tabela com seu cabecalho e corpo.</p>
-						<pre>var t = new Tabela(['NOME','SOBRENOME'],[['MARCOS', 'FELIPE'],['WILSON', 'JARDIM']], 'table table-hover', '', '')</pre>
-						<p class="bg-info">setClasseCabecalho(String classe)</p>
-						<p>Define a classe do cabecalho da tabela html.</p><pre>t.setClasseCabecalho('bg-success');</pre>
-						<p class="bg-info">setCorpo(Array[Array] corpo)</p>
-						<p>Define o corpo de uma tabela html. Ele deve ter a mesma quantidade de elementos em cada array interno e cada array interno deve ter o tamanho igual o do cabecalho.</p><pre>t.setCorpo([['JOAO', 'BARBOSA']]);</pre>
-						<p class="bg-info">setRodape(Array rodape)</p>
-						<p>Define o rodape da tabela, este por padrão não é definido no construtor. É esperado um array com o mesmo tamanho (quantidade de itens) do cabecalho.</p><pre>t.setRodape(['NOME','SOBRENOME'])</pre>
-						<p class="bg-info">converterMonetario(int indexColuna)</p>
-						<p>Metodo utilizado para converter uma determinada coluna em monetario, por exemplo, se você quiser converter a primeira coluna use o indice 0.</p><pre>t.converterMonetario(0); // Converter a primeira coluna </pre>
-						<p class="bg-info">converterPercentual(int indexColuna)</p>
-						<p>Metodo usado para converter uma determinada coluna em monetario, por exemplo, se você quiser converter a primeira coluna, use o indice 0</p><pre>t.converterPercentual(0); // Converte a primeira coluna em percentual</pre>
-						<p class="bg-info">desenhaDataTable()</p>
-						<p>Este metodo funciona com o apoio da biblioteca dataTables, ele desenha uma tabela usando a api do dataTables (claro que a tabela já deve existir no html, veja getTabela())</p><pre>t.desenhaDataTable();</pre>
-						<p class="bg-info">getTabelaDinamica(int colunaChave, Array valoresMonetarios, int campoAserMovido)</p>
-						<p>Um dos métodos mais complexos utilizados pelo objeto Tabela. Ele tem 3 campos chaves para configuração, cada um deles determina a forma como a tabela dinamica sera desenhada. O primeiro é a colunaChave, ele vai centralizar registros cujo esta coluna seja identica a outras, por exemplo, se o corpo tem esta aparencia, [['MARCOS', 320], ['FELIPE', 230], ['MARCOS', 420]] isto que dizer que a colunaChave zero vai unificar todos os nomes iguais na coluna, se for a coluna zero, então teremos somente um registro de MARCOS e um de FELIPE.</p>
-						<p>O segundo parametro define colunas como valores monetarios, ou seja, valores que serão somados para definir um total a cada coluna e automaticamente formatados, como o corpo do exemplo acima a coluna 1 pode ser informada dentro de um array ([1]) como coluna que contem valores monetarios a serem totalizados e convertidos.</p>
-						<p>O terceiro e ultimo parametro, não o menos importante, move um determinado campo para a posição do campo da colunaChave, onde os valores duplicados são removidos. Não compreendeu ? Vou explicar. Vamos supor que temos o seguinte corpo. [['MARCOS','CC',280],['FELIPE','CC',480],['MARCOS','R$',110]]. Foi escolhida como coluna a ser movida a coluna 1, e a coluna a ser convertida a coluna 2, então nos registros MARCOS CC e R$  serão movidos abaixo do nome, assim como FELIPE recebera abaixo o CC, os valores serao somados e o resultado vai dar uma ideia de tabela dinamina sendo que a representacao sera exibida desta forma [['MARCOS','--',R$ 390],['MARCOS','R$',R$ 110],['MARCOS','CC',R$ 280],['FELIPE','--',R$ 480],['FELIPE','CC',R$ 480]]</p>
-						<p>Um exemplo de execucao do codigo</p><pre>t.getTabelaDinamica(0,[2],1)</pre>
-						<p class="bg-info">clickTabelaDinamica()</p>
-						<p>Metodo usado para definir o evento click a tabela dinamica já criada. Este metodo é totalmente dependente de getTabelaDinamica(). Para funcionar é necessário que a tabela dinamica já esteja desenhada na pagina.</p><pre>t.clickTabelaDinamica()</pre>
-						<p class="bg-info">getTabela()</p>
-						<p>Recupera uma representação html de uma tabela, com seu cabecalho, corpo e (se houver) seu rodape, suas classes e id. Caso o corpo não esteja de acordo com o tamanho do cabecalho uma mensagem de erro será retornada.</p><pre>t.getTabela();</pre>
-						<p class="bg-info">removeColuna(int indexColuna)</p>
-						<p>Remove a coluna da tabela recebendo seu indice, o valor do indice inicia-se por 0, sendo que a primeira coluna tem indice 0.</p>
-						<pre>t.removeColuna(1);</pre>
-						<p class="bg-info">getColuna(int indexColuna)</p>
-						<p>Método usado para retornar uma copia do corpo da tabela na coluna solicitada.</p>
-						<pre>var colu = t.getColuna(1);</pre>
-						<p class="bg-info">getColunas(Array colunas)</p>
-						<p>Método usado para retornar uma copia do corpo da tabela nas colunas solicitadas.</p>
-						<p>O exemplo abaixo retorna tres campos da tabela.</p>
-						<pre>var colu = t.getColunas([1,2,3]);</pre>
-						<p class="bg-info">filtro(String palavraChave)</p>
-						<p>Metodo usado para retornar cabecalho e corpo de dados filtrados. Recebe uma string para filtro e retorna [[cabecalho],[[corpo],[corpo]]]</p>
-						<pre>var recebeNovaTabela = t.filtro('Marcos');</pre>
-						<p class="bg-info">setOpcoes(Objeto opcoes)</p>
-						<p>Permite enviar um objeto "{}" de parametros para ser usado pelo datatables (usar antes de chamar o metodo desenhaDataTable()).</p><pre>t.setOpcoes({'order':true, 'bPaginate':false});</pre>
-						<p class="bg-info">calculaRodape(Array camposNaoCalculaveis, Array valorDosCamposNaoCalculaveis, Array camposMonetarios)</p>
-						<p>Este metodo faz o calculo da tabela e coloca as informações no rodape. Ele permite que se envie um array com os indices dos campos que nao serao calculaveis, um array contendo o valor destes campos que nao serao calculaveis (este precisa ter o mesmo tamanho do array dos camposNaoCalculaveis) e também um array com os indices das colunas que contem valores monetarios. Já campos com valores de números inteiros são somados de forma correta. Qualquer campos que não esteja listado será somado como se fosse valores inteiros.Isto faz os valores do rodape serem calculados e preechidos de forma correta sem erros.</p>
-						<pre>t.calculaRodape([0,1,2], [' -- ', ' -- ', 'TOTAL'], [3,4]);</pre>
-						
-						<p class="bg-info">baixarEmExcel(String nomeArmazenamentoLocal, String localParaBaixar)</p>
-						<p>Este metodo implementa o download de uma tabela que esta sendo exibida na tela em excel. Ele espera encontrar os dois parametros enviados nomeArmazenamentoLocal e localParaBaixar.</p>
-						<ul>
-							<li>nomeArmazenamentoLocal -> Nome para usar no salvamento de dados locais(casos de lembrar as colunas selecionadas)</li>
-							<li>localParaBaixar -> Esta é a URL que vai retornar o caminho onde arquivo xlsx foi gerado. O servidor precisa estar esperando dados JSON com um objeto chamado 'objeto', e retornar uma string do caminho para obter o arquivo xlsx</li>
-						</ul>
-						<p>O usuario define os campos da tabela que deseja baixar, e então baixa, o metodo solicita a variavel localParaBaixar o arquivo em xlsx.</p>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="Lista"><br/>
-				<h3>Class Lista</h3>
-				<p>Descrição: Cria um objeto capaz de representar uma lista, seja ela ordenada ou não.</p>
-				<p>A classe Lista herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#listaAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#listaMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="listaAtributo"><br/>
-						<p>Array: itens -> Um array com os itens que faram parte da lista (cada li).</p>
-						<p>boolean: ordenada -> Se true, será definido que o retorno será uma lista ordenada (ol), caso false será uma ul.</p>
-						<p>String: classe -> Uma classe para fazer parte da lista.</p>
-						<p>String: id -> Um id para fazer parte da lista.</p>
-					</div>
-					<div class="tab-pane fade" id="listaMetodo"><br/>
-						<p class="bg-info">CONSTRUTOR: Lista(Array itens, boolean ordenada, String classe, String id)</p>
-						<p>Instancia um objeto Lista para um elemento de lista html.</p><pre>var l = new Lista(['ovo','manteiga'], true, '','');</pre>
-						<p class="bg-info">getLista()</p>
-						<p>Retorna uma lista ordenada ou não dependendo do parametro que você enviou.</p><pre>l.getLista();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none" id="Botao">
-				<h3>Class Botao</h3>
-				<p>Descrição: Cria um objeto Botao capaz de representar um elemento button html.</p>
-				<p>A classe Botao herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#botaoAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#botaoMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="botaoAtributo"><br/>
-						<p>String: conteudo -> Define o conteudo entre o elemento button.</p>
-						<p>String: classe -> Define a classe do elemento button.</p>
-						<p>String: id -> Define o id do elemento button.</p>
-					</div>
-					<div class="tab-pane fade" id="botaoMetodo"><br/>
-						<p class="bg-info">CONSTRUTOR: Botao(String conteudo, String classe, String id)</p>
-						<p>Instancia um objeto Botao capaz de representar uma tag html button.</p><pre>var b = new Botao('CLIQUE', '','');</pre>
-						<p class="bg-info">getBotao();</p>
-						<p>Retorna a representação de uma tag button.</p><pre>b.getBotao();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none;" id="Selecao"><br/>
-				<h3>Class Selecao</h3>
-				<p>Descrição: Cria um objeto Selecao capaz de representar um elemento select.</p>
-				<p>A classe Selecao herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#selecaoAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#selecaoMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="selecaoAtributo"><br/>
-						<p>String: nome -> Um nome para o select, este é o valor do atributo name</p>
-						<p>String: classe -> Define uma classe para o elemento select.</p>
-						<p>String: id -> Define um id para o elemento select.</p>
-						<p>String: autoSelecionado -> Define um valor autoSelecionado no select.</p>
-					</div>
-					<div class="tab-pane fade" id="selecaoMetodo"><br/>
-						<p class="bg-info">CONSTRUTOR Selecao(String nome, String classe, String id)</p>
-						<p>Instancia um objeto Selecao que sera capaz de representar uma tag select.</p><pre>var selecao = new Selecao('nome','','');</pre>
-						<p class="bg-info">addItem(Array item)</p>
-						<p>Apenda um item ao select, resumindo cria mais um option para o select. O array enviado deve ter dois elementos, um sendo o value e o outro o rotulo.</p><pre>selecao.setItem(['1','UM']);</pre>
-						<p class="bg-info">addItens(Array[Array] item)</p>
-						<p>Apenda todos os itens do array ao select. Deve ser um array com outro array alinhado e o tamanho de cada array alinhado deve ser 2.</p><pre>selecao.setItens([['2','DOIS'],['3','TRES']]);</pre>
-						<p class="bg-info">getSelecao()</p>
-						<p>Retorna a representação de uma tag select com todos o itens (option) disponveis.</p><pre>selecao.getSelecao();</pre>
-						<p class="bg-info">setSelecionado(String selecionado)</p>
-						<p>Define que se existir este valor no array de itens, então ele será o campo que vem selecionado por padrão no select. EX: Se quero que o campo JAN venha selecionado, chamo este metodo antes mesmo de obter a representacao do select (getSelecao).</p><pre>selecao.setSelecionado('JAN');</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display: none" id="DivRow"><br>
-				<h3>Class DivRow</h3>
-				<p>Descrição: Classe usada para instanciar um objeto DivRow que vai representar uma divRow do bootstrap</p>
-				<p>A classe DivRow herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#divrowAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#divrowMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="divrowAtributo"><br/>
-						<p>String: classe -> Define a classe de um objeto divRow</p>
-						<p>String: id -> Define o id para o objeto divRow</p>
-						<p>Integer: tamanho -> Define a quantidade de divs col-ms vão existir, somente é permitida 12 destas.</p>
-					</div>
-					<div class="tab-pane fade" id="divrowMetodo"><br>
-						<p class="bg-info">CONSTRUTOR: DivRow(String classe, String id)</p>
-						<p>Este metodo contrói um objeto DivRow capaz de representar divs de 12 grades no máximo, o tamanho é definido na chamada do método addDiv().</p><pre>var di = new DivRow();</pre>
-						<p class="bg-info">addDiv(String conteudo, Integer tamanho, String classe, String id);</p>
-						<p>Este método é a melhor forma de conversar com um objeto DivRow, com este metodo pode-se informar o conteudo, o tamanho, sendo que a soma dos tamanhos deve ser igual ou inferior a 12, a classe da div e o id da div que será adicionada.</p>
-						<pre>di.addDiv('oi',4,'','');</pre>
-						<p class="bg-info">getDivRow()</p>
-						<p>Retorna um elemento div com divs alinhadas.</p><pre>di.getDivRow();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="DivTabs"><br>
-				<h3>Class DivTabs</h3>
-				<p>Descrição: Classe usada para instanciar um objeto DivTabs que vai representar uma divTabs do bootstrap</p>
-				<p>A classe DivTabs herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#divtabsAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#divtabsMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="divtabsAtributo"><br>
-						<p>Array: lista -> Uma lista que vai definir os links da tabulacao.</p>
-						<p>Array: conteudo -> Um array com o conteudo de cada aba do divTabs.</p>
-						<p><span class="text-danger glyphicon glyphicon-asterisk"></span> ESTES ATRIBUTOS NÃO SÃO DEFINIDOS PELO USUÁRIO, O PREENCHIMENTO DELES SE DÁ PELO METODO addDivTabs que é demonstrado na aba dos métodos.</p>
-					</div>
-					<div class="tab-pane fade" id="divtabsMetodo">
-						<p class="bg-info">CONSTRUTOR: DivTabs()</p>
-						<p>Contrói um objeto divTabs capaz de representar a tabela.</p>
-						<pre>var diT = new DivTabs();</pre>
-						<p class="bg-info">addDivTabs(String nome, String idDaDiv, String Conteudo</p>
-						<p>O nome é de fato o que aparece na aba, já o idDaDiv é o id que vai ligar a aba ate a div contida no divTabs, já o conteudo é de fato o que vai dentro da aba.</p>
-						<pre>diT.addDivTabs('NOMES', 'nomes', '&ltp>Marcos&lt/p>')</pre>
-						<p class="bg-info">getDivTabs()</p>
-						<p>Retorna a representaçao da divTabs para ser inserida na pagina como voce desejar.</p>
-						<pre>diT.getDivTabs();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="Modal"><br>
-				<h3>Class Modal</h3>
-				<p>Descrição: Classe usada para instanciar um objeto Modal que vai representar um modal do bootstrap</p>
-				<p>A classe Modal herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#modalAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#modalMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="modalAtributo"><br>
-					<p>String: cabeModal -> Conteudo do cabecalho do modal</p>
-					<p>String: corpoModal -> Conteudo do corpo do modal</p>
-					<p>String: rodapeModal -> Conteudo do rodape do modal</p>
-					<p>boolean: tipoModal -> Conteudo do tipo do modal</p>
-					</div>
-					<div class="ta-pane fade" id="modalMetodo"><br/>
-					<p class="bg-info">CONSTRUTOR Modal(String cabeModal, String corpoModal, String rodapeModal, String classe, String id)</p>
-					<p>Este é o construtor do modal, recebe estes parametos posicionais para se criar um modal com largura media.</p>
-					<pre>var mo = new Modal('&lth1>Ola&lt/>', '&ltp>TESTE&lt/p>', '', '', '')</pre>
-					<p class="bg-info">setCabeModal(String cabeModal);</p>
-					<p>Recebe uma string que vai representar o cabecalho do modal.</p>
-					<pre>mo.setCabeModal('');</pre>
-					<p class="bg-info">setCorpoModal(String corpoModal);</p>
-					<p>Define o corpo do modal recebendo a string que vai representa-lo.</p>
-					<pre>mo.setCorpoModal('');</pre>
-					<p class="bg-info">setRodapeModal(String rodaModal)</p>
-					<p>Define o rodape do modal recebendo uma string que vai representa-lo.</p>
-					<pre>mo.setRodapeModal('');</pre>
-					<p class="bg-info">setTipoModal(boolean tipoModal)</p>
-					<p>Recebe um booleando definindo o tipo do modal. Se tipoModal for true o modal fica com fundo preto, mas clicando fora ele fecha, se for false ele fica com fundo transparente e não é possivel fecha-lo clicando fora e se for enviado a string 'static' o modal fica com fundo preto e não é fechado clicando fora, somente fechando pelos seus botoes.</p>
-					<pre>mo.setTipoModal(true);</pre>
-					<p class="bg-info">getModal()</p>
-					<p>Obtem a representacao html do modal, este pode ser usado para ser incluso no documento html.</p>
-					<pre>var modal = mo.getModal();</pre>
-					<p class="bg-info">executaModal()</p>
-					<p>Este metodo executa o modal no estilo javascript sendo que se o modal já estiver contido no documento html ele o faz aparecer na tela.</p>
-					<pre>mo.executaModal();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="Grafico"><br>
-				<h3>Class Grafico</h3>
-				<p>Descrição: Classe usada para instanciar um objeto Grafico que vai representar graficos do google charts</p>
-				<p>NOTA: PARA FUNCIONAR É NECESSÁRIO QUE O GOOGLE CHARTS ESTEJA PRESENTE NO DOCUMENTO HTML.</p>
-				<p>A classe Modal herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#graficoAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#graficoMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="graficoAtributo"><br>
-						<p>Array[Array]: dados -> Um array aninhado com os dados para gerar o grafico</p>
-						<p>Object: opcoes -> Um objeto de opções com pares {chave:valor}.</p>
-						<p>String: classe -> A classe da div do grafico</p>
-						<p>String: id -> O id que indentificar a div do grafico.</p>
-					</div>
-					<div class="tab-pane fade" id="graficoMetodo"><br/>
-					<p class="bg-info">CONSTRUTOR Grafico(Array[Array] dados, Object opcoes, String classe, String id)</p>
-					<p>Inicia um objeto que vai representar um grafico, é importante que o ID do objeto seja informado pois ele é reponsavel por especificar o local exato da criação do grafico. Para funcionar corretamente é necessário que exista uma div com um id, e este ID seja informado na criacao do objeto grafico.</p>
-					<pre>var g = new Grafico([['NOME', 'TOTAL'],['MARCOS',250.00]], {title:'VENDAS DE PRODUTOS'}, '', 'graf');</pre>
-					<p class="bg-info">addColuna(Array dadosColuna);</p>
-					<p>Ao enviar um array pode-se incluir uma terceira coluna para os dados, casos usados quando a terceira coluna ainda não havia sido criada e ela precisa ser inclusa no grafico. Este array tem que ter o mesmo tamanho da quantidade de arrays dentro do arrayDados.</p>
-					<pre>g.addColuna(['PERCENTUAL', 50.0]);</pre>
-					<p class="bg-info">setCores(Array cores)</p>
-					<p>Caso queira definir as cores do grafico pode-se enviar as cores desejadas como um array simples e o mesmo será usados para gerar as cores.</p>
-					<pre>g.setCores(['red','green']);</pre>
-					<p class="bg-info">getPizza()</p>
-					<p>Este metodo cria um grafico de pizza na div com o ID informado no momento da criação do objeto.</p>
-					<pre>g.getPizza();</pre>
-					<p class="bg-info">getBarra()</p>
-					<p>Este metodo cria um grafico de barra na div com o ID informado no momento da criação do objeto.</p>
-					<pre>g.getBarra()</pre>
-					<p class="bg-info">getColuna()</p>
-					<p>Este método cria um grafico de coluna na div com o ID informado no momento da criação do objeto.</p>
-					<pre>g.getColuna()</pre>
-					<p class="bg-info">getLinha()</p>
-					<p>Este método cria um grafico de linha na div com o ID informado no momento da criação do objeto. Este gráfico de linha para ser desenhado corretamente precisa que o arrayDados seja algo constante no eixo X.Ex: Se quero desenhar os rendimentos mensais de uma loja, devo informar que a primeira coluna sera o nome do mes, a segunda no titulo sera o nome da loja(Valor do rotulo) e cada array apos este será a fusao do mes e o valor daquela loja no referente mes. Como uma tabela.</p>
-					<table class="table table-hover table-responsive table-bordered"><thead><tr><th>MES</th><th>LOJA 01</th></tr></thead>
-						<tbody><tr><td>JAN</td><td>250.00</td></tr>
-						<tr><td>FEV</td><td>200.00</td></tr><tr><td>MAR</td><td>650.00</td></tr>
-				<tr><td>ABR</td><td>250.00</td></tr><tr><td>MAI</td><td>260.00</td></tr>
-				<tr><td>JUN</td><td>450.00</td></tr></tbody></table>
-					<p>Desta forma da tabela os dados são descritos na forma correta para o exemplo do grafico</p>
-					<pre>g.getLinha();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="Formulario"><br>
-				<h3>Class Formulario</h3>
-				<p>Descrição: Classe usada para instanciar um objeto Formulario que vai validar campos de formularios.</p>
-				<p>A classe Modal herda de <a class="classes" href="#ClasseId">ClasseId</a>.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#formularioAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#formularioMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="formularioAtributo"><br>
-						
-					</div>
-					<div class="tab-pane fade" id="formularioMetodo"><br/>
-					<p class="bg-info">CONSTRUTOR Formulario()</p>
-					<p>Inicia um objeto formulario que é capaz de validar datas e campos. Ele não recebe nenhum parametro.</p>
-					<pre>var f = new Formulario();</pre>
-					<p class="bg-info">validaData(idOuClasse);</p>
-					<p>Valida a data informada retornando um objeto Date se a data estiver correta, senão retorna false.</p>
-					<pre>var da = f.validaData('data1');</pre>
-					<p class="bg-info">deMenorQueAte(data1, data2)</p>
-					<p>Verifica se a data1 é menor que a data2. Usado para validar campos de data em filtros de/ate. Os parametros enviados são idOuClasse de cada campo de formulario date. Se tudo ocorreu bem retorna true e atribui ao objeto Formulario os valores de data1 e data2, sendo que cria os atributos de = data1 e ate = data2.</p>
-					<pre>var validou = f.deMenorQueAte('data1', 'data2);</pre>
-					<p class="bg-info">validaCampo(idOuClasse)</p>
-					<p>Este metodo valida o campo recebendo um id ou classe. Verifica se o campo não esta em branco, se ele esta retorna false, senão atribui o campo ao objeto do Formulario de dados e retorna true.</p>
-					<pre>var validou = f.validaCampo('grupos');</pre>
-					<p class="bg-info">validaArquivo(ID, arrayDeTipos)</p>
-					<p>Este metodo valida se o arquivo ou arquivos enviados no campo file onde o ID foi informado atende aos tipos de arquivos listado no arrayDeTipos. Se todos atendem retorna true, senão exibem uma mensagem dizendo que tem arquivo de tipo incorreto e retorna false.</p>
-					<pre>var validou = f.validaArquivo('arquivo', ['.png', '.PNG', '.JPG', '.jpg', '.JPEG', '.jpeg']);</pre>
-					<p class="bg-info">O objeto dados do Formulario</p>
-					<p>Quando você utiliza metodos como deMenorQueAte() e validaCampo() eles depois de validados criam atributos no objeto de Formulario chamado dados. Para recuperar os dados que foram validados basta você chamar o atributo dados. Usando nosso exemplo vamos chama-lo em f.</p>
-					<pre>var dados = f.dados</pre>
-					<p>Os dados retornados são um par de chave e valor, sendo que deMenorQueAte cria as chaves de e ate, e validaCampo cria a chave do nome do idOuClasse do campo. f.dados.de;f.dados.ate;</p>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="Diversos"><br>
-				<h3>Diversos</h3>
-				<p>Descrição: Aqui reune varias funcoes que não se encaixam em nenhuma classe informada.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#funcoesDiversos">Funções</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="funcoesDiversos"><br>
-						<p class="bg-info">converter(String valor)</p>
-						<p>Converte um valor repassado como string em um monetario com a sigla R$ e o retorna. Caso seja um float pode converte-lo usando o metodo toFixed(2) de parseFloat para envia-lo corretamente.</p>
-						<pre>var valor = 15000.00;var conv = converter(parseFloat(valor).toFixed(2));</pre>
-						<p class="bg-info">desconverter(String valor)</p>
-						<p>Esta função desconverte o valor enviado como string e retorna uma string numerica com 2 casas decimais. Geralmente o valor recebido é um 'R$ 00,0' e o valor retornado é "0.00"</p>
-						<pre>var valor = 'R$ 25,00'; var desconv = desconverter(valor);</pre>
-					</div>
-					
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="BarraDeProgresso"><br>
-				<h3>Class BarraDeProgresso</h3>
-				<p>Descrição: Classe usada para instanciar um objeto BarraDeProgresso que cria uma visualização de barra, se atendido alguns parametros.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#BarraDeProgressoAtributo">Atributos</a></li>
-					<li><a data-toggle="tab" href="#BarraDeProgressoMetodo">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="BarraDeProgressoAtributo"><br>
-						
-					</div>
-					<div class="tab-pane fade" id="BarraDeProgressoMetodo"><br/>
-					<p class="bg-info">CONSTRUTOR BarraDeProgresso()</p>
-					<p>Inicia um objeto BarraDeProgresso que é capaz de criar uma barra de progresso, definir tempo de mudança e interromper a barra.</p>
-					<pre>var barra = new BarraDeProgresso();</pre>
-					<p class="bg-info">incluirBarra(String idOuClasse);</p>
-					<p>Este metodo cria barra de progresso substiuindo o conteudo do objeto idOuClasse informado. Assim que o metodo ativarBarra for chamado, a barra de progresso começa a caminhar devido ao valor dos saltos.</p>
-					<p>Lembrando que a notação deve ser um seletor css.</p>
-					<pre>barra.incluirBarra('#corpo_pagina')</pre>
-					<p class="bg-info">ativarBarra(Number contador, Number intervalo)</p>
-					<p>Quando este metodo é chamado, já assumimos que você tenha definido um alvo chamando o metodo incluirBarra. Ele recebe dois parametos, o contador(onde a barra vai iniciar) até 100 e um intervalo em milisegundos que a barra vai saltar para o proximo numero. Sendo que o intervalo 1000 quer dizer que de 1 em 1 segundo a barra vai andar.</p>
-					<pre>barra.ativarBarra(0, 1500); // Barra salta de 1.5 segundo em 1.5 segundos</pre>
-					<p class="bg-info">pararBarra()</p>
-					<p>Este método para a execução da barra colocando ela como 100% completo.</p>
-					<pre>barra.pararBarra();</pre>
-					</div>
-				</div>
-			</div>
-			<div class="classes" style="display:none" id="Controlador"><br>
-				<h3>Class Controlador</h3>
-				<p>Descrição: Classe usada para instanciar um objeto Controlador mantem atividades de solicitacao de dados e validação de parametros.</p>
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#ControladorAtributos">Atributos</a></li>
-					<li><a data-toggle="tab" href="#ControladorMetodos">Métodos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade in active" id="ControladorAtributos"><br>
-						
-					</div>
-					<div class="tab-pane fade" id="ControladorMetodos"><br/>
-					<p class="bg-info">CONSTRUTOR Controlador()</p>
-					<p>Inicia um objeto Controlador que vai manipular com seus metodos rotinas padrão de validação de campos.</p>
-					<pre>var con = new Controlador();</pre>
-					<p class="bg-info">pesquisar(String paginaAlvo);</p>
-					<p>Este método depende de um formulario de 4 campos #grupos, #lojas, #data1 e #data2 na pagina para que ele possa fazer a validação destes campos, enviar os dados para a paginaAlvo informada e depois chamar criarTabela() passando como parametros os dados de retorno json do servidor.</p>
-					<pre>con.pesquisar('/pagina_alvo');</pre>
-					<p class="bg-info">criarTabela(dados)</p>
-					<p>Este método é chamado em pesquisar e ele precisa ser sobreescrito, pois recebera os dados retornados em forma de json da pagina alvo.</p>
-					<p>Nota: Não tem regra, este método pode ser implantado atendendo as necessidades da pagina. A unica regra é que o parametro dados seja convertido usando JSON.parse(dados).</p>
-					</div>
-				</div>
-			</div>
-	</div>
-<script type="text/javascript">
+        <hr>
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="text-center text-uppercase bg-danger" id="classe_selecionada"></h4>
+            <p class="text-center" id="descricao_classe"></p> 
+          <div style="display:none" id="conteudo_metodos"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ <footer class="container-fluid text-center">
+  <p style="font-family: cursive;" class="text-danger pull-right">Desenvolvido por: Marcos Felipe da Silva Jardim </p>
+</footer>
+<script>
+	let classes, metodos;
+	classes = {
+		ClasseId:{descricao:'', 'Heranca':'', 'metodos':['setClasse', '']},
 
-$('a.classes').click(function(){
-	var ID = $(this).attr('href');
-	$(ID).slideDown();
-	$('div.classes:not('+ID+')').slideUp();
+	};
 	
-
-});
-
-$('.executaTeste').bind('click', function(e){
-	e.preventDefault();
-	// Recuperando o texto de textArea
-	var comando = $(this).parent().find('textarea').val();
-	// Executa os comandos e exibe o resultado dentro da div informada.
-	eval(comando);
-});
+	metodos = {};
 </script>
 </body>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/fh-3.1.2/datatables.min.js"></script>
- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/fh-3.1.2/datatables.min.css"/> 
- <!-- plugin de fixacao da coluna -->
- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/fc-3.2.2/datatables.min.js"></script>
- <!-- plugin de reordenacao das colunas -->
- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/cr-1.3.2/datatables.min.js"></script>
 </html>

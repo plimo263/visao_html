@@ -7,6 +7,7 @@ Objetivo: Reune as principais tags e as exibe pelas chamadas das funcoes
 
 ************************* ------ CLASSES ------ ******************************************
 */
+var testeRelease = '';
 // Classe pai para as propriedade classe, id e conteudo
 var ClasseId = function(conteudo, classe, id){
 	this.conteudo = conteudo ? conteudo : '';
@@ -786,8 +787,6 @@ var Vendedor = function(nome, imagem, id){
 	ClasseId.call(this, "", "",id);
 };
 
-
-
 Vendedor.prototype = new ClasseId();
 Vendedor.prototype.constructor = Vendedor;
 // Metodos do vendedor
@@ -818,7 +817,6 @@ Vendedor.prototype.iniciaAtendimento = function(){
 	this.dataAtendimento = hora.getUTCFullYear() +'-'+(hora.getUTCMonth()+1)+'-'+hora.getUTCDate();
 
 };
-
 
 Vendedor.prototype.finalizaAtendimento = function(){
 	// Registra tempo de finalizacao do atendimento

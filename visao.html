@@ -117,7 +117,7 @@
 		Formulario: {descricao:'Esta classe tem por finalidade validar dados de um formulario', 
 		heranca: 'ClasseId',metodos: Object.keys(Formulario.prototype).filter(function(val){ if(typeof Formulario.prototype[val] === "function" && val !== "constructor" ) return true; }) },
 		Utilitario: {descricao:'Esta classe reune uma suite de metodos que podem ser usados para \
-		fazer as mais diferentes configuracoes e ajustes', heranca: 'NENHUM',metodos: Object.keys(Utilitario.prototype).filter(function(val){ if(typeof Utilitario.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		fazer as mais diferentes configuracoes e ajustes', heranca: 'NENHUM',metodos: Object.keys(Utilitario).filter(function(val){ if(typeof Utilitario[val] === "function" && val !== "constructor" ) return true; }) },
 		BarraDeProgresso: {descricao:'Esta classe tem por finalidade possibilitar uma barra de \
 		progresso e controlar a barra com atualizacoes dinamicas', heranca: 'ClasseId',metodos: Object.keys(BarraDeProgresso.prototype).filter(function(val){ if(typeof BarraDeProgresso.prototype[val] === "function" && val !== "constructor" ) return true; }) },
 		Controlador: {descricao:'Esta classe tem por finalidade facilitar processos dentro da aplicacao como validacao de dados, \

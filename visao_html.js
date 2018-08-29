@@ -4,6 +4,9 @@ autor: Marcos Felipe da Silva Jardim
 
 Objetivo: Reune as principais tags e as exibe pelas chamadas das funcoes
 ------------------------------------------------------------------------------------
+Revisao de codigo:
+
+rev1.0 27-08-2018
 
 ************************* ------ CLASSES ------ ******************************************
 */
@@ -24,10 +27,8 @@ ClasseId.prototype.addAtributo = function(atributo){ if(atributo){ this.attr.pus
 ClasseId.prototype.getConteudo = function(){ return this.conteudo;};
 ClasseId.prototype.setConteudo = function(conteudo){ if(conteudo){this.conteudo = conteudo;} };
 ClasseId.prototype.getAtributo = function(){
-	var at = '';
-	for(var x = 0;x<this.attr.length;x++){
-		at += this.attr[x];
-	}
+	let at = '';
+	this.attr.forEach(function(e){ at += " "+ e; });
 	return at;
 }
 
@@ -38,10 +39,7 @@ Para.prototype = new ClasseId();
 Para.prototype.constructor = Para;
 Para.prototype.setPara = function(conteudo){ this.conteudo = conteudo; }
 Para.prototype.getPara = function(){
-	var atributos = '';
-	for(var i = 0;i < this.attr.length;i++){ 
-		atributos += ' ' +this.attr[i]; 
-	} 
+	let atributos = this.getAtributo();
 	return '<p class="'+this.classe+'" id="'+this.id+'" '+atributos+ ' >'+this.conteudo+'</p>'; 
 };
 
@@ -86,195 +84,195 @@ Img.prototype.getImg = function(){
 
 // Classe que instancia uma tabela
 var Tabela = function(cabecalho, corpo, classe, id, classeCabecalho){
-	this.rodape = []; 
-	this.classeCabecalho = classeCabecalho; this.cabecalho = cabecalho instanceof Array ? cabecalho : []; 
-	this.corpo = corpo ? corpo : [[]]; 
-	ClasseId.call(this, '', classe, id);
-	this.opcoes = {"bPaginate": false, "ordering" : true,"colReorder" : true, "scrollY": 250, "scrollCollapse": true,
+	this._rodape = [];  // Rodape
+	this._cabecalho; // Atributo do cabecalho
+	this._classeCabecalho = classeCabecalho; // Define uma classe para o cabecalho
+	this._corpo = Array.isArray(corpo)  && Array.isArray(corpo[0]) ? corpo : [[]];  // Define um corpo
+	this._estiloTd = ''; // Recebe estilos do TD
+	ClasseId.call(this, '', classe, id); // Define os atributos classe e id
+	this._idDataTables = ''; // id do datatables
+	this._opcoes = {"bPaginate": false, "ordering" : true,"colReorder" : true, "scrollY": 250, "scrollCollapse": true,
   "scrollX": true, "info" : false, "responsive": true,"autoWidth": false,
   "search" : {"regex": true }, retrieve: true, "language": { "search": "Procurar na tabela",
-    "emptyTable" : "Nao ha dados", "zeroRecords": "Sem registros com valor informado","decimal":",","thousands":"."}};
+	"emptyTable" : "Nao ha dados", "zeroRecords": "Sem registros com valor informado","decimal":",","thousands":"."}};
+	this.setCabecalho(cabecalho);// Define o cabecalho
 }
 
 Tabela.prototype = new ClasseId();
 Tabela.prototype.constructor = Tabela; 
 
+// Metodo para definir o cabecalho
+Tabela.prototype.setCabecalho = function(cabe){
+	if(!Array.isArray(cabe)){
+		throw new SyntaxError(`FAVOR ENVIAR SOMENTE ARRAYS PARA O CABECALHO.VALOR ENVIADO ${JSON.stringify(cabe)}`);
+	} else if(!Array.isArray(this._corpo[0]) || (this._corpo[0].length !== 0 && this._corpo[0].length !== cabe.length)){
+		throw new SyntaxError(`NÃO PODE SER ENVIADO UM CABECALHO DE TAMANHO DIFERENTE DO CORPO ATUAL ${JSON.stringify(cabe)}`);
+	}
+	this._cabecalho = cabe;
+	return true;
+}
 // Define o corpo da tabela, o mesmo deve estar alinhado com o tamanho do cabecalho<>
 Tabela.prototype.setCorpo = function(corpo){
 	// Verificando se o corpo é um array e seu conteudo é um array também
-	if(corpo instanceof Array && corpo[0] instanceof Array){
-		// Agora verificar se um dos conteudos do corpo não tem o tamanho do cabecalho.
-		var linha = -1;
-		for(var x = 0;x < corpo.length;x++){
-			if(corpo[x].length != this.cabecalho.length){
-				linha = x;
-				break;
+	if(Array.isArray(corpo) && Array.isArray(corpo[0])){
+		corpo.forEach((e,i) =>{
+			if(e.length !== this._cabecalho.length){
+				throw new SyntaxError(`FALHA, UM DOS REGISTROS TEM O TAMANHO DIFERENTE DO CABECALHO:
+				 REGISTRO ${i} VALOR DO ARRAY:${JSON.stringify(e)}`);
 			}
-		}
-		if(linha >= 0){
-			console.log("Um dos elementos do corpo não é compativel com o tamanho do cabecalho. O array "+linha+" tem tamanho incompativel.");
-		} else {
-			this.corpo = corpo;
-		}
+		});
+			this._corpo = corpo;
+			return true;
 	} else {
 		console.log("O corpo enviado não é um array ou não contém um array alinhado.");
 	}
 }
 // Obtem uma tabela de forma simples <>
 Tabela.prototype.getTabela = function(){
-	var tabe = '<div class="tabe table-responsive small"><table class="'+this.classe+'" id="'+this.id+'">'; 
-	var corpo = '<tbody>'; 
-	var cabe = '<thead><tr class="'+this.classeCabecalho+'">'; 
-	var cabecalho = this.cabecalho; 
-	var arrCorpo = this.corpo;
-	for(var i = 0;i < arrCorpo.length;i++){ 
-		if(arrCorpo[i].length != cabecalho.length){ 
-			return 'O cabecalho e o registro do corpo não são identicos ';	
-		} else { 
-			var tr = '<tr>'; 
-			for(var x = 0;x < arrCorpo[i].length;x++){ 
-				tr += '<td>'+arrCorpo[i][x]+'</td>';  
-			} 
-			corpo += tr + '</tr>'; 
-		} 
-	} 
+	let tabe = `<div class="tabe table-responsive small"><table class="${this.classe}" id="${this.id}">`; 
+	let corpo = '<tbody>'; 
+	let cabe = `<thead><tr class="${this._classeCabecalho}">`; 
+	//let cabecalho = this._cabecalho; 
+	// Fazer um loop sobre o corpo para criar os tr
+	this._corpo.forEach(e=>{
+		let tr = '<tr>';
+		e.forEach(eInterno=>{ tr += `<td style="${this._estiloTd}">${eInterno}</td>`; });
+		tr += '</tr>';
+		corpo += tr;
+	});
+
 	corpo += '</tbody>'; 
-	for(var i =0;i < cabecalho.length;i++){ 
-		cabe += '<th>'+cabecalho[i]+'</th>'; 
-	} 
-	cabe += '</tr></thead>'; 
-	// Verificando se tem rodape, se tiver cria-lo, senão deixe sem ele
-	if(this.rodape.length == cabecalho.length){
-		corpo += '<tfoot><tr class="'+this.classeCabecalho+'">';
-		for(var x = 0;x < this.rodape.length;x++){
-			corpo += '<td>'+this.rodape[x]+'</td>';
-		}
+	this._cabecalho.forEach(e=>{ cabe += `<th>${e}</th>`; });
+	cabe += '</tr></thead>';
+	// Criando rodape se existir
+	if(this._rodape.length === this._cabecalho.length){
+		corpo +='<tfoot><tr>';
+		this._rodape.forEach(e1=>{ corpo += `<td>${e1}</td>`; });
 		corpo += '</tr></tfoot>';
 	}
+	// Montando as strings das tabela e retornando
 	tabe += cabe + corpo + '</table></div>'; 
 	return tabe; 
 };
+// Metodo para obter o dataTables
+Tabela.prototype.getIdDataTable = function(){
+	return this._idDataTables;
+}
 // Metodo que cria uma tabela dinamica recebendo a coluna chave e as colunas de valores monetarios
 Tabela.prototype.getTabelaDinamica = function(colunaChave, arrayValoresMonetarios, campoMovidoAbaixo){
 	// Verifica se a coluna chave existe no corpo
-	if(this.corpo[0][colunaChave] === null){
+	if(this._corpo[0][colunaChave] === null){
 		return 'A coluna informada não existe';
 	}
 	// Tá coluna ok, agora verifica se o arrayValoresMonetarios se é um array
-	if(!(arrayValoresMonetarios instanceof Array)){
+	if(!(Array.isArray(arrayValoresMonetarios))){
 		return 'O arrayValoresMonetarios não é um array, então não é possivel determinar quais serao as colunas monetarias';
 	}
 	// Criando a lista arrChave
-	var arrChave = {};
+	let arrChave = {};
 	// Fazendo um loop para criar as chaves únicas
-	for(var x = 0;x < this.corpo.length;x++){
+	this._corpo.forEach((e1,i1)=>{
 		// Recupera o valor da coluna a ser filtrada
-		var valor = this.corpo[x][colunaChave];
+		let valor = this.corpo[x][colunaChave];
 		// Se ele nao contiver a chave, vamos cria-la
 		if(typeof arrChave[valor] == "undefined"){
 			arrChave[valor] = [];
 			// Realizar a copia deste array
-			var arrTemp = JSON.stringify(this.corpo[x]);
-			arrTemp =  JSON.parse(arrTemp);
+			let arrTemp = JSON.stringify(e1);
+			arrTemp = JSON.parse(arrTemp);
 			arrTemp[campoMovidoAbaixo] = "- -";
 			// Apendando este array copiado
 			arrChave[valor].push(arrTemp); // Chaves preenchidas
 			// Agora fazer um loop sobre o arrayMonetario, para zerar os campos que foram informados
-			for(var h = 0;h < arrayValoresMonetarios.length;h++){
-				var indiceM = arrayValoresMonetarios[h];
-				// Atribuindo o valor
+			arrayValoresMonetarios.forEach((e2, i2) => {
+				let indiceM = arrayValoresMonetarios[i2];
+				//Atribuindo o valor
 				arrChave[valor][0][indiceM] = 0.00;
-			}
+			});
 		}
-	}
-
+	});
+	
 	// Agora este é o segundo loop para gerar o total ao arrChave
-	for(var j = 0;j < this.corpo.length;j++){
-		// Recupera o valor da coluna a ser filtrada
-		var valor = this.corpo[j][colunaChave];
-		
+	this._corpo.forEach((e1,i1) =>{
+		let valor = this._corpo[i1][colunaChave];
 		// Agora fazer um loop sobre o arrayMonetario, para zerar os campos que foram informados
-		for(var i = 0;i < arrayValoresMonetarios.length;i++){
-			var indiceM = arrayValoresMonetarios[i];
-			// Atribuindo o valor
-			arrChave[valor][0][indiceM] += this.corpo[j][indiceM];
-			}
-	}
-	// Pronto, agora temos o array com os totais, vamos apendar este objeto(para mim chama-se dicionario)
-	// para que ele receba os subregistros de this.corpo
-	for(var j = 0;j < this.corpo.length;j++){
+		arrayValoresMonetarios.forEach((e2, i2) =>{
+			let indiceM = arrayValoresMonetarios[i2];
+			arrChave[valor][0][indiceM] += e1[indiceM];
+		});
+	});
+
+	// Pronto, agora temos o array com os totais, vamos apendar este objeto
+	// para que ele receba os subregistros de this._corpo
+	this._corpo.forEach((e1,i1)=>{
 		// Recupera o valor da coluna a ser filtrada
-		var valor = this.corpo[j][colunaChave];
+		let valor = e1[colunaChave];
 		// Criando o arrayTemp que armazena dados do array corpo
-		var arrTemp = JSON.stringify(this.corpo[j]);
+		let arrTemp = JSON.stringify(e1);
 		arrTemp = JSON.parse(arrTemp);
 		// Substituir o campo da coluna chave pelo valor do campoMovidoAbaixo
 		arrTemp[colunaChave] = arrTemp[campoMovidoAbaixo];
 		arrTemp[campoMovidoAbaixo] = "- -";
 		// Apendando este array copiado
 		arrChave[valor].push(arrTemp);
-	}
-	
-	// BOM, TUDO ESTA SOMADO E INCLUSO NO ARRCHAVE, VAMOS AGORA DEFINIR OS VALORES MONETARIOS
-	for(var z in arrChave){
-		// Fazer um loop sobre os array para alterar os valores para monetarios
-		for(var y = 0;y < arrChave[z].length;y++){
-			// Agora fazer um loop sobre o arrayMonetario, para converter os valores
-			for(var i = 0;i < arrayValoresMonetarios.length;i++){
-				var indiceM = arrayValoresMonetarios[i];
-				// Atribuindo o valor
-				arrChave[z][y][indiceM] = converter(parseFloat(arrChave[z][y][indiceM]).toFixed(2));
-			}
-		}
-	}
-	
-	var tabe = '<table class="'+this.classe+'" id="'+this.id+'">'; 
-	var corpoTabela = '<tbody>';
-	var cabe = '<thead><tr class="'+this.classeCabecalho+'">'; 
-	var cabecalho = this.cabecalho; 
-	// Fazendo um loop no rodape(caso exista para dar valores monetarios para os campos marcados)
-	if(this.rodape.length == this.cabecalho.length){
-		for(var x in arrayValoresMonetarios){
-			var campo = arrayValoresMonetarios[x];
-			var vl = converter(parseFloat(this.rodape[campo]).toFixed(2));
-			this.rodape[campo] = vl;
-		}
-	}
+	});
 
 	
+	// BOM, TUDO ESTA SOMADO E INCLUSO NO ARRCHAVE, VAMOS AGORA DEFINIR OS VALORES MONETARIOS
+	for(let z in arrChave){
+		// Fazer um loop sobre os array para alterar os valores para monetarios
+		arrChave[z].forEach((e1, i1)=>{
+			arrayValoresMonetarios.forEach((e2,i2)=>{
+				let indiceM = e2;
+				// Atribuindo o valor
+				arrChave[z][i1][indiceM] = converter(parseFloat(arrChave[z][i1][indiceM]).toFixed(2));
+			});
+		});
+	}
+	
+	let tabe = `<table class="${this.classe}" id="${this.id}">`; 
+	let corpoTabela = '<tbody>';
+	let cabe = `<thead><tr class="${this.classeCabecalho}">`; 
+	let cabecalho = this._cabecalho; 
+	// Fazendo um loop no rodape(caso exista para dar valores monetarios para os campos marcados)
+	if(this._rodape.length === this._cabecalho.length){
+		arrayValoresMonetarios.forEach((e2,i2)=>{
+			let vl = converter(parseFLoat(this._rodape[i2]).toFixed(2));
+			this._rodape[i2] = vl;
+		});
+	}
+	
 	// OK, sta tudo certo, agora vamos criar o corpo desta tabela
-	for(var reg in arrChave){
-		var ID = arrChave[reg][0][colunaChave].replace(/ /g,'_');
+	for(let reg in arrChave){
+		let ID = arrChave[reg][0][colunaChave].replace(/ /g,'_');
 		// Vamos fazer um loop sobre cada registro afim de preencher os trs
-		for(var x = 0;x < arrChave[reg].length;x++){
+		for(let x = 0;x < arrChave[reg].length;x++){
 			// Se x for igual a zero, este é o registro mestre, precisa ser clicavel e ter um id com o nome do campocoluna informado
-			var TR = '';
+			let TR = '';
 			if(x == 0){
-				TR = '<tr id="'+ID+'" style="color:red;font-weight:bold;cursor:pointer">';
+				TR = `<tr id="${ID}" style="color:red;font-weight:bold;cursor:pointer">`;
 			} else {
-				TR = '<tr class="'+ID+'" style="display:none">';
+				TR = `<tr class="${ID}" style="display:none">`;
 			}
 			
 			// Vamos fazer um loop sobre cada campo do registro e incluir o td de cada um
-			for(var y = 0;y < arrChave[reg][x].length;y++){
-				
-				TR += '<td>'+arrChave[reg][x][y]+'</td>';
-				
+			for(let y = 0;y < arrChave[reg][x].length;y++){
+				TR += `<td>${arrChave[reg][x][y]}</td>`;
 			}
 			TR += '</tr>';
 			corpoTabela += TR;
 		}
 	}
 	corpoTabela += '<tbody>';
-	for(var i =0;i < cabecalho.length;i++){ 
-		cabe += '<th>'+cabecalho[i]+'</th>'; 
+	for(let i = 0;i < cabecalho.length;i++){ 
+		cabe += `<th>${cabecalho[i]}</th>`; 
 	} 
 	cabe += '</tr></thead>';
 	// Verificando se tem rodape, se tiver cria-lo, senão deixe sem ele
 	if(this.rodape.length == cabecalho.length){
-		corpoTabela += '<tfoot><tr class="'+this.classeCabecalho+'">';
-		for(var x = 0;x < this.rodape.length;x++){
-			corpoTabela += '<th>'+this.rodape[x]+'</th>';
+		corpoTabela += `<tfoot><tr class="${this.classeCabecalho}">`;
+		for(let x = 0;x < this.rodape.length;x++){
+			corpoTabela += `<th>${this.rodape[x]}</th>`;
 		}
 		corpoTabela += '</tr></tfoot>';
 	}
@@ -285,12 +283,12 @@ Tabela.prototype.getTabelaDinamica = function(colunaChave, arrayValoresMonetario
 // Metodo da tabela dinamica que liga o evento de click para exibir os registros ocultos
 Tabela.prototype.clickTabelaDinamica = function(){
 	$('tbody tr').each(function(){
-		if(typeof $(this).attr('id') == "undefined"){
+		if(typeof $(this).attr('id') === "undefined"){
 
 		} else {
 
 			// Ligando o evento click a cada ID de TR
-			var ID = $(this).attr('id');
+			let ID = $(this).attr('id');
 
 			$('#'+ID+' td').bind('click', function(){
 				$('.'+ID).slideToggle();
@@ -301,187 +299,226 @@ Tabela.prototype.clickTabelaDinamica = function(){
 }
 // Metodo que vai adicionar um rodape a tabela se o mesmo for do mesmo tamanho que o cabecalho <>
 Tabela.prototype.setRodape = function(arrayRodape){
-	if(!(arrayRodape instanceof Array)){
-		console.log('O que foi enviado não é um rodape.');
+	if(!Array.isArray(arrayRodape)){
+		new SyntaxError(`O QUE FOI ENVIADO NAO E UM ARRAY.VALOR ENVIADO: ${arrayRodape}`);
 		return false;
 	}
-
-	if(arrayRodape.length != this.cabecalho.length){
-		console.log('O rodapé enviado é menor que o cabecalho da tabela.');
+	if(arrayRodape.length !== this._cabecalho.length){
+		new SyntaxError(`O RODAPE ENVIADO E DIFERENTE DO TAMANHO DO CABECALHO DA TABELA. VALOR ENVIADO ${arrayRodape}`);
 		return false;
 	}
-	var arrTempRoda2 = JSON.stringify(arrayRodape);
-	arrTempRoda2 = JSON.parse(arrTempRoda2);
-	// Tudo certo, vamos definir this.rodape com o arrayRodape
-	this.rodape = arrTempRoda2;
-
+	this._rodape = JSON.parse(JSON.stringify(arrayRodape));
+	return true;
 }
 // Define a classe do cabecalho da tabela (thead) <>
 Tabela.prototype.setClasseCabecalho = function(classe){
-	this.classeCabecalho = classe;
+	if(typeof classe === "string"){ this._classeCabecalho = classe; return true; } 
+	console.log(`ENVIOU UM ESTILO QUE NAO E UMA STRING ${classe}`);
+	return false;
 };
+// Metodo para definir um estilo para os tds
+Tabela.prototype.setEstiloTd = function(estiloTd){
+	if(typeof estiloTd === "string"){ 
+		this._estiloTd = estiloTd; return true; 
+	} else if(typeof estiloTd === "object"){
+		let estilo = "";
+		for(let k in estiloTd){
+			estilo += `${k}:${estiloTd[k]}`;
+		}
+		this._estiloTd = estilo;
+		return true;
+	} else {
+		console.log(`ENVIOU UM ESTILO QUE NAO E UMA STRING ${estiloTd}`);
+		throw new SyntaxError("FAVOR ENVIAR UMA STRING OU UM OBJETO COM ESTILOS");
+	}
+}
+
+// Metodo interno usado para validar um indice
+Tabela.prototype._validaIndice = function(index, msg){
+	let valido = true;
+	this._corpo.forEach(e1=>{
+		if(typeof e1[index] === "undefined"){
+			valido = false;
+			return valido;
+		}
+	});
+	if(!valido){
+		throw new SyntaxError(`INDICE SOLICITADO NAO EXISTE: ${msg} -> ${index}`);
+	}
+	return valido;
+};
+
 // Metodo que exclui uma determinada coluna Ele recebe o index da coluna e a exclui gerando um novo corpo e cabecalho. <>
-Tabela.prototype.removeColuna = function(indexColuna){
+Tabela.prototype.removeColuna = function(index){
 	// Verifica se a coluna existe
-	if(typeof this.corpo[0][indexColuna] == "undefined" || typeof this.cabecalho[indexColuna] == "undefined"){
-		console.log('O indice informado não existe no corpo e/ou no cabecalho da tabela. Favor informar um indice dentro da faixa.');
-		return false;
-	}
+	this._validaIndice(index, 'IMPOSSSIVEL REMOVER ');		
 	// O indice existe, vamos recriar o corpo
-	for(var x = 0;x < this.corpo.length;x++){
-		this.corpo[x].splice(indexColuna,1); // Remove a coluna solicitada
-	}
+	this._corpo.forEach(e1=>{ e1.splice(index,1); });
 	// Agora removendo o indice do cabecalho
-	this.cabecalho.splice(indexColuna,1);
+	this._cabecalho.splice(index,1);
 	// Tudo correto, retorne true.
 	return true;
 };
 // Metodo usado para converter os monetarios da tabela <>
-Tabela.prototype.converterMonetario = function(indexColuna){
+Tabela.prototype.converterMonetario = function(index){
+	let valido = true;
 	// Verifica se a coluna existe
-	if(typeof this.corpo[0][indexColuna] == "undefined" || typeof this.cabecalho[indexColuna] == "undefined"){
-		console.log('O indice informado não existe no corpo e/ou no cabecalho da tabela. Favor informar um indice dentro da faixa.');
-		return false;
-	}
+	this._validaIndice(index, "NAO FOI POSSIVEL CONVERTER");
 	// O indice existe, vamos fazer um loop para converter o corpo em monetario
-	for(var x = 0;x < this.corpo.length;x++){
-		this.corpo[x][indexColuna] = converter(parseFloat(this.corpo[x][indexColuna]).toFixed(2)) // Converte a coluna informada em monetario
-	}
+	this._corpo.forEach((e1, i1) => {
+		// Se o valor nao for um number, vamos dizer que nao foi possivel converter
+		if(typeof e1[index] === "number"){
+			this._corpo[i1][index] = converter(parseFloat(e1[index]).toFixed(2));
+		} else if(e1[index].search('R\\$') != -1){// Ja foi convertido
+			console.log('NAO PRECISA CONVERTER, JA E UM NUMERO');
+		} else {
+			console.log('NÃO FOI POSSIVEL CONVERTER POIS A COLUNA INFORMADA NAO E UM NUMERO');
+			valido = false;
+		}
+	});
 	// Tudo correto, retorne true.
-	return true;
+	return valido;
 }
 // Metodo usado para converter valores para Percentuais de 1 casa <>
-Tabela.prototype.converterPercentual = function(indexColuna){
+Tabela.prototype.converterPercentual = function(index){
+	let valido = true;
 	// Verifica se a coluna existe
-	if(typeof this.corpo[0][indexColuna] == "undefined" || typeof this.cabecalho[indexColuna] == "undefined"){
-		console.log('O indice informado não existe no corpo e/ou no cabecalho da tabela. Favor informar um indice dentro da faixa.');
-		return false;
-	}
-	// O indice existe, vamos fazer um loop para converter o corpo em monetario
-	for(var x = 0;x < this.corpo.length;x++){
-		this.corpo[x][indexColuna] = Math.round(parseFloat(this.corpo[x][indexColuna] * 100).toFixed(1), 1) + ' %' // Converte a coluna informada para percentual
-	}
+	this._validaIndice(index);
+	// O indice existe, vamos fazer um loop para converter o corpo em percentual
+	this._corpo.forEach((e1, i1) =>{
+		// Se o valor nao for um number, vamos dizer que nao foi possivel converter
+		if(typeof e1[index] === "number"){
+			this._corpo[i1][index] = Math.round(parseFloat(e1[index] * 100).toFixed(1), 1) + ' %';
+		} else if(e1[index].search('\\%') != -1){// Ja foi convertido
+			console.log('NAO PRECISA CONVERTER, JA E UM PERCENTUAL');
+		} else {
+			console.log('NÃO FOI POSSIVEL CONVERTER POIS A COLUNA INFORMADA NAO E UM NUMERO');
+			valido = false;
+		}
+	});
 	// Tudo correto, retorne true.
-	return true;
+	return valido;
 }
 // Metodo usado para retornar cabecalho e corpo de dados filtrados. Recebe uma string para filtro e retorna [[cabecalho][corpo],[corpo]] <>
 Tabela.prototype.filtro = function(palavra){
 	// Cria um novo array para criar o novo corpo com os dados filtrados.
-	var filtrados = new Array();
-	for(var x = 0;x< this.corpo.length;x++){
-		if(this.corpo[x].indexOf(palavra) != -1){// Se a palavra foi encontrada no corpo, vamos anexar ao array filtrados.
-			filtrados.push(this.corpo[x]);
-		}
-	}
-	if(filtrados.length < 1){ // Dados filtrados são menores que 1, então nada foi encontrado, retorne false.
-		return false;
-	}
+	let filtrados = new Array();
+	this._corpo.forEach(e1=>{
+			e1.forEach((e2, i2)=>{
+				if(e2.toString().search(palavra) != -1){
+					filtrados.push(e1);
+				}
+			});
+	});
 	// Retorna um array com o cabecalho e o corpo com os dados filtrados.
-	var cabecalhoComCorpo = [this.cabecalho, filtrados];
-	return cabecalhoComCorpo;
+	if(filtrados.length === 0){ return []; } 
+	else { return [this._cabecalho, filtrados]; }
 };
 // Metodo usado para realizar um copia da coluna solicitada e retorna-la
 Tabela.prototype.getColuna = function(indice) {
 	if(typeof indice !== "number"){
+		throw new SyntaxError('FAVOR INFORMAR UM INDICE INICIANDO DO ZERO.');
 		console.log('FAVOR INFORMAR UM INDICE INICIANDO DO ZERO.');
 		return false;
 	}
-	var arrTemp = [];
-	// Agora vamos copiar o corpo para retornar os dados deste indice
-	for(var x = 0; x < this.corpo.length;x++){
-		if(this.corpo[x][indice]){
-			arrTemp.push(this.corpo[x][indice]);
-		}
-	}
+	let arrTemp = [];
+	this._corpo.forEach(e1=>{
+		arrTemp.push(e1[indice]);
+	});
 	return arrTemp;
 };
+
 // Metodo usado para realizar copia de colunas solicitadas e retorna-las
 Tabela.prototype.getColunas = function(arrIndice){
 	if(!Array.isArray(arrIndice)){
 		console.log('FAVOR INFORNAR UM ARRAY DE INDICES.');
 		return false;
 	}
-	var arrTemp = [];
-	for(var x = 0;x < this.corpo.length;x++){
-		arrTemp[x] = new Array();
-		for(var i = 0; i < this.corpo[x].length;i++){
-			if(arrIndice.indexOf(i) != -1){
-				arrTemp[x].push(this.corpo[x][i]);
+	let arrTemp = [];
+	this._corpo.forEach((e1,i1)=>{
+		arrTemp[i1] = [];
+		e1.forEach((e2, i2)=>{
+			if(arrIndice.indexOf(i2) != -1){
+				arrTemp[i1].push(e2);
 			}
-		}
-	}
+		});
+	});
 	return arrTemp;
-
 };
-
 // Metodo que recebe o apoio da biblioteca Datatable e coloca a tabela de forma representativa na tela <>
 Tabela.prototype.desenhaDataTable = function(){
 	// Destruindo a tabela se ela existir
-	$('#'+this.id).DataTable().destroy();
-	var opt = this.opcoes
-	$('#'+this.id).DataTable(opt);
-}
+	try{
+		$('#'+this.id).DataTable().destroy();
+		this._idDataTables = $('#'+this.id).DataTable(this._opcoes);
+		return true;
+	}catch(e){
+		alert('VOCE PRECISA IMPORTAR A API DO DATATABLES PARA USAR ESTE RECURSO');
+		return false;
+	}
+};
 // Metodo usado para definir as opcoes do DataTable, quando deseja enviar opcoes personalizadas
 Tabela.prototype.setOpcoes = function(opcoes){
-	this.opcoes = opcoes;
+	if(typeof opcoes === "object"){
+		this.opcoes = opcoes;
+		return true;
+	} 
+	console.log(`OS DADOS ENVIADOS NAO SAO UM OBJETO ${opcoes}`);
+	return false;
 }
 // Metodo que calcula o rodape passando por todo o corpo
 Tabela.prototype.calculaRodape = function(camposNaoCalculaveis, valorCamposNaoCalculaveis, camposMonetarios){
-	var arrTempRodape = [];
-	// Fazer um loop para criar o rodape
-	for(var h = 0;h < this.cabecalho.length;h++){
-		arrTempRodape[h] = 0;
-	}
-
+	let arrTempRodape = [];
+	// Fazer um loop para criar o rodape e inicializa-lo em zero
+	this._cabecalho.forEach(e=>{ arrTempRodape.push(0); });
+	
 	// Faz um loop sobre o corpo e então calcula o rodape
-	if(!(this.corpo[0] instanceof Array) || !(this.cabecalho instanceof Array)){
-                console.log('Ainda nao foi definido um corpo e/ou cabecalho');
-                return false;
-        }
+	if(!Array.isArray(this._corpo[0]) || !Array.isArray(this._cabecalho)){
+        console.log('Ainda nao foi definido um corpo e/ou cabecalho');
+        return false;
+    }
 	// Pronto, temos o corpo e o cabecalho, agora vamos ver se o camposNaoCalculaveis é um array
-	if(!(camposNaoCalculaveis instanceof Array) || !(camposMonetarios instanceof Array) || (camposNaoCalculaveis.length != valorCamposNaoCalculaveis.length)){
+	if(!Array.isArray(camposNaoCalculaveis) || !Array.isArray(camposMonetarios) || (camposNaoCalculaveis.length !== valorCamposNaoCalculaveis.length)){
 		console.log('Os parametros enviados não são um array, ou tamanhos incompativeis entre o parametro 1 e 2');
 		return false;
 	}
-	// Tudo certo, agora vamos fazer os calculos
-	for(var x = 0;x < this.corpo.length;x++){
-		
-	var h = 0; // Variavel de contagem do indice de valorCamposNaoCalculaveis
-	   for(var y = 0;y < this.corpo[x].length;y++){
-		if(camposNaoCalculaveis.includes(y)){
-		// Se for um campo nao calculavel entao preencher com o valorCamposNaoCalculaveis
-			arrTempRodape[y] = valorCamposNaoCalculaveis[h];
-			h++;
-		} else {
-			var valor;
-			// Se o indice fazer parte do campo monetario então converta-o em parseFloat
-			if(camposMonetarios.includes(y)){ 
-			valor = parseFloat(this.corpo[x][y].replace('R$', '').replace(/\./g,'').replace(',','.'));
-			} else { valor = this.corpo[x][y]; }
-			arrTempRodape[y] += valor;	
-		}
-	   }
-
-	}
-	// Agora faca um loop no rodape e converta todos os valores em monetario
-	for(var i = 0;i < camposMonetarios.length;i++){
-		arrTempRodape[camposMonetarios[i]] = converter(parseFloat(arrTempRodape[camposMonetarios[i]]).toFixed(2));
-	}
+	// Preparando o rodape dos valores que nao devem ser calculados
+	camposNaoCalculaveis.forEach(e=>{ arrTempRodape[e] = valorCamposNaoCalculaveis[e]; });
+	// Faz um loop, desconverte os monetarios e soma os rodapes corretamente
+	this._corpo.forEach((e,i) => {
+		e.forEach((e2, i2)=>{
+			// Se nao faz parte dos camposNaoCalculaveis entao devemos analisar
+			if(!camposNaoCalculaveis.includes(i2)){
+				let valor = e2; // desconverter os monetarios se tiver algum
+				if(camposMonetarios.includes(i2)){
+					if(typeof e2 === "number"){ valor = parseFloat(e2).toFixed(2); } 
+					else { valor = desconverter(e2); }
+				}
+				arrTempRodape[i2] += valor; // Soma o valor, sendo o que foi convertido a monetario ou nao
+				
+			}
+		});
+	});
+	// Converte os valores do rodape para ficarem corretos
+	camposMonetarios.forEach(e=>{
+		arrTempRodape[e] = converter( parseFloat(arrTempRodape[e]).toFixed(2) );
+	});
 	// Tudo certo, agora defina o rodape com este valor
 	this.setRodape(arrTempRodape);
-
+	return true;
 }
-
 // Metodo que coloca um botao para baixar a tabela
 Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixar){
+	// Valida par aver se os parametros foram preenchidos
+	if(typeof localParaBaixar === "undefined"){ alert('INFORME DE ONDE RECUPERAR O EXCEL'); return false;}
 	// Salva o ID do botao
-	var idBotao = '#'+this.id+'_botao';
-	var idTabela = '#'+this.id;
+	let idBotao = '#'+this.id+'_botao';
+	let idTabela = '#'+this.id;
 	// Verifica se a tabela nao existir, nem prosseguir
 	if($(idTabela).length < 1){ alert('ESTA TABELA NAO EXISTE '+idTabela); return false; }
 
-  	// Verificar se o botao existe
-  	if($(idBotao).length < 1){ 
+  	// Verificar se o botao existe e se da para colocar ele no local correto
+  	if($(idBotao).length < 1 && $(idTabela+'_wrapper').length){ 
   		// Nao existe, vamos criar o Elemento
   		$(idTabela+'_wrapper').prepend(new Botao('<span class="glyphicon glyphicon-download-alt"></span> BAIXAR', 'btn btn-xs btn-danger', idBotao.replace('#', '')).getBotao());
   	}
@@ -494,14 +531,14 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
     	e.preventDefault();
     	// Vendo se tem o armazenamento local
     	if(typeof(Storage) === "undefined"){ 
-      		alert('NÃO será possivel escolher as colunas desejadas para baixar.');
+      		alert('NÃO será possivel salvar as colunas desejadas para baixar.');
       		// Agora criar o objeto que vai comportar o cabecalho e o corpo da tabela
-        		var objTabelaBaixar = {'cabe':[], 'corpo':[]};
+        		let objTabelaBaixar = {'cabe':[], 'corpo':[]};
         	$(idTabela+' thead tr').children().each(function(i,v){
             	objTabelaBaixar.cabe.push($(this).text());
         	});
         	$(idTabela+' tbody').children().each(function(i,v){
-            	var tempQ = [];
+            	let tempQ = [];
             	$(this).children().each(function(ia,va){
                 	tempQ.push($(this).text());
             	});
@@ -519,24 +556,24 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
         	return false;
     	}
 	    // Verificamos se temos dados no armazenamento interno
-	    var asColunasSelecionadas = [];
+	    let asColunasSelecionadas = [];
 	    if(localStorage.getItem(nomeArmazenamentoLocal)){
 	      asColunasSelecionadas = JSON.parse(localStorage.getItem('colunas_selecionadas'));
 	    }
 	    // Recupera todas as colunas e permite o usuario a escolher quais ele quer
-	    var tempA = '';var entrada = '<input class="checa_colunas" type="checkbox" value="indice" /> VALOR<br/>';
+	    let tempA = '';let entrada = '<input class="checa_colunas" type="checkbox" value="indice" /> VALOR<br/>';
 	    $(idTabela+' thead tr').children().each(function(ind, val){
 	        if(asColunasSelecionadas.indexOf(Number(ind).toString()) != -1){
-	          tempA += '<input class="checa_colunas" checked type="checkbox" value="'+ind+'" />'+$(this).text()+'<br/>';
+	          tempA += `<input class="checa_colunas" checked type="checkbox" value="${ind}" />${$(this).text()}<br/>`;
 	        } else {
 	          tempA += entrada.replace('VALOR', $(this).text()).replace('indice', ind);
 	        }
 	    });
-	    tempA += '<p class="text-center">'+new Botao('BAIXAR', 'btn btn-xs btn-danger', 'baixar_selecionados').getBotao()+'</p>';
+	    tempA += `<p class="text-center">${new Botao('BAIXAR', 'btn btn-xs btn-danger', 'baixar_selecionados').getBotao()}</p>`;
 	    // Agora cria o modal permitindo que o usuario escolhas as colunas que ele deseja fazer o download
-	    var modTitulo = new Titulo('ESCOLHA AS COLUNAS A BAIXAR', 4, 'text-center text-danger').getTitulo();
-	    var modRodape = '<button class="btn btn-xs btn-default" data-dismiss="modal">FECHAR</button>';
-	    var mod = new Modal(modTitulo, tempA, modRodape, '', 'modalExcel');
+	    let modTitulo = new Titulo('ESCOLHA AS COLUNAS A BAIXAR', 4, 'text-center text-danger').getTitulo();
+	    let modRodape = '<button class="btn btn-xs btn-default" data-dismiss="modal">FECHAR</button>';
+	    let mod = new Modal(modTitulo, tempA, modRodape, '', 'modalExcel');
 	    mod.setTipoModal(true);
 	    $('#modalExcel').remove();
 	    $('body').append(mod.getModal());
@@ -544,17 +581,15 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
 
 	    // Clica no botao para baixar_selecionados e então é permitido gerar um excel disto
 	    $('#baixar_selecionados').bind('click', function(e){
-	        var $_CHECADOS = $('.checa_colunas');
-	        var escolhidas = [];
+	        let $_CHECADOS = $('.checa_colunas');
+	        let escolhidas = [];
 	        $($_CHECADOS).each(function(ind,val){
-	            if($(this).prop('checked')){
-	              escolhidas.push($(this).val());
-	            }
+	            if($(this).prop('checked')){ escolhidas.push($(this).val()); }
 	        });
 
 	        localStorage.setItem(nomeArmazenamentoLocal, JSON.stringify(escolhidas));
 	        // Agora criar o objeto que vai comportar o cabecalho e o corpo da tabela
-	        var objTabelaBaixar = {'cabe':[], 'corpo':[]};
+	        let objTabelaBaixar = {'cabe':[], 'corpo':[]};
 	        // Obtendo o cabecalho
 	        $(idTabela+' thead tr').children().each(function(ind, val){
 	            if(escolhidas.indexOf(Number(ind).toString()) != -1){
@@ -564,7 +599,7 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
 	        // Agora obtendo o corpo
 	        $(idTabela+' tbody').children().each(function(i, v){
 	          // Passando pelos filhos do registro
-	          var tempInternoTab = [];
+	          let tempInternoTab = [];
 	          $(this).children().each(function(ix, vx){
 	              if(escolhidas.indexOf(Number(ix).toString()) != -1){
 	                tempInternoTab.push($(this).text());
@@ -1382,7 +1417,7 @@ BarraDeProgresso.prototype.cronometro = function(){
 
 // Esta funcao desconverte o valor monetario para um float.toFixed2
 function desconverter(valor){
-	if(typeof valor != "string"){ console.log('FAVOR ENVIAR STRING.'); return false;}
+	if(typeof valor !== "string"){ console.log('FAVOR ENVIAR STRING.'); return false;}
 	// Removendo o cifrao, ponto e a virgula e retornando um float
 	valor = parseFloat(valor.replace('R$', '').replace(/\./g, '').replace(',','.')).toFixed(2);
 	return valor;

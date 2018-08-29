@@ -18,16 +18,21 @@
     
     /* Set gray background color and 100% height */
     .sidenav {
-      background-color: #f1f1f1;
+      background-color: #fff;
       height: 100%;
       width:auto;
     }
-
-        
+       
     /* On small screens, set height to 'auto' for the grid */
     @media screen and (max-width: 767px) {
       .row.content {height: auto;} 
     }
+
+		.menu{
+			height: 470px;
+			overflow-y:auto;
+			border-bottom: 1px solid #ddd;
+		}
   </style>
 </head>
 <body>
@@ -56,7 +61,8 @@
     <div class="col-sm-2 sidenav hidden-xs">
 	  <ul class="menu nav nav-pills nav-stacked">
 		<li><h4 class="text-center text-info">API VISAO_HTML</h4></li>
-        <li class="active"><a href="#">Classes</a></li>
+				<li class="active"><a href="#">Classes</a></li>
+				<li><input autofocus type="text" class="input input-sm form-control" name="" id="filtro_classe" placeholder="Pesquisar"></li>
 
       </ul>
       <br>
@@ -68,6 +74,8 @@
 		<p id="heranca_classe"></p>
       </div>
         <div id="conteudo_classes">
+					<p class="pull-right">PESQUISAR METODO<input type="text" class="form-control" id="filtro" placeholder="Pesquisar"/></p><br/>
+			<h4 class="text-center">Modulos</h4>
 			<ul class="list-group">
 			</ul>
 		</div>
@@ -84,47 +92,170 @@
 	classes = {
 		ClasseId:{descricao:'Esta classe tem como objetivo disponibilizar metodos \
 		 que possam ser usados para incluir atributos, classes  e ids em outras \
-		 classes deste projeto. Praticamente todas as classes Herdão desta.', heranca:'NENHUM', 'metodos':Object.keys(ClasseId.prototype).filter(function(val){ if(typeof ClasseId.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		 classes deste projeto. Praticamente todas as classes Herdão desta.', heranca:'NENHUM', 
+		 'metodos':['ClasseId'].concat(Object.keys(ClasseId.prototype).filter(function(val){ if(typeof ClasseId.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Para: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag paragrafo (p)', 
-		heranca: 'ClasseId',metodos: Object.keys(Para.prototype).filter(function(val){ if(typeof Para.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Para'].concat(Object.keys(Para.prototype).filter(function(val){ if(typeof Para.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Titulo: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag titulo (h{n})', 
-		heranca: 'ClasseId',metodos: Object.keys(Titulo.prototype).filter(function(val){ if(typeof Titulo.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Titulo'].concat(Object.keys(Titulo.prototype).filter(function(val){ if(typeof Titulo.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Div: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag div (div)', 
-		heranca: 'ClasseId',metodos: Object.keys(Div.prototype).filter(function(val){ if(typeof Div.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Div'].concat(Object.keys(Div.prototype).filter(function(val){ if(typeof Div.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Img: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag img (img)', 
-		heranca: 'ClasseId',metodos: Object.keys(Img.prototype).filter(function(val){ if(typeof Img.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos:['Img'].concat(Object.keys(Img.prototype).filter(function(val){ if(typeof Img.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Tabela: {descricao:'Esta classe tem por finalidade representar uma tabela, tem metodos interessantes \
 		como filtrar dados da tabela, ordena-la, converter os valores de um campo para monetario entre outros. \
 		Nota: Algumas funcionalidades são dependentes do plugin DataTables', 
-		heranca: 'ClasseId',metodos: Object.keys(Tabela.prototype).filter(function(val){ if(typeof Tabela.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Tabela'].concat(Object.keys(Tabela.prototype).filter(function(val){ if(typeof Tabela.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Link: {descricao:'Esta classe tem por finalidade retornar a representacao de uma tag a (a)', 
-		heranca: 'ClasseId',metodos: Object.keys(Link.prototype).filter(function(val){ if(typeof Link.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Link'].concat(Object.keys(Link.prototype).filter(function(val){ if(typeof Link.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Lista: {descricao:'Esta classe tem por finalidade retornar a representacao de uma lista (ul)', 
-		heranca: 'ClasseId',metodos: Object.keys(Lista.prototype).filter(function(val){ if(typeof Lista.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Lista'].concat(Object.keys(Lista.prototype).filter(function(val){ if(typeof Lista.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Botao: {descricao:'Esta classe tem por finalidade retornar a representacao de um botao (button)', 
-		heranca: 'ClasseId',metodos: Object.keys(Botao.prototype).filter(function(val){ if(typeof Botao.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Botao'].concat(Object.keys(Botao.prototype).filter(function(val){ if(typeof Botao.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Selecao: {descricao:'Esta classe tem por finalidade retornar a representacao de uma selecao', 
-		heranca: 'ClasseId',metodos: Object.keys(Selecao.prototype).filter(function(val){ if(typeof Selecao.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Selecao'].concat(Object.keys(Selecao.prototype).filter(function(val){ if(typeof Selecao.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		DivRow: {descricao:'Esta classe tem por finalidade retornar a representacao de uma divRow usada pelo bootstrap', 
-		heranca: 'ClasseId',metodos: Object.keys(DivRow.prototype).filter(function(val){ if(typeof DivRow.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['DivRow'].concat(Object.keys(DivRow.prototype).filter(function(val){ if(typeof DivRow.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		DivTabs: {descricao:'Esta classe tem por finalidade retornar a representacao de uma divTabs usada pelo bootstrap', 
-		heranca: 'ClasseId',metodos: Object.keys(DivTabs.prototype).filter(function(val){ if(typeof DivTabs.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['DivTabs'].concat(Object.keys(DivTabs.prototype).filter(function(val){ if(typeof DivTabs.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Modal: {descricao:'Esta classe tem por finalidade retornar a representacao de um modal usado pelo bootstrap', 
-		heranca: 'ClasseId',metodos: Object.keys(Modal.prototype).filter(function(val){ if(typeof Modal.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Modal'].concat(Object.keys(Modal.prototype).filter(function(val){ if(typeof Modal.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Grafico: {descricao:'Esta classe tem por finalidade interagir com a api de \
 		graficos do google de forma a facilitar o trabalho da criacao de graficos', 
-		heranca: 'ClasseId',metodos: Object.keys(Grafico.prototype).filter(function(val){ if(typeof Grafico.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Grafico'].concat(Object.keys(Grafico.prototype).filter(function(val){ if(typeof Grafico.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Formulario: {descricao:'Esta classe tem por finalidade validar dados de um formulario', 
-		heranca: 'ClasseId',metodos: Object.keys(Formulario.prototype).filter(function(val){ if(typeof Formulario.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		heranca: 'ClasseId',metodos: ['Formulario'].concat(Object.keys(Formulario.prototype).filter(function(val){ if(typeof Formulario.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Utilitario: {descricao:'Esta classe reune uma suite de metodos que podem ser usados para \
-		fazer as mais diferentes configuracoes e ajustes', heranca: 'NENHUM',metodos: Object.keys(Utilitario).filter(function(val){ if(typeof Utilitario[val] === "function" && val !== "constructor" ) return true; }) },
+		fazer as mais diferentes configuracoes e ajustes', heranca: 'NENHUM',metodos: ['Utilitario'].concat(Object.keys(Utilitario).filter(function(val){ if(typeof Utilitario[val] === "function" && val !== "constructor" ) return true; })) },
 		BarraDeProgresso: {descricao:'Esta classe tem por finalidade possibilitar uma barra de \
-		progresso e controlar a barra com atualizacoes dinamicas', heranca: 'ClasseId',metodos: Object.keys(BarraDeProgresso.prototype).filter(function(val){ if(typeof BarraDeProgresso.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		progresso e controlar a barra com atualizacoes dinamicas', heranca: 'ClasseId',
+		metodos:['BarraDeProgresso'].concat(Object.keys(BarraDeProgresso.prototype).filter(function(val){ if(typeof BarraDeProgresso.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 		Controlador: {descricao:'Esta classe tem por finalidade facilitar processos dentro da aplicacao como validacao de dados, \
-		desenho de barra de progresso entre outros.', heranca: 'NENHUM',metodos: Object.keys(Controlador.prototype).filter(function(val){ if(typeof Controlador.prototype[val] === "function" && val !== "constructor" ) return true; }) },
+		desenho de barra de progresso entre outros.', heranca: 'NENHUM',metodos: ['Controlador'].concat(Object.keys(Controlador.prototype).filter(function(val){ if(typeof Controlador.prototype[val] === "function" && val !== "constructor" ) return true; })) },
 	};
 	
-	metodos = {};
+	metodos = {
+		setCorpo:{
+			descricao:'ESTE METODO TEM O PODER DE DEFINIR O CORPO DA TABELA O \
+	TAMANHO DE CADA REGISTRO DEVE SER O MESMO DO CABECALHO. ELE RECEBE UM ARRAY ANINHADO COMO PARAMETRO',
+	parametros:'(Array[Array] corpo) // Array aninhado',
+	uso: "Tabela.setCorpo([['FELIPE', 'JARDIM','plimo262@gmail.com', 258.20]]);", 
+	retorno: 'boolean (true|false)',
+	excecoes: 'Lança um SyntaxError caso algum registro do corpo tenha o tamanho diferente do array do cabecalho'
+	},
+	Tabela:
+	{descricao:'Este é o construtor do objeto, ele recebe parametros para iniciar uma tabela',
+	parametros:'(Array cabe, Array[Array] corpo, string classe, string id, string classeCabecalho) // O corpo pode ter um array vazio se desejavel',
+	uso:'let t = new Tabela(\n\r["EMPRESA", "VENDEDOR", "META", "META AR", "META OC", "META MONOFOCAIS", "META MULTIFOCAIS", "LENTES TOTAL","FILIAL"],\
+	\n\r[["FMOREIRA", "ROSANGELA SI", 42500.0, 50, 24, 12, 12, 24, 1]], "text-uppercase", "minhaTabela", "success small");',
+	retorno: 'Retorna uma referencia a um Objeto Tabela',
+	excecoes: 'Pode lançar um SyntaxError caso o cabecalho nao seja enviado como um array.'
+	},
+	setCabecalho:
+	{descricao:'Este metodo permite adicionar/alterar o cabecalho de uma tabela ja inicializada',
+	parametros:'(Array cabecalho)',
+	uso: 't.setCabecalho(["EMPRESA", "VENDEDOR", "META", "META AR", "META OC", "META MONOFOCAIS", "META MULTIFOCAIS", "LENTES TOTAL","FILIAL"])',
+	retorno:'boolean (true|false)',
+	excecoes:'Lança um SyntaxError se o array do cabecalho for de tamanho diferente de um array interno do corpo ou se ele nao for um array',
+	},
+	getTabela: 
+	{descricao:'Este metodo retorna uma representacao html de uma tabela, baseado nos dados que contem o objeto Tabela',
+	parametros: '()',
+	uso: 't.getTabela()',
+	retorno: '&lt;div class=&quot;tabe table-responsive small&quot;&gt;&lt;table class=&quot;text-uppercase&quot; id=&quot;minhaTabela&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;success small&quot;&gt;&lt;th&gt;EMPRESA&lt;/th&gt;&lt;th&gt;VENDEDOR&lt;/th&gt;&lt;th&gt;META&lt;/th&gt;&lt;th&gt;META AR&lt;/th&gt;&lt;th&gt;META OC&lt;/th&gt;&lt;th&gt;META MONOFOCAIS&lt;/th&gt;&lt;th&gt;META MULTIFOCAIS&lt;/th&gt;&lt;th&gt;LENTES TOTAL&lt;/th&gt;&lt;th&gt;FILIAL&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;FMOREIRA&lt;/td&gt;&lt;td&gt;ROSANGELA SI&lt;/td&gt;&lt;td&gt;42500&lt;/td&gt;&lt;td&gt;50&lt;/td&gt;&lt;td&gt;24&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;td&gt;24&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;',
+	},
+	getIdDataTable: 
+	{descricao: 'Este metodo retorna a referencia de uma tabela que usou o metodo desenhaDataTable()',
+	parametros:'()',uso:'t.getIdDataTable()', retorno: "Referencia a um DataTables",
+	},
+	getTabelaDinamica: 
+	{descricao: 'Este metodo constroi e retorna a referencia a uma tabela que sera usada como tabela dinamica. \
+	O primeiro parametro diz qual sera a coluna usada como chave primaria para ocultar/exibir os itens, o segundo \
+	parametro e um array que indica onde estao os valores monetarios, e o terceiro e o campo que sera movido para baixo ou seja o campo que vai ficar oculto',
+	parametros:'(int colunaChave, Array arrayValoresMonetarios, int campoMovidoParaBaixo)',
+	uso: 't.getTabelaDinamica(1, [4], 2)',
+	retorno: 'Retorna uma representacao html da tabela dinaminha'
+	},
+	clickTabelaDinamica: 
+	{descricao:'Este metodo ativa o click da tabela dinamica permitindo que ela esconda/exiba os itens deste mesmo grupo',
+	parametros:'()',uso:'t.clickTabelaDinamica()', retorno:'undefined'
+	},
+	setRodape: 
+	{descricao:'define um rodape para a tabela, passando um array.',
+	parametros:'(Array rodape)',
+	uso: 't.setRodape(["--","--","TOTAIS",250.52])',
+	retorno: 'boolean (true|false)',
+	excecoes: 'Lanca um SyntaxError caso o tamanho do array do rodape seja diferente do tamanho do cabecalho'
+	},
+	setClasseCabecalho:
+	{descricao: 'DEFINE A CLASSE A SER APLICADA PARA O thead DA TABELA',
+	parametros:'(string classeCabecalho)',uso:'t.setClasseCabecalho("success small")',
+	retorno: 'boolean (true|false)'
+	},
+	setEstiloTd: 
+	{descricao:'Este metodo define um estilo para o td, ele pode ser enviado como um par de chaves, ou como uma string. Isto sera aplicado ao atributo style de cada td',
+	parametros:'(string estiloTD) ou (object estiloTd)',
+	uso: 't.estiloTd({"cursor","pointer"}) ou t.estiloTd("cursor:pointer")',
+	retorno: 'boolean (true|false)',
+	excecoes: 'Lanca um SyntaxError se o parametro enviado nao for uma string e nem um objeto'
+	},
+	removeColuna: 
+	{descricao:'Este metodo permite remover uma coluna da tabela que ainda nao foi desenhada (nao se usou o getTabela()',
+	parametros:'(int colunaASerRemovida)',
+	uso: 't.removeColuna(1)',retorno:'boolean (true|false)'
+	},
+	converterMonetario: 
+	{descricao: 'Este metodo converte os valores do indice informado para monetario',
+	parametros: '(int indiceMonetario)',
+	uso: 't.converterMonetario(1)', retorno: 'boolean(true|false)'
+	},
+	converterPercentual: 
+	{descricao: 'Este metodo converte os valores para percentuais recebendo o indice da coluna. É interessante que o valor em percentual ja esteja definido, por exemplo 0.40 que é 40%',
+	parametros:'(int converterPercentual)',uso:'t.converterPercentual(2)', 
+	retorno:'boolean(true|false)'
+	},
+	filtro: 
+	{descricao: 'Este metodo aceita uma string para filtro de um campo e retorna um array aninhado com o campo filtrado e o cabecalho',
+	parametros:'(string palavraFiltro)', 
+	uso: 't.filtro("palavra")', retorno: '[["NOME","SOBRENOME","EMAIL"],[["MARCOS","FELIPE", "plimo263@gmail.com"]] ]'
+	},
+	getColuna: 
+	{descricao: 'Este metodo recebe um indice e retorna um Array com a coluna deste indice',
+	parametros:'(int indiceColuna)',uso:'let arrColuna = t.getColuna(1)',
+	retorno: '[["MARCOS"]]', excecoes: 'Lanca um SyntaxError se o valor enviado nao for um indice'
+	}, 
+	getColunas: 
+	{descricao: 'Este metodo tem o mesmo objeto de getColuna, mas com a diferenca de receber um Array com os indices das colunas que se deseja retornar',
+	parametros: '(Array arrIndice)', uso: 'let arrColunas = t.getColunas([1,2,3])',
+	retorno: '[["MARCOS","FELIPE", "plimo263@gmail.com"]]'
+	},
+	desenhaDataTable: 
+	{descricao: 'Este metodo desenha um dataTables (API para criar tabelas dinamicas). Ele depende do id da tabela ja estar presente no documento html',
+	parametros: '()', uso: 't.desenhaDataTable()', 
+	retorno: 'boolean(true|false)'
+	},
+	setOpcoes: 
+	{descricao: 'Este metodo define o objeto para os parametros do dataTables',
+	parametros:'(object opcoes)',uso: 't.setOpcoes({})',
+	retorno: 'boolean(true|false)'
+	},
+	calculaRodape: 
+	{descricao: 'Este metodo faz o calculo do rodape para que quando a tabela for anexada ao html ele ja tenha o rodape',
+	parametros: '(Array camposNaoCalculaveis, Array valorCamposNaoCalculaveis, Array camposMonetarios)',
+	uso: 't.calculaRodape([0,1],["- -","TOTAIS"], [2]) // Qualquer indice nao repassado ser considerado como inteiro e somado',
+	retorno: 'boolean(true|false)'
+	},
+	baixarEmExcel: 
+	{descricao: 'Este metodo possibilita o download da planilha em excel(Claro ele depende que seja fornecida uma string com a localizacao).\
+	E necessario que o servidor receba um fluxo de um JSON (object) chamado objeto enviado via post.\
+	O armazenamento local e usado para que as colunas salvas sejam carregadas no parametro',
+	parametros: '(string nomeArmazenamentoLocal, string urlParaBaixar)',
+	uso: 't.baixarEmExcel("planilhaContatos", "/baixar_em_excel")',
+	retorno: 'NADA'
+	},
+
+	};
+	
 </script>
 <script>
 	// Criando dinamicamente os itens do menu
@@ -139,17 +270,62 @@
 		$('.classe_ativar').bind('click', function(e){
 			e.preventDefault();
 			let nome = $(this).text();
+			// Limpa o campo de pesquisa de metodos e da foco ao usuario
+			$('#filtro').val("").trigger('focus');
+			
 			// Apenda no titulo, na descricao e na lista de metodos
 			$('#titulo_classe').html(nome);		
 			$('#descricao_classe').html(`<span class="text-danger"> DESCRICAO</span>: ${classes[nome].descricao}`);
 			$('#heranca_classe').html(`<span class="text-danger">HERDA DE</span>: ${classes[nome].heranca}`);
 			$('#conteudo_classes > ul.list-group').empty();
 			classes[nome].metodos.forEach(element => {
-				$('#conteudo_classes > ul.list-group').append(`<li style="cursor:pointer" class="item_metodo list-group-item"><span class="text-danger glyphicon glyphicon-book"></span> ${element}</li>`);	
+				let conteudo = `<li style="cursor:pointer" class="item_metodo list-group-item">
+					<span class="text-danger glyphicon glyphicon-book"></span> ${element}</li>`;
+				if(metodos.hasOwnProperty(element)){ // Inclui todos os detalhes do metodo na area reservada para os metodos
+					conteudo += `<div class="well" style="display:none;"><h5 class="text-center bg-danger">METODO ${element}</h5>
+					<p><span  class="text-danger">DESCRICAO</span>: ${metodos[element].descricao.toUpperCase()}</p>
+					<p><span  class="text-danger">PARAMETROS</span>: ${metodos[element].parametros}</p>
+					<p><span  class="text-danger">USO</span>: </p><pre>${metodos[element].uso}</pre>
+					<p><span  class="text-danger">RETORNO</span>: </p><pre>${metodos[element].retorno}</pre>
+					<p><span  class="text-danger">EXCECOES</span>: ${(metodos[element].excecoes || "NENHUM")}</p></div>`;
+				}
+				$('#conteudo_classes > ul.list-group').append(conteudo);	
+			});
+			// Ativa o click para qualquer item da lista que for clicado para exibir os detalhes do metodo abaixo
+			$('.item_metodo').bind('click', function(){ 
+				let item = this;
+				let proximo = $(item).next().attr('class');
+				// Se o proximo item for uma div entao ative o slideToggle
+				if(proximo === 'well'){
+					$(this).next().slideToggle(1250);	
+				}
+			});
+		});
+		// Evento para filtrar os metodos
+		$('#filtro').bind('keyup', function(){
+			let valor = $(this).val().toUpperCase();
+			// Procurar o valor nos lis
+			$('.item_metodo').each(function(i,v){
+				let valorItem = $(this).text().toUpperCase();
+				if(valorItem.search(valor) != -1){ $(this).fadeIn(); } 
+				else { $(this).fadeOut();	}
+			});
+		});
+		// Evento para filtrar as classes
+		$('#filtro_classe').bind('keyup',function(){
+			let valor = $(this).val().toUpperCase();
+			$('.classe_ativar').each(function(i,v){
+				let classeTexto = $(this).text().toUpperCase();
+				if(classeTexto.search(valor) != -1){
+					$(this).fadeIn();
+				} else {
+					$(this).fadeOut();
+				}
 			});
 		});
 	}
-	window.onload = function(){ criarItensMenu(); eventos(); }
+	
+	window.onload = function(){ criarItensMenu(); eventos(); $('a.classe_ativar:first').trigger('click'); }
 </script>
 </body>
 </html>

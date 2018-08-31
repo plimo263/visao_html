@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://rawgit.com/plimo263/visao_html/master/visao_html.js"></script>
+  <script src="https://cdn.rawgit.com/plimo263/visao_html/2.2.9/visao_html.js"></script>
   <style>
     .classe_selecionada {
         cursor:pointer;
@@ -253,6 +253,27 @@
 	uso: 't.baixarEmExcel("planilhaContatos", "/baixar_em_excel")',
 	retorno: 'NADA'
 	},
+	Para: 
+	{descricao: 'Este construtor retorna uma referencia a um objeto Para que pode ser usado para criar tags <p>',
+	parametros: '(string conteudo, string classe, string id)',
+	uso: 'let p = new Para("ola");', retorno: 'UMA REFERENCIA AO OBJETO Para'
+
+	},
+	getPara:
+	{descricao: 'Este metodo retorna a representacao de uma tag <p>',
+	parametros: '()',
+	uso: 'p.getPara()',retorno:'&lt;p id=&quot;&quot; class=&quot;&quot;&gt;ola&lt;/p&gt;',
+	},
+	setPara: 
+	{descricao: 'Este metodo e util se você deseja alterar o texto dentro do paragrafo, envie uma string e o texto sera alterado.',
+	parametros: '(string conteudo)',
+	uso: 'p.setPara("OI DE NOVO");', retorno:'NENHUM'
+	},
+	Titulo: 
+	{descricao: 'Este construtor cria um objeto Titulo e retorna a referencia de um titulo, este titulo pode ser usado para criar tags <h*>',
+	
+
+	}
 
 	};
 	

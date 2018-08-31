@@ -39,22 +39,21 @@ Para.prototype = new ClasseId();
 Para.prototype.constructor = Para;
 Para.prototype.setPara = function(conteudo){ this.conteudo = conteudo; }
 Para.prototype.getPara = function(){
-	let atributos = this.getAtributo();
-	return '<p class="'+this.classe+'" id="'+this.id+'" '+atributos+ ' >'+this.conteudo+'</p>'; 
+	return `<p class="${this.classe}" id="${this.id}" ${this.getAtributo()} >${this.conteudo}</p>`; 
 };
 
 // Classe que cria uma instancia do titulo
-var Titulo = function(conteudo, tamanho, classe, id){ClasseId.call(this, conteudo, classe, id);this.tamanho = tamanho > 0 ? tamanho : 1;}
+var Titulo = function(conteudo, tamanho, classe, id){
+	ClasseId.call(this, conteudo, classe, id);
+	this.tamanho = tamanho > 0 ? tamanho : 1;
+}
 
 Titulo.prototype = new ClasseId();
 Titulo.prototype.constructor = Titulo;
 Titulo.prototype.setTitulo = function(titulo){ this.conteudo = titulo; }
 Titulo.prototype.getTitulo = function(){
-	var atributos = '';	
-	for(var i = 0;i < this.attr.length;i++){ 
-		atributos += ' ' +this.attr[i]; 
-	} 
-	return '<h'+this.tamanho+' class="'+this.classe+'" id="'+this.id+'" '+atributos+ ' >'+this.conteudo+'</h'+this.tamanho+'>'; 
+	return `<h${this.tamanho} class="${this.classe}" id="${this.id}" ${this.getAtributo()} >${this.conteudo}
+	</h${this.tamanho}>`; 
 };
 
 // Classe que cria uma instancia de uma Div comum
@@ -63,11 +62,7 @@ var Div = function(conteudo, classe, id){ClasseId.call(this, conteudo, classe, i
 Div.prototype = new ClasseId();
 Div.prototype.constructor = Div;
 Div.prototype.getDiv = function(){
-	var atributos = ''; 
-	for(var i = 0;i < this.attr.length;i++){ 
-		atributos += ' ' +this.attr[i]; 
-	} 
-	return '<div class="'+this.classe+'" id="'+this.id+'" '+atributos+ ' >'+this.conteudo+'</div>'; 
+	return `<div class="${this.classe}" id="${this.id}" ${this.getAtributo()} >${this.conteudo}</div>`; 
 };
 
 // Classe que cria uma instancia de Img
@@ -75,11 +70,7 @@ var Img = function(conteudo, classe, id){ ClasseId.call(this, conteudo, classe, 
 Img.prototype = new ClasseId(); 
 Img.prototype.constructor = Img; 
 Img.prototype.getImg = function(){ 
-	var atributos = ''; 
-	for(var i = 0;i< this.attr.length;i++){
-		atributos += ' ' +this.attr[i];
-	} 
-	return '<img src="'+this.conteudo+'" class="'+this.classe+'" id="'+this.id+'" '+atributos+' />';
+	return `<img src="${this.conteudo}" class="${this.classe}" id="${this.id}" ${this.getAtributo()} />`;
 };
 
 // Classe que instancia uma tabela
@@ -91,7 +82,7 @@ var Tabela = function(cabecalho, corpo, classe, id, classeCabecalho){
 	this._estiloTd = ''; // Recebe estilos do TD
 	ClasseId.call(this, '', classe, id); // Define os atributos classe e id
 	this._idDataTables = ''; // id do datatables
-	this._opcoes = {"bPaginate": false, "ordering" : true,"colReorder" : true, "scrollY": 250, "scrollCollapse": true,
+	this.opcoes = {"bPaginate": false, "ordering" : true,"colReorder" : true, "scrollY": 250, "scrollCollapse": true,
   "scrollX": true, "info" : false, "responsive": true,"autoWidth": false,
   "search" : {"regex": true }, retrieve: true, "language": { "search": "Procurar na tabela",
 	"emptyTable" : "Nao ha dados", "zeroRecords": "Sem registros com valor informado","decimal":",","thousands":"."}};
@@ -450,7 +441,7 @@ Tabela.prototype.desenhaDataTable = function(){
 	// Destruindo a tabela se ela existir
 	try{
 		$('#'+this.id).DataTable().destroy();
-		this._idDataTables = $('#'+this.id).DataTable(this._opcoes);
+		this._idDataTables = $('#'+this.id).DataTable(this.opcoes);
 		return true;
 	}catch(e){
 		alert('VOCE PRECISA IMPORTAR A API DO DATATABLES PARA USAR ESTE RECURSO');
@@ -491,8 +482,8 @@ Tabela.prototype.calculaRodape = function(camposNaoCalculaveis, valorCamposNaoCa
 			if(!camposNaoCalculaveis.includes(i2)){
 				let valor = e2; // desconverter os monetarios se tiver algum
 				if(camposMonetarios.includes(i2)){
-					if(typeof e2 === "number"){ valor = parseFloat(e2).toFixed(2); } 
-					else { valor = desconverter(e2); }
+					if(typeof e2 === "number"){ valor = parseFloat(parseFloat(e2).toFixed(2)); } 
+					else { valor = parseFloat(desconverter(e2)); }
 				}
 				arrTempRodape[i2] += valor; // Soma o valor, sendo o que foi convertido a monetario ou nao
 				
@@ -627,11 +618,7 @@ var Link = function(link, conteudo, classe, id){ this.link = link; ClasseId.call
 Link.prototype = new ClasseId(); 
 Link.prototype.constructor = Link; 
 Link.prototype.getLink = function(){
-	var atributos = '';
-	for(var i = 0;i< this.attr.length;i++){ 
-		atributos += ' ' +this.attr[i];
-	} 
-	return '<a href="'+this.link+'" class="'+this.classe+'" id="'+this.id+'" '+atributos+' >'+this.conteudo+'</a>';
+	return `<a href="${this.link}" class="${this.classe}" id="${this.id}" ${this.getAtributo()} >${this.conteudo}</a>`;
 };
 
 // Classe utilizada para criar listas ordenadas ou não ordenadas
@@ -640,16 +627,12 @@ var Lista = function(itens, ordenada, classe, id){ this.itens = itens instanceof
 Lista.prototype = new ClasseId();
 Lista.prototype.constructor = Lista;
 Lista.prototype.getLista = function(){
-	var lista = ''; 
-	var atributos = '';
-	for(var i = 0;i< this.attr.length;i++){ 
-		atributos += ' ' +this.attr[i];
-	} 
-	var itens = this.itens; 
-	for(var i = 0;i < itens.length;i++){ 
-		lista += '<li>'+itens[i]+'</li>'; 
-	} 
-	return '<'+this.ordenada+' class="'+ this.classe + '" id="'+this.id+'" '+atributos+' >'+lista+'</'+this.ordenada+'>';
+	let lista = ''; 
+	this.itens.forEach(function(e){
+		lista += `<li>${e}</li>`; 
+	});
+	
+	return `<${this.ordenada} class="${this.classe}" id="${this.id}" ${this.getAtributo()} >${lista}</${this.ordenada}>`;
 };
 
 // Classe utilizada para criar botoes
@@ -658,11 +641,7 @@ var Botao = function(conteudo, classe, id){ ClasseId.call(this, conteudo, classe
 Botao.prototype = new ClasseId(); 
 Botao.prototype.constructor = Botao;
 Botao.prototype.getBotao = function(){
-	var atributos = ''; 
-	for(var i = 0;i< this.attr.length;i++){ 
-		atributos += ' ' +this.attr[i];
-	} 
-	return '<button class="'+this.classe+'" id="'+this.id+'" '+atributos+' >'+this.conteudo+'</button>'; 
+	return `<button class="${this.classe}" id="${this.id}" ${this.getAtributo()} >${this.conteudo}</button>`; 
 }
 
 // CLASSE QUE CRIA FORM.SELECTS
@@ -674,10 +653,9 @@ var Selecao = function(nome, classe, id){
 };
 
 Selecao.prototype = new ClasseId();
-
 // Metodo utilizado para incluir um item no array
 Selecao.prototype.addItem = function(arrayItem){
-	if(arrayItem instanceof Array && arrayItem.length == 2){
+	if(Array.isArray(arrayItem) && arrayItem.length == 2){
 		this.itens.push(arrayItem);
 	} else {
 		console.log("É necessario enviar um array com dois itens, um sendo o valor e outro o rotulo");
@@ -686,25 +664,32 @@ Selecao.prototype.addItem = function(arrayItem){
 
 // Metodo utilizado para incluir um array com arrays de itens
 Selecao.prototype.addItens = function(arrayItens){
-	if(arrayItens instanceof Array && arrayItens[0] instanceof Array){
-		for(var x = 0;x < arrayItens.length;x++){
-				this.itens.push(arrayItens[x]);
-		}
+	if(Array.isArray(arrayItens)){
+		arrayItens.forEach(function(e){
+			if(!Array.isArray(e) || e.length != 2){
+				console.log('UM DOS ELEMENTOS NAO E UM ARRAY OU SEU TAMANHO E INFERIOR A 2.');
+				return false
+			} else {
+				this.itens.push(e);
+			}
+		});
 	} else {
 		console.log("É necessario enviar arrays aninhados, sendo que cada um deles deve ter o tamanho de 2. EX: [['hora','HORAS'],['dia','DIAS']]");
+		return false;
 	}
 }
 
 // Metodo utilizado para retornar um  select usando os dados repassados
 Selecao.prototype.getSelecao = function(){
-	var select = "<select name='"+this.nome+"' id='"+this.id+"' class='"+this.classe+"' "+this.getAtributo()+">";
-	for(var x = 0;x < this.itens.length;x++){
-		if(this.itens[x][0] == this.autoSelecionado || this.itens[x][1] == this.autoSelecionado){
-			select += "<option selected value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";
+	let select = `<select name='${this.nome}' id='${this.id}' class='${this.classe}' ${this.getAtributo()}>`;
+	this.itens.forEach(function(e){
+		if(e[0] == this.autoSelecionado || e[1] == this.autoSelecionado){
+			select += `<option selected value='${e[0]}'>${e[1]}</option>`;
 		} else {
-			select += "<option value='"+this.itens[x][0]+"'>"+this.itens[x][1]+"</option>";
+			select += `<option value='${e[0]}'>${e[1]}</option>`;
 		}
-	}
+	});
+
 	select += "</select>";
 	return select;
 };
@@ -719,12 +704,12 @@ DivRow.prototype = new ClasseId();
 DivRow.prototype.constructor = DivRow;
 DivRow.prototype.addDiv = function(conteudo, tamanho, classe, id){ 
 	// Verificando se o tamanho atual somado com o tamanho enviado é menor ou igual a 12
-	var tamanhoAtual = this.tamanho + tamanho;
+	let tamanhoAtual = this.tamanho + tamanho;
 	if(tamanhoAtual <= 12){
 		this.tamanho += tamanho;
 		// Para classe o ids nao configurados, insira uma string vazia
-		var classe = typeof classe == "undefined" ? "" : classe;
-		var id =  typeof  id == "undefined" ? "" : id;
+		let classe = typeof classe === "undefined" ? "" : classe;
+		let id =  typeof  id === "undefined" ? "" : id;
 		this.corpo.push([conteudo, tamanho, classe, id]);
 	} else {
 		console.log('Tamanho enviado excede o limite de 12 grids.');
@@ -733,10 +718,10 @@ DivRow.prototype.addDiv = function(conteudo, tamanho, classe, id){
 }
 DivRow.prototype.getDivRow = function(){
 	// Realizar um loop e criar o corpo da divRow, retorna-lo
-	var di = '<div class="row">';
-	for(var x = 0;x < this.corpo.length;x++){
-		di += '<div class="col-sm-'+this.corpo[x][1]+' '+this.corpo[x][2]+'" id="'+this.corpo[x][3]+'">'+this.corpo[x][0]+'</div>';
-	}
+	let di = '<div class="row">';
+	this.corpo.forEach(function(e){
+		di += `<div class="col-sm-${e[1]} ${e[2]}" id="${e[3]}">${e[0]}</div>`;
+	});
 	di += '</div>';
 	return di;
 }
@@ -744,14 +729,13 @@ DivRow.prototype.getDivRow = function(){
 // Classe utilizada para criar abas
 var DivTabs = function(){
 	this.lista = [];
-	this.conteudo = [];
-	
+	this.conteudo = [];	
 }
 
 // Metodo utilizado para acrescentar um tab, Nome, idDaDiv e div
 DivTabs.prototype.addDivTabs = function(nome, idDaDiv, conteudo){
-	if(typeof nome == "string" && nome.search('@') == -1 && idDaDiv.search('@') == -1 && typeof idDaDiv == "string" && typeof conteudo == "string"){
-		this.lista.push(nome+'@'+idDaDiv); // Concatenando o nome com o idDaDiv
+	if(typeof nome === "string" && nome.search('@') === -1 && idDaDiv.search('@') === -1 && typeof idDaDiv === "string" && typeof conteudo === "string"){
+		this.lista.push(`${nome}@${idDaDiv}`); // Concatenando o nome com o idDaDiv
 		this.conteudo.push(conteudo);
 	} else {
 		console.log("Alguma das informacoes nao foram repassadas corretamente, um simbolo de '@'' esta no nome ou no idDadiv e todos os parametros devem ser strings");
@@ -763,20 +747,20 @@ DivTabs.prototype.getDivTabs = function(){
 		console.log("Não é possivel criar um divTab sem as informacoes");
 		return false;
 	}
-	var ulTab = "<ul class='nav nav-tabs'>";
-	var divs = "<div class='tab-content'>";
-	for(var x = 0;x < this.lista.length;x++){ // Fazer um loop e preencher o ulTab
-		var divisao = this.lista[x].split('@'); // Divide o nome do link com o id que vai identificar a div
-		if(x == 0){ // Se x e igual a 0 entao esta e a primeira aba, entao ela deve estar ativa
+	let ulTab = "<ul class='nav nav-tabs'>";
+	let divs = "<div class='tab-content'>";
+	this.lista.forEach(function(e,x){
+		let divisao = e.split('@'); // Divide o nome do link com o id que vai identificar a div
+		if(x === 0){ // Se x e igual a 0 entao esta e a primeira aba, entao ela deve estar ativa
 			// O item da lista e a div do content devem ser criadas
-			ulTab += "<li class='active'><a data-toggle='tab' href='#"+divisao[1]+"'>"+divisao[0]+"</a></li>";
-			divs += "<div id='"+divisao[1]+"' class='tab-pane fade in active'>"+this.conteudo[x]+"</div>";
+			ulTab += `<li class='active'><a data-toggle='tab' href='#${divisao[1]}'>${divisao[0]}</a></li>`;
+			divs += `<div id='${divisao[1]}' class='tab-pane fade in active'>${this.conteudo[x]}</div>`;
 		} else {
 			// O item da lista e a div do content devem ser criadas
-			ulTab += "<li><a data-toggle='tab' href='#"+divisao[1]+"'>"+divisao[0]+"</a></li>";
-			divs += "<div id='"+divisao[1]+"' class='tab-pane fade '>"+this.conteudo[x]+"</div>";
+			ulTab += `<li><a data-toggle='tab' href='#${divisao[1]}'>${divisao[0]}</a></li>`;
+			divs += `<div id='${divisao[1]}' class='tab-pane fade '>${this.conteudo[x]}</div>`;
 		}
-	}
+	});
 	ulTab += "</ul>";divs += "</div>";
 	return ulTab + divs;
 }
@@ -793,17 +777,17 @@ var Modal = function(cabeModal, corpoModal, rodapeModal, classe, id){
 Modal.prototype = new ClasseId();
 Modal.prototype.constructor = Modal;
 // Metodos configuradores das partes do modal
-Modal.prototype.setCabeModal = function(cabeModal){ this.cabeModal = typeof cabeModal == "undefined" ? "" : cabeModal;};
-Modal.prototype.setCorpoModal = function(corpoModal){ this.corpoModal = typeof corpoModal == "undefined" ? "" : corpoModal;};
-Modal.prototype.setRodapeModal = function(rodapeModal){ this.rodapeModal = typeof rodapeModal == "undefined" ? "" : rodapeModal;};
+Modal.prototype.setCabeModal = function(cabeModal){ this.cabeModal = typeof cabeModal === "undefined" ? "" : cabeModal;};
+Modal.prototype.setCorpoModal = function(corpoModal){ this.corpoModal = typeof corpoModal === "undefined" ? "" : corpoModal;};
+Modal.prototype.setRodapeModal = function(rodapeModal){ this.rodapeModal = typeof rodapeModal === "undefined" ? "" : rodapeModal;};
 // Metodos configurador do comportamento do modal
-Modal.prototype.setTipoModal = function(tipoModal){this.tipoModal = typeof tipoModal == "undefined" ? false : tipoModal;};
+Modal.prototype.setTipoModal = function(tipoModal){this.tipoModal = typeof tipoModal === "undefined" ? false : tipoModal;};
 
 Modal.prototype.getModal = function(){
-	var conteudoDoModal = '<div '+this.getAtributo()+' class="modal fade '+this.classe+'" id="'+this.id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">';
-	conteudoDoModal += '<div class="modal-header">'+this.cabeModal+'</div>';
-	conteudoDoModal += '<div class="modal-body">'+this.corpoModal+'</div>';
-	conteudoDoModal += '<div class="modal-footer">'+this.rodapeModal+'</div>';
+	let conteudoDoModal = `<div ${this.getAtributo()} class="modal fade ${this.classe}" id="${this.id}" role="dialog"><div class="modal-dialog"><div class="modal-content">`;
+	conteudoDoModal += `<div class="modal-header">${this.cabeModal}</div>`;
+	conteudoDoModal += `<div class="modal-body">${this.corpoModal}</div>`;
+	conteudoDoModal += `<div class="modal-footer">${this.rodapeModal}</div>`;
     conteudoDoModal += '</div></div></div>';
     return conteudoDoModal;
 };
@@ -888,7 +872,7 @@ Grafico.prototype = new ClasseId();
 Grafico.prototype.constructor = Grafico;
 // Metodo para validacao de dados, recebe um array bidimencional e valida-o
 Grafico.prototype.setDados = function(dados){
-	if(dados instanceof Array && dados[0] instanceof Array && dados[0].length > 1){
+	if(Array.isArray(dados) && Array.isArray(dados[0]) && dados[0].length > 1){
 		if(this.dadosModificados instanceof Array && this.dadosModificados.length >= 1){
 			this.dadosModificados = dados;
 		} else {
@@ -900,29 +884,29 @@ Grafico.prototype.setDados = function(dados){
 }
 // Metodo capaz de gerar percentual de todos os dados do grafico
 Grafico.prototype.getPercentual = function(linha){
-	var arr = [];
+	let arr = [];
 	if(this.dadosModificados.length > 1){
 		arr = JSON.stringify(this.dadosModificados);
 	} else{
 		arr = JSON.stringify(this.dados);
 	}
-	var arrayLocal = JSON.parse(arr); // Tive que converter em um JSON para remover a referencia e poder alterar o array
+	let arrayLocal = JSON.parse(arr); // Tive que converter em um JSON para remover a referencia e poder alterar o array
 	arr = null;
 	// Vamos inciar fazendo um loop e pegando o valor total de cada coluna que for Integer
 	// e/ou Float E somando elas
-	var total = ['TOTAL'];
-	for(var x = 1;x < arrayLocal.length;x++){
+	let total = ['TOTAL'];
+	for(let x = 1;x < arrayLocal.length;x++){
 		if(linha){ // Linha é verdadeiro, então vamos calcular o percentual de cada array dentro do array
-			var total = 0;
+			let total = 0;
 			// Fazendo loop interno para pegar o valor de cada campo
-			for(var y = 1;y < arrayLocal[x].length;y++){
+			for(let y = 1;y < arrayLocal[x].length;y++){
 				if(!isNaN(arrayLocal[x][y])){ // Se este campo e um numero
 					total += arrayLocal[x][y]; // Somando o valor total
 				}
 				
 			}
 			// Agora calculando o percentual, substituindo os valores das colunas
-			for(var y = 1;y < arrayLocal[x].length;y++){
+			for(let y = 1;y < arrayLocal[x].length;y++){
 				if(!isNaN(arrayLocal[x][y])){
 					arrayLocal[x][y] = parseFloat(parseFloat((arrayLocal[x][y] / total) * 100).toFixed(1));
 				} else if(!isNaN(parseFloat(arrayLocal[x][y].split(' ')[0]))){
@@ -931,7 +915,7 @@ Grafico.prototype.getPercentual = function(linha){
 			}	
 		} else {
 			// Fazendo loop interno para pegar o valor de cada campo
-			for(var y = 1;y < arrayLocal[x].length;y++){
+			for(let y = 1;y < arrayLocal[x].length;y++){
 				if(!isNaN(arrayLocal[x][y])){ // Se este campo e um numero
 					if(total[y]){ // Verificando se a referencia ja existe
 						total[y] += arrayLocal[x][y]; // Somando o valor total
@@ -941,17 +925,15 @@ Grafico.prototype.getPercentual = function(linha){
 				}
 			}
 		}
-		
-
 	}
 	/* Agora faremos um loop para gerar a percentagem dividindo d asoma
 		
 	*/
 	if(!linha){
-		for(var x = 1;x < arrayLocal.length;x++){
-			for(var y = 1;y < arrayLocal[x].length;y++){
+		for(let x = 1;x < arrayLocal.length;x++){
+			for(let y = 1;y < arrayLocal[x].length;y++){
 				if(!isNaN(arrayLocal[x][y])){ // Se este campo e um numero
-					var valor = parseFloat(parseFloat((arrayLocal[x][y] / total[y]) * 100).toFixed(2)) ; // Calcular percentual
+					let valor = parseFloat(parseFloat((arrayLocal[x][y] / total[y]) * 100).toFixed(2)) ; // Calcular percentual
 					arrayLocal[x][y] = valor;
 				}
 			}
@@ -973,7 +955,7 @@ Grafico.prototype.addColuna = function(coluna){
 	// Verificar se a coluna tem a mesma extensao da coluna original
 	if(arrayLocal.length == coluna.length){
 		// Vamos fazer um loop e incluir a coluna na terceira parte
-		for(var x = 0;x < arrayLocal.length;x++){
+		for(let x = 0;x < arrayLocal.length;x++){
 			arrayLocal[x].splice(2,0, coluna[x]);
 		}
 		this.dadosModificados = arrayLocal;
@@ -984,21 +966,21 @@ Grafico.prototype.addColuna = function(coluna){
 }
 // Metodo que gera o novo array de dados retornando-o (Metodo somente usado dentro do metodo setCores)
 Grafico.prototype.getCores = function(usarModificado){
-	var arrayLocal = [];
+	let arrayLocal = [];
 	if(usarModificado){ // Verifica se vamos usar o array modificado ou nao para gerar os novos dados
 		arrayLocal = this.dadosModificados;
 	} else {
 		arrayLocal = this.dados;
 	}
-	var qtdCores = this.cores.length; // Conta a quantidade de cores
-	var x = 0; // Variavel que vai contar as cores
-	var novo = []; // Array auxiliar para inclusao dos dados
+	let qtdCores = this.cores.length; // Conta a quantidade de cores
+	let x = 0; // Variavel que vai contar as cores
+	let novo = []; // Array auxiliar para inclusao dos dados
 	// Verificar se ja  temos cores definidas
-	for(var i = 2;i < arrayLocal[0].length;i++){ 
+	for(let i = 2;i < arrayLocal[0].length;i++){ 
 		if(arrayLocal[0][i].role == "style"){ // Verificando se o campo pesquisado tem
 			// o atributo role com valor style.
 			// Fazer um loop no array e excluir o campo de referencia
-			for(var e = 0;e < arrayLocal.length;e++){
+			for(let e = 0;e < arrayLocal.length;e++){
 				arrayLocal[e].splice(i, 1); // Removendo a coluna do array
 			}
 		}
@@ -1006,7 +988,7 @@ Grafico.prototype.getCores = function(usarModificado){
 	novo.push(arrayLocal[0]);
 	novo[0].push({role:'style'});
 	// Iniciando o loop para preencher a cor
-	for(var y = 1;y < arrayLocal.length;y++){
+	for(let y = 1;y < arrayLocal.length;y++){
 		if(x == qtdCores){
 			x = 0;
 		}
@@ -1021,10 +1003,11 @@ Grafico.prototype.setCores = function(cores){
 	// Verifica se as cores enviadas sao um array
 	if(cores instanceof Array && cores.length >= 1){
 		this.cores = cores;
+		let novo;
 		if(this.dadosModificados.length > 1){
-			var novo = this.getCores(true); // Informo que desejo usar o array modificado
+			novo = this.getCores(true); // Informo que desejo usar o array modificado
 		} else{
-			var novo = this.getCores(); // Retorna o array original modificado
+			novo = this.getCores(); // Retorna o array original modificado
 		}
 		// Definindo os novos dadosModificados
 		this.dadosModificados = novo;
@@ -1035,11 +1018,12 @@ Grafico.prototype.setCores = function(cores){
 Grafico.prototype.setTotal = function(coluna, linhaNaoRegistrada){
 
 	if(!isNaN(coluna)){// Se a coluna usada para a soma foi definida, vamos somar
-		var tot = 0; // Total a ser somado
+		let tot = 0; // Total a ser somado
+		let arrayLocal;
 		if(this.dadosModificados.length > 1){
-			var arrayLocal = this.dadosModificados;
+			arrayLocal = this.dadosModificados;
 		} else {
-			var arrayLocal = this.dados
+			arrayLocal = this.dados
 		}
 
 		// Verificando se a opçao de linha nao registrada foi informada
@@ -1049,7 +1033,7 @@ Grafico.prototype.setTotal = function(coluna, linhaNaoRegistrada){
 			linhaNaoRegistrada = undefined;
 		}
 		// Fazer o loop, somar a coluna e colocar no atributo this.total
-		for(var x = 1;x < arrayLocal.length;x++){
+		for(let x = 1;x < arrayLocal.length;x++){
 			if(x == linhaNaoRegistrada){
 				continue;
 			} else {
@@ -1069,44 +1053,44 @@ Grafico.prototype.setOpcoes = function(opcoes){
 
 // Metodo que prepara os dados para a criacao do grafico
 Grafico.prototype.getDados = function(percent, linha){
+	let dado;
 	// Verificando os dados são um array bidimensional e se as opcoes sao um objeto
-	if(this.dados instanceof Array && this.dados[0] instanceof Array && this.opcoes instanceof Object){
+	if(Array.isArray(this.dados) && Array.isArray(this.dados[0]) && typeof this.opcoes === "object"){
 		if(percent){
-			var dado = google.visualization.arrayToDataTable(this.getPercentual(linha));
+			 dado = google.visualization.arrayToDataTable(this.getPercentual(linha));
 		} else if(this.dadosModificados.length > 1){
-			var dado = google.visualization.arrayToDataTable(this.dadosModificados);
+			 dado = google.visualization.arrayToDataTable(this.dadosModificados);
 		} else {
-			var dado = google.visualization.arrayToDataTable(this.dados);
+			 dado = google.visualization.arrayToDataTable(this.dados);
 		}
 	}
 	return dado;
 }
 // Metodo que cria um grafico de pizza
 Grafico.prototype.getPizza = function(){
-		var dado = this.getDados(); // Recebendo o array de dados para montar o grafico
-		var chart = new google.visualization.PieChart(document.getElementById(this.id));
+		let dado = this.getDados(); // Recebendo o array de dados para montar o grafico
+		let chart = new google.visualization.PieChart(document.getElementById(this.id));
 		chart.draw(dado, this.opcoes);
-		this.refGraf = chart; //Recuperando referencia do grafico
-	
+		this.refGraf = chart; //Recuperando referencia do grafico	
 }
 // Metodo que cria grafico de coluna
 Grafico.prototype.getColuna = function(percent, linha){
-	var dado = this.getDados(percent, linha);
-	var chart = new google.visualization.ColumnChart(document.getElementById(this.id));
+	let dado = this.getDados(percent, linha);
+	let chart = new google.visualization.ColumnChart(document.getElementById(this.id));
 	chart.draw(dado, this.opcoes);
 	this.refGraf = chart; //Recuperando referencia do grafico
 }
 //Metodo que cria grafico de barra
 Grafico.prototype.getBarra = function(percent, linha){
-	var dado = this.getDados(percent, linha);
-	var chart = new google.visualization.BarChart(document.getElementById(this.id));
+	let dado = this.getDados(percent, linha);
+	let chart = new google.visualization.BarChart(document.getElementById(this.id));
 	chart.draw(dado, this.opcoes);
 	this.refGraf = chart; //Recuperando referencia do grafico
 }
 // Metodo para criar grafico de linha
 Grafico.prototype.getLinha = function(percent, linha){
-	var dado = this.getDados(percent, linha);
-	var chart = new google.visualization.LineChart(document.getElementById(this.id));
+	let dado = this.getDados(percent, linha);
+	let chart = new google.visualization.LineChart(document.getElementById(this.id));
 	chart.draw(dado, this.opcoes);
 	this.refGraf = chart; //Recuperando referencia do grafico
 }
@@ -1116,7 +1100,7 @@ Grafico.prototype.getRefGraf = function(){
 };
 // Metodo que define anotacoes {role:annotarion}
 Grafico.prototype.setAnotacoes = function(){
-	var arrTempNovo, listaCampos = [];
+	let arrTempNovo, listaCampos = [];
 	// Verificando quais dados vou utilizar
 	if(this.dadosModificados.length > 0){
 		arrTempNovo = this.dadosModificados;
@@ -1128,14 +1112,14 @@ Grafico.prototype.setAnotacoes = function(){
   	arrTempNovo.forEach(function(value, index){
   		if(index > 0){
     		listaCampos.push([]);// Cria novo array no temp2
-	    	var marcador = 1; // Inicializa o marcador de linha
+	    	let marcador = 1; // Inicializa o marcador de linha
 	    	value.forEach(function(val, ind){
 	    		//console.log('PASSA AQUI');
 	      		if(ind < 1){ 
 	      			listaCampos[index][ind] = val;
 	      		}else{ // utilizando o marcador atual, passa o valor desconvertido
 
-	      			if(typeof val == "string" && val.search('R') != -1){
+	      			if(typeof val === "string" && val.search('R') != -1){
 	      				console.log(val);
 	      				listaCampos[index][marcador] = parseFloat(desconverter(val));
 	      			}else{
@@ -1144,14 +1128,13 @@ Grafico.prototype.setAnotacoes = function(){
 	        		// Colocando o valor no campo do role:annotation
 	        		listaCampos[index][marcador+1] = val;
 	        		marcador += 2; // Sempre aumenta o contador em 2 para criar o proximo campo
-	        	}
-	        	
+	        	}	
 	    	});
 	    }
   	});
   	
   	// Agora o ajuste o cabecalho para ter role:annotation
-  	var tempC = [];var cont = 1;
+  	let tempC = [];let cont = 1;
   	// A logica aqui e a mesma, a diferenca e que o contador e array temp estao fora
   	listaCampos[0].forEach(function(value, ind){ 
     	if(ind < 1){ tempC.push(value);
@@ -1183,31 +1166,29 @@ var Formulario = function(){
 Formulario.prototype.validaData = function(idOuClasse){
 	
 	// Se a classe ou id não for encontrado, retorne erro
-	if(typeof $(idOuClasse).val() == "undefined"){
+	if(typeof $(idOuClasse).val() === "undefined"){
 		console.log('Não foi possível encontrar este campo. '+idOuClasse);
 		return false;
 	}
 	// Agora vamos verificar se o valor pode ser convertido em uma data
-	var data = $(idOuClasse).val();
+	let data = $(idOuClasse).val();
 	// Regex para validar a data
-	var re = /^[2][0][0-9][0-9]-([0][0-9]|[1][0-2])-([0-2][0-9]|[3][0-1])$/g;
+	let re = /^[2][0][0-9][0-9]-([0][0-9]|[1][0-2])-([0-2][0-9]|[3][0-1])$/g;
 	// Se a data seguir o padrao, exiba correto, senao exiba um alert informando que a data esta incorreta
 	if(data.search(re) == -1){
 		alert("A data informada esta no formato incorreto.");
 		return false;
 	}
 	// Data esta correta, vamos retornar o objeto Date da data informada
-	var d = new Date(data);
+	let d = new Date(data);
 	return d;
 };
 
 // Método que compara dois objetos data para verificar se De é menor ou igual a ate
 Formulario.prototype.deMenorQueAte = function(data1, data2){
-	
 	// Recebemos dados do tipo string (supostamente classe ou id e os atribuem a data1 e data2)
-
-	if(typeof data1 == "string" && typeof data2 == "string"){
-		var data1 = this.validaData(data1);var data2 = this.validaData(data2);
+	if(typeof data1 === "string" && typeof data2 === "string"){
+		let data1 = this.validaData(data1);let data2 = this.validaData(data2);
 	} else if(typeof data1 == "undefined" || typeof data2 == "undefined" || typeof data1 == false || typeof data2 == false){
 		console.log("Os objetos enviados não são datas.");
 		return false;
@@ -1218,8 +1199,8 @@ Formulario.prototype.deMenorQueAte = function(data1, data2){
   	alert('A data DE nao deve ser maior que a data ATE.');
   	return false;
   	} else {
-		var de2 = data1.getUTCFullYear() +'-'+(data1.getUTCMonth()+1 > 9 ? data1.getUTCMonth()+1 : '0'+(data1.getUTCMonth()+1))+'-'+(data1.getUTCDate() > 9 ? data1.getUTCDate() : '0'+data1.getUTCDate());
-		var ate2 = data2.getUTCFullYear() +'-'+(data2.getUTCMonth()+1 > 9 ? data2.getUTCMonth()+1 : '0'+(data2.getUTCMonth()+1))+'-'+(data2.getUTCDate()> 9 ? data2.getUTCDate() : '0'+data2.getUTCDate());
+		let de2 = data1.getUTCFullYear() +'-'+(data1.getUTCMonth()+1 > 9 ? data1.getUTCMonth()+1 : '0'+(data1.getUTCMonth()+1))+'-'+(data1.getUTCDate() > 9 ? data1.getUTCDate() : '0'+data1.getUTCDate());
+		let ate2 = data2.getUTCFullYear() +'-'+(data2.getUTCMonth()+1 > 9 ? data2.getUTCMonth()+1 : '0'+(data2.getUTCMonth()+1))+'-'+(data2.getUTCDate()> 9 ? data2.getUTCDate() : '0'+data2.getUTCDate());
 		this.dados.de = de2;this.dados.ate = ate2;
   		return true;
   	}
@@ -1227,15 +1208,15 @@ Formulario.prototype.deMenorQueAte = function(data1, data2){
 // Método para validar um campo verificando se o mesmo não está em branco
 Formulario.prototype.validaCampo = function(idOuClasse){
 	// Se a classe ou id não for encontrado, retorne erro
-	if(typeof $(idOuClasse).val() == "undefined"){
+	if(typeof $(idOuClasse).val() === "undefined"){
 		console.log('Não foi possível encontrar este campo. '+idOuClasse);
 		return false;
 	}
 	// Existe, então vamos recuperar o seu valor
-	var valor = $(idOuClasse).val();
+	let valor = $(idOuClasse).val();
 
 	// Verificando se o valor esta em branco ou e indefinido
-	if(valor == "" || typeof valor == "undefined"){
+	if(valor === "" || typeof valor === "undefined"){
 		console.log("Valor do campo não foi definido.");
 		alert('Um campo não foi preenchido.');
 		return false;
@@ -1246,7 +1227,7 @@ Formulario.prototype.validaCampo = function(idOuClasse){
 };
 // Metodo para validar arquivos, recebe dois parametros, o id do campo file e um array com os tipos aceitos
 Formulario.prototype.validaArquivo = function(ID, arrayDeTipos){
-	if(!arrayDeTipos instanceof Array){
+	if(!Array.isArray(arrayDeTipos)){
 		console.log("Os tipos enviados não estão na forma de array.");
 		return false;
 	}
@@ -1256,15 +1237,15 @@ Formulario.prototype.validaArquivo = function(ID, arrayDeTipos){
 		return false;
 	}
 	// O id esta correto, agora vamos fazer um loop para ver se os arquivos enviados estão de acordo com os tipos aceitos
-	var arq = document.getElementById(ID).files;
+	let arq = document.getElementById(ID).files;
 	// Verificando se existe pelo menos um arquivo, caso nao exista retorne a mensagem informando que nao temos arquivos
 	if(arq.length < 1){
 		alert('Por favor envie pelo menos um arquivo.');
 		return false;
 	}
-	for(var x = 0;x < arq.length;x++){
+	for(let x = 0;x < arq.length;x++){
 		// Retirar a extensao do arquivo
-		var nome = arq[x].name.split('.');
+		let nome = arq[x].name.split('.');
 		// Fazer loop sobre as extensoes
 		console.log(nome[1]);
 			if(arrayDeTipos.indexOf(nome[1]) == -1){
@@ -1281,9 +1262,8 @@ Formulario.prototype.validaArquivo = function(ID, arrayDeTipos){
 Formulario.prototype.atualizarDados = function(fn){
 	// Agora quando clicar no botao de atualizacao o cookie é novamente salvo, os dados são atualizados e a pagina se mantem intacta
 	$('#pesquisar').click(function(e){
-		e.preventDefault();
-		
-		var form = new Formulario();
+		e.preventDefault();	
+		let form = new Formulario();
 		if(form.deMenorQueAte('#data1', '#data2') && form.validaCampo('#grupos') && form.validaCampo('#lojas')){
 			$.ajax({ url: '/set_salvar_cookies', method: 'POST', data : form.dados }).done(function(da){
 				// TUDO DEU CERTO, GRAVANDO AS DATAS NO USUARIO ATUAL
@@ -1302,10 +1282,10 @@ Formulario.prototype.atualizarDados = function(fn){
 // FUNCAO USADA PARA CONVERTER VALORES MONETARIOS
 function converter(valor){
     valor = valor.replace('.',',');// Substituindo ponto por virgula
-    var valorReverso = valor.split("").reverse(); // Reverte a string
-    var recebeConvertido = '';
-    var x = 0;// Contado a cada 3 vai incluir ponto
-    for(var i =0;i< valorReverso.length;i++){
+    let valorReverso = valor.split("").reverse(); // Reverte a string
+    let recebeConvertido = '';
+    let x = 0;// Contado a cada 3 vai incluir ponto
+    for(let i =0;i< valorReverso.length;i++){
         // Se o x for inferior a 4 entao vamos incrementar x e colocar o caractere
         if(x < 4){
             x += 1
@@ -1320,7 +1300,7 @@ function converter(valor){
         }
     }
     //# Reverte novamente a string para o formato de ordem original
-    var valor2 = 'R$ '+recebeConvertido.split("").reverse().join("");
+    let valor2 = 'R$ '+recebeConvertido.split("").reverse().join("");
     return valor2;
 
 };
@@ -1333,9 +1313,9 @@ var Usuario = function(){
 
 // Metodo usado para obter os cookies do usuario
 Usuario.prototype.obterCookie = function(){
-	var todosCookies = decodeURIComponent(document.cookie).split(';');
-	for(var x = 0;x < todosCookies.length;x++){
-		var dados = todosCookies[x].split('=');
+	let todosCookies = decodeURIComponent(document.cookie).split(';');
+	for(let x = 0;x < todosCookies.length;x++){
+		let dados = todosCookies[x].split('=');
 		this.dados[dados[0].trim()] = dados[1].replace(/\\054/g, ',');
 		
 	}
@@ -1343,10 +1323,10 @@ Usuario.prototype.obterCookie = function(){
 
 // Metodo usado para obter o nome dos grupos de forma resumida e separados por virgula
 Usuario.prototype.getGrupoResumido = function(){
-	var grupoResumido = [];
-	var todos = this.dados.grupo_selecionado.split(',');
-	for(var x = 0;x < todos.length;x++){
-		var nome = todos[x].split('|')[1].split(' ')[1];
+	let grupoResumido = [];
+	let todos = this.dados.grupo_selecionado.split(',');
+	for(let x = 0;x < todos.length;x++){
+		let nome = todos[x].split('|')[1].split(' ')[1];
 		grupoResumido.push(nome);
 	}
 	return grupoResumido.join();
@@ -1390,7 +1370,7 @@ BarraDeProgresso.prototype.ativarBarra = function(contador, intervalo){
   // Vendo se tempo foi definido e atribuindo ele ao contador
   if(typeof contador !== "number"){this.contador = 0;} else{
     this.contador = contador;}
-    var obj = this;
+    let obj = this;
     // Funcao criada para executar o cronometro e alterar os valores
     function crono(){ obj.cronometro(); };
     // Recupera o numero retornado por setInteval. Vamos usa-lo para interromper o tempo
@@ -1450,10 +1430,10 @@ Controlador.prototype.pesquisar = function(paginaALvo){
         console.log('FAVOR DEFINIR A PAGINA ALVO');
         return false;
     }
-    var ref = this;
+    let ref = this;
     $('#pesquisar').bind('click', function(){
                 
-        var grupo, filial, dataDe, dataAte;
+        let grupo, filial, dataDe, dataAte;
         grupo = $('#grupos').val();
         filial = $('#lojas').val();
         dataDe = $('#data1').val();dataAte = $('#data2').val();
@@ -1478,8 +1458,8 @@ Controlador.prototype.pesquisar = function(paginaALvo){
 
 // Metodo que valida os campos do relatorio
 Controlador.prototype.validarCampos = function(grupos, lojas, de, ate){
-    var ref = this;
-    var dDe = new Date(de); var dAte = new Date(ate);
+    let ref = this;
+    let dDe = new Date(de); let dAte = new Date(ate);
 
     if(!(grupos instanceof Array) || (grupos.length < 1) || !(lojas instanceof Array) || 
         (lojas.length < 1)){alert('GRUPO(S) E/OU LOJA(S) NÃƒO SELECIONADOS. VERIFICAR.');
@@ -1507,12 +1487,12 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
     if(typeof(Storage) === "undefined"){ 
       alert('NÃO será possivel escolher as colunas desejadas para baixar.');
       // Agora criar o objeto que vai comportar o cabecalho e o corpo da tabela
-        var objTabelaBaixar = {'cabe':[], 'corpo':[]};
+        let objTabelaBaixar = {'cabe':[], 'corpo':[]};
         $(idTabela+' thead tr').children().each(function(i,v){
             objTabelaBaixar.cabe.push($(this).text());
         });
         $(idTabela+' tbody').children().each(function(i,v){
-            var tempQ = [];
+            let tempQ = [];
             $(this).children().each(function(ia,va){
                 tempQ.push($(this).text());
             });
@@ -1529,13 +1509,13 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
         return false;
     }
     // Verificamos se temos dados no armazenamento interno
-    var asColunasSelecionadas = [];
+    let asColunasSelecionadas = [];
     if(localStorage.getItem(nomeArmazenamentoLocal)){
       asColunasSelecionadas = JSON.parse(localStorage.getItem('colunas_selecionadas'));
     }
     
     // Recupera todas as colunas e permite o usuario a escolher quais ele quer
-    var tempA = '';var entrada = '<input class="checa_colunas" type="checkbox" value="indice" /> VALOR<br/>';
+    let tempA = '';let entrada = '<input class="checa_colunas" type="checkbox" value="indice" /> VALOR<br/>';
     $(idTabela+' thead tr').children().each(function(ind, val){
         if(asColunasSelecionadas.indexOf(Number(ind).toString()) != -1){
           tempA += '<input class="checa_colunas" checked type="checkbox" value="'+ind+'" />'+$(this).text()+'<br/>';
@@ -1545,9 +1525,9 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
     });
     tempA += '<p class="text-center">'+new Botao('BAIXAR', 'btn btn-xs btn-danger', 'baixar_selecionados').getBotao()+'</p>';
     // Agora cria o modal permitindo que o usuario escolhas as colunas que ele deseja fazer o download
-    var modTitulo = new Titulo('ESCOLHA AS COLUNAS A BAIXAR', 4, 'text-center text-danger').getTitulo();
-    var modRodape = '<button class="btn btn-xs btn-default" data-dismiss="modal">FECHAR</button>';
-    var mod = new Modal(modTitulo, tempA, modRodape, '', 'modalExcel');
+    let modTitulo = new Titulo('ESCOLHA AS COLUNAS A BAIXAR', 4, 'text-center text-danger').getTitulo();
+    let modRodape = '<button class="btn btn-xs btn-default" data-dismiss="modal">FECHAR</button>';
+    let mod = new Modal(modTitulo, tempA, modRodape, '', 'modalExcel');
     mod.setTipoModal(true);
     $('#modalExcel').remove();
     $('body').append(mod.getModal());
@@ -1555,8 +1535,8 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
 
     // Clica no botao para baixar_selecionados e então é permitido gerar um excel disto
     $('#baixar_selecionados').bind('click', function(e){
-        var $_CHECADOS = $('.checa_colunas');
-        var escolhidas = [];
+        let $_CHECADOS = $('.checa_colunas');
+        let escolhidas = [];
         $($_CHECADOS).each(function(ind,val){
             if($(this).prop('checked')){
               escolhidas.push($(this).val());
@@ -1565,7 +1545,7 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
 
         localStorage.setItem(nomeArmazenamentoLocal, JSON.stringify(escolhidas));
         // Agora criar o objeto que vai comportar o cabecalho e o corpo da tabela
-        var objTabelaBaixar = {'cabe':[], 'corpo':[]};
+        let objTabelaBaixar = {'cabe':[], 'corpo':[]};
         // Obtendo o cabecalho
         $(idTabela+' thead tr').children().each(function(ind, val){
             if(escolhidas.indexOf(Number(ind).toString()) != -1){
@@ -1575,7 +1555,7 @@ Controlador.prototype.baixarEmExcel = function(idTabela, idBotao, nomeArmazename
         // Agora obtendo o corpo
         $(idTabela+' tbody').children().each(function(i, v){
           // Passando pelos filhos do registro
-          var tempInternoTab = [];
+          let tempInternoTab = [];
           $(this).children().each(function(ix, vx){
               if(escolhidas.indexOf(Number(ix).toString()) != -1){
                 tempInternoTab.push($(this).text());

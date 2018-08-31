@@ -749,7 +749,7 @@ DivTabs.prototype.getDivTabs = function(){
 	}
 	let ulTab = "<ul class='nav nav-tabs'>";
 	let divs = "<div class='tab-content'>";
-	this.lista.forEach(function(e,x){
+	this.lista.forEach((e,x)=>{
 		let divisao = e.split('@'); // Divide o nome do link com o id que vai identificar a div
 		if(x === 0){ // Se x e igual a 0 entao esta e a primeira aba, entao ela deve estar ativa
 			// O item da lista e a div do content devem ser criadas

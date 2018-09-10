@@ -102,6 +102,8 @@ Tabela.prototype.setCabecalho = function(cabe){
 	this._cabecalho = cabe;
 	return true;
 }
+
+
 // Define o corpo da tabela, o mesmo deve estar alinhado com o tamanho do cabecalho<>
 Tabela.prototype.setCorpo = function(corpo){
 	// Verificando se o corpo é um array e seu conteudo é um array também
@@ -120,7 +122,12 @@ Tabela.prototype.setCorpo = function(corpo){
 }
 // Obtem uma tabela de forma simples <>
 Tabela.prototype.getTabela = function(){
-	let tabe = `<div class="tabe table-responsive small"><table class="${this.classe}" id="${this.id}">`; 
+	let tabe = `<div class="tabe table-responsive small">${this._getTabela()}</div>`; 
+	return tabe; 
+};
+// Metodo interno que desenha somente retora a representacao da tabela
+Tabela.prototype._getTabela = function(){
+	let tabe =`<table class="${this.classe}" id="${this.id}">`; 
 	let corpo = '<tbody>'; 
 	let cabe = `<thead><tr class="${this._classeCabecalho}">`; 
 	//let cabecalho = this._cabecalho; 
@@ -131,20 +138,19 @@ Tabela.prototype.getTabela = function(){
 		tr += '</tr>';
 		corpo += tr;
 	});
-
 	corpo += '</tbody>'; 
 	this._cabecalho.forEach(e=>{ cabe += `<th>${e}</th>`; });
 	cabe += '</tr></thead>';
 	// Criando rodape se existir
 	if(this._rodape.length === this._cabecalho.length){
-		corpo +='<tfoot><tr>';
+		corpo +=`<tfoot><tr class="${this._classeCabecalho}">`;
 		this._rodape.forEach(e1=>{ corpo += `<td>${e1}</td>`; });
 		corpo += '</tr></tfoot>';
 	}
 	// Montando as strings das tabela e retornando
-	tabe += cabe + corpo + '</table></div>'; 
-	return tabe; 
-};
+	tabe += cabe + corpo + '</table>';
+	return tabe;
+}
 // Metodo para obter o dataTables
 Tabela.prototype.getIdDataTable = function(){
 	return this._idDataTables;
@@ -310,18 +316,26 @@ Tabela.prototype.setClasseCabecalho = function(classe){
 // Metodo para definir um estilo para os tds
 Tabela.prototype.setEstiloTd = function(estiloTd){
 	if(typeof estiloTd === "string"){ 
-		this._estiloTd = estiloTd; return true; 
+		this._estiloTd = estiloTd; 
 	} else if(typeof estiloTd === "object"){
 		let estilo = "";
 		for(let k in estiloTd){
-			estilo += `${k}:${estiloTd[k]}`;
+			estilo += `${k}:${estiloTd[k]};`;
 		}
 		this._estiloTd = estilo;
-		return true;
 	} else {
 		console.log(`ENVIOU UM ESTILO QUE NAO E UMA STRING ${estiloTd}`);
 		throw new SyntaxError("FAVOR ENVIAR UMA STRING OU UM OBJETO COM ESTILOS");
 	}
+	// Agora verifica se o datataTables ja existe, se sim a tabela deve ser recriada
+	// com o metodo interno _getTabela
+		if(typeof this._idDataTables === "object") {
+			$('#'+this.id).DataTable().destroy();
+			$('#'+this.id).parent().html(this._getTabela());
+			this._idDataTables = $('#'+this.id).DataTable(this.opcoes);
+		}
+	return true;
+
 }
 
 // Metodo interno usado para validar um indice
@@ -474,7 +488,7 @@ Tabela.prototype.calculaRodape = function(camposNaoCalculaveis, valorCamposNaoCa
 		return false;
 	}
 	// Preparando o rodape dos valores que nao devem ser calculados
-	camposNaoCalculaveis.forEach(e=>{ arrTempRodape[e] = valorCamposNaoCalculaveis[e]; });
+	camposNaoCalculaveis.forEach((e,i)=>{ arrTempRodape[e] = valorCamposNaoCalculaveis[i]; });
 	// Faz um loop, desconverte os monetarios e soma os rodapes corretamente
 	this._corpo.forEach((e,i) => {
 		e.forEach((e2, i2)=>{
@@ -611,6 +625,92 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
 	    });
     });
 }
+// Metodo que permite a remocao de um registro do corpo passando o id e o valor que espera-se encontrar
+Tabela.prototype.removeRegistro = function(id, valor){
+	let indiceARemover = false;
+	let remover = false;
+	this._corpo.forEach((e,i)=>{
+		e.forEach((e2,i2)=>{
+			if(i2 === id && e2.search(valor) != -1 ){
+				// Achou o indice
+				remover = true;
+				indiceARemover = i;
+				return true;
+			}
+		});
+		if(remover) return true;
+	});
+	// Agora se tiver que remover ja remove
+	if(remover) this._corpo.splice(indiceARemover, 1);
+	return indiceARemover;
+}
+// Metodo usado para ajudar no filtro da tabela realizando o calculo do rodape automaticamente
+Tabela.prototype.atualizaRodape = function(arrCampos, arrMonetarios){
+	// Valida para ver se os dois sao arrays e o campos tem que ser do mesmo tamanho ou menor que 
+	// o de monetarios
+	if(!Array.isArray(arrCampos) || !Array.isArray(arrMonetarios)){
+		throw new SyntaxError('UM DOS PARAMETROS NAO É UM ARRAY. SOMENTE SAO ACEITOS ARRAYS');
+	}
+	// Ver se o arrCampos é igual ou maior que arrMonetarios
+	if(arrCampos.length < arrMonetarios.length){
+		throw new SyntaxError('O ARRAY DOS MONETARIOS NAO DEVE SER MAIOR QUE O ARRCAMPOS');
+	}
+	// OK, agora precisamos ver se o conteudo destes arrays sao numeros
+	arrCampos.forEach(e=>{ if(isNaN(e) || !isFinite(e)) 
+		throw new SyntaxError('UM DOS VALORES DE arrCampos NAO E UM NUMERO'); 
+	});
+	arrMonetarios.forEach(e=>{ if(isNaN(e) || !isFinite(e)) 
+		throw new SyntaxError('UM DOS VALORES DE arrCampos NAO E UM NUMERO'); 
+	});
+	// Vamos ver se a tabela ja existe
+	if(!document.querySelector(`#${this.id}_wrapper`)){
+		throw new SyntaxError('NAO EXISTE UMA TABELA DATATABLES PARA APLICAR O atualizaRodape');
+	}
+	// Agora temos certeza que os parametros sao numeros e a tabela existe, vamos aplicar o filtro
+	let ref = this;
+
+	$(`#${ref.id}_wrapper [type="search"]`).bind('keyup',function(){
+		let somas = {};
+		
+		arrCampos.forEach(v=>{
+			somas[v] = 0;
+		});
+
+		$(`#${ref.id} tbody tr`).each(function(ia,v){
+			// Ja desconverte e soma os campos monetarios
+			if(arrMonetarios.length > 0){
+				arrMonetarios.forEach(e=>{
+					somas;
+					//somas[e] = somas[e] ? somas[e] : 0;
+					let vl1 = desconverter($(this).children().eq(e).text());
+					let valorAtual = parseFloat( vl1 );
+					//somas[e] += parseFloat( desconverter($(this).children().eq(e).text()) );
+					somas[e] += valorAtual;
+				});
+			}
+			// Passando sobre cada campo para verificar
+			for(let c in somas){ // Se o campo nao e monetario, entao some com parseInt
+				if(!arrMonetarios.includes(parseInt(c))){
+					//somas[c] = somas[c] ? somas[c] : 0;
+					somas[c] += parseInt($(this).children().eq(c).text());
+				}
+			}
+		}); 
+		// Agora acertando o rodape atribuindo os valores no lugar correto
+		arrMonetarios.forEach(e=>{
+			$(`#${ref.id}_wrapper .dataTables_scrollFootInner tfoot tr`).children().eq(e).text(converter(parseFloat(somas[e]).toFixed(2)));	
+		});
+		// Colocando os valores inteiros
+		for(let i in somas){
+			if(!arrMonetarios.includes(parseInt(i))){
+				$(`#${ref.id}_wrapper .dataTables_scrollFootInner tfoot tr`).children().eq(i).text(somas[i]);	
+			}
+		}
+		// Ajustando os campos
+		$.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+	});
+	return true;
+}
 
 // Classe que instancia um link
 var Link = function(link, conteudo, classe, id){ this.link = link; ClasseId.call(this, conteudo, classe, id);}
@@ -665,7 +765,7 @@ Selecao.prototype.addItem = function(arrayItem){
 // Metodo utilizado para incluir um array com arrays de itens
 Selecao.prototype.addItens = function(arrayItens){
 	if(Array.isArray(arrayItens)){
-		arrayItens.forEach(function(e){
+		arrayItens.forEach((e)=>{
 			if(!Array.isArray(e) || e.length != 2){
 				console.log('UM DOS ELEMENTOS NAO E UM ARRAY OU SEU TAMANHO E INFERIOR A 2.');
 				return false
@@ -682,7 +782,7 @@ Selecao.prototype.addItens = function(arrayItens){
 // Metodo utilizado para retornar um  select usando os dados repassados
 Selecao.prototype.getSelecao = function(){
 	let select = `<select name='${this.nome}' id='${this.id}' class='${this.classe}' ${this.getAtributo()}>`;
-	this.itens.forEach(function(e){
+	this.itens.forEach((e)=>{
 		if(e[0] == this.autoSelecionado || e[1] == this.autoSelecionado){
 			select += `<option selected value='${e[0]}'>${e[1]}</option>`;
 		} else {
@@ -702,14 +802,14 @@ var DivRow = function(classe, id){this.tamanho = 0; this.corpo = new Array(); Cl
 
 DivRow.prototype = new ClasseId();
 DivRow.prototype.constructor = DivRow;
-DivRow.prototype.addDiv = function(conteudo, tamanho, classe, id){ 
+DivRow.prototype.addDiv = function(conteudo, tamanho, clas, ide){ 
 	// Verificando se o tamanho atual somado com o tamanho enviado é menor ou igual a 12
 	let tamanhoAtual = this.tamanho + tamanho;
 	if(tamanhoAtual <= 12){
 		this.tamanho += tamanho;
 		// Para classe o ids nao configurados, insira uma string vazia
-		let classe = typeof classe === "undefined" ? "" : classe;
-		let id =  typeof  id === "undefined" ? "" : id;
+		let classe = typeof clas === "undefined" ? "" : clas;
+		let id = typeof  ide === "undefined" ? "" : ide;
 		this.corpo.push([conteudo, tamanho, classe, id]);
 	} else {
 		console.log('Tamanho enviado excede o limite de 12 grids.');
@@ -1405,6 +1505,7 @@ function desconverter(valor){
 
 // Objeto que controla as acoes da pagina
 var Controlador = function(){
+	this._refAjax;
     this.grupos;
     this.lojas;
     this.de;
@@ -1445,7 +1546,7 @@ Controlador.prototype.pesquisar = function(paginaALvo){
         ref.barra.incluirBarra('#corpo_pagina2');
         ref.barra.ativarBarra(0, 2000);
         // Campos validados, agora vamos submeter os dados para o servidor
-        $.ajax({method:'POST', url:paginaALvo, data:{
+        ref._refAjax = $.ajax({method:'POST', url:paginaALvo, data:{
             'grupos':ref.grupos, 'lojas':ref.lojas, 'de':ref.de, 'ate':ref.ate}
         }).done(function(data){
             // Deu tudo certo, enviar os dados para o metodo de criacao de tabela o criar
@@ -1455,6 +1556,15 @@ Controlador.prototype.pesquisar = function(paginaALvo){
         });
     });
 };
+// Metodo para cancelar ajax
+Controlador.prototype.cancelaAjax = function(msg){
+	if(typeof this._refAjax !== "undefined"){
+		this._refAjax.abort();
+		if(typeof msg !== "undefined")
+			alert(msg);
+	}
+	return true;
+}
 
 // Metodo que valida os campos do relatorio
 Controlador.prototype.validarCampos = function(grupos, lojas, de, ate){

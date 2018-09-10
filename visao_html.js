@@ -170,7 +170,7 @@ Tabela.prototype.getTabelaDinamica = function(colunaChave, arrayValoresMonetario
 	// Fazendo um loop para criar as chaves únicas
 	this._corpo.forEach((e1,i1)=>{
 		// Recupera o valor da coluna a ser filtrada
-		let valor = this.corpo[x][colunaChave];
+		let valor = this._corpo[i1][colunaChave];
 		// Se ele nao contiver a chave, vamos cria-la
 		if(typeof arrChave[valor] == "undefined"){
 			arrChave[valor] = [];
@@ -229,13 +229,13 @@ Tabela.prototype.getTabelaDinamica = function(colunaChave, arrayValoresMonetario
 	
 	let tabe = `<table class="${this.classe}" id="${this.id}">`; 
 	let corpoTabela = '<tbody>';
-	let cabe = `<thead><tr class="${this.classeCabecalho}">`; 
+	let cabe = `<thead><tr class="${this._classeCabecalho}">`; 
 	let cabecalho = this._cabecalho; 
 	// Fazendo um loop no rodape(caso exista para dar valores monetarios para os campos marcados)
 	if(this._rodape.length === this._cabecalho.length){
 		arrayValoresMonetarios.forEach((e2,i2)=>{
-			let vl = converter(parseFLoat(this._rodape[i2]).toFixed(2));
-			this._rodape[i2] = vl;
+			let vl = converter(parseFloat(this._rodape[e2]).toFixed(2));
+			this._rodape[e2] = vl;
 		});
 	}
 	
@@ -266,10 +266,10 @@ Tabela.prototype.getTabelaDinamica = function(colunaChave, arrayValoresMonetario
 	} 
 	cabe += '</tr></thead>';
 	// Verificando se tem rodape, se tiver cria-lo, senão deixe sem ele
-	if(this.rodape.length == cabecalho.length){
-		corpoTabela += `<tfoot><tr class="${this.classeCabecalho}">`;
-		for(let x = 0;x < this.rodape.length;x++){
-			corpoTabela += `<th>${this.rodape[x]}</th>`;
+	if(this._rodape.length == cabecalho.length){
+		corpoTabela += `<tfoot><tr class="${this._classeCabecalho}">`;
+		for(let x = 0;x < this._rodape.length;x++){
+			corpoTabela += `<th>${this._rodape[x]}</th>`;
 		}
 		corpoTabela += '</tr></tfoot>';
 	}
@@ -458,7 +458,7 @@ Tabela.prototype.desenhaDataTable = function(){
 		this._idDataTables = $('#'+this.id).DataTable(this.opcoes);
 		return true;
 	}catch(e){
-		alert('VOCE PRECISA IMPORTAR A API DO DATATABLES PARA USAR ESTE RECURSO');
+		console.log('VOCE PRECISA IMPORTAR A API DO DATATABLES PARA USAR ESTE RECURSO');
 		return false;
 	}
 };
@@ -1286,21 +1286,22 @@ Formulario.prototype.validaData = function(idOuClasse){
 
 // Método que compara dois objetos data para verificar se De é menor ou igual a ate
 Formulario.prototype.deMenorQueAte = function(data1, data2){
+	let data11, data22;
 	// Recebemos dados do tipo string (supostamente classe ou id e os atribuem a data1 e data2)
 	if(typeof data1 === "string" && typeof data2 === "string"){
-		let data1 = this.validaData(data1);let data2 = this.validaData(data2);
-	} else if(typeof data1 == "undefined" || typeof data2 == "undefined" || typeof data1 == false || typeof data2 == false){
+		data11 = this.validaData(data1);data22 = this.validaData(data2);
+	} else if(typeof data11 == "undefined" || typeof data22 == "undefined" || typeof data11 == false || typeof data22 == false){
 		console.log("Os objetos enviados não são datas.");
 		return false;
 	}
 
 	// Verificando se a data1 é menor/igual a data2
-	if(data1.getTime() > data2.getTime()){
+	if(data11.getTime() > data22.getTime()){
   	alert('A data DE nao deve ser maior que a data ATE.');
   	return false;
   	} else {
-		let de2 = data1.getUTCFullYear() +'-'+(data1.getUTCMonth()+1 > 9 ? data1.getUTCMonth()+1 : '0'+(data1.getUTCMonth()+1))+'-'+(data1.getUTCDate() > 9 ? data1.getUTCDate() : '0'+data1.getUTCDate());
-		let ate2 = data2.getUTCFullYear() +'-'+(data2.getUTCMonth()+1 > 9 ? data2.getUTCMonth()+1 : '0'+(data2.getUTCMonth()+1))+'-'+(data2.getUTCDate()> 9 ? data2.getUTCDate() : '0'+data2.getUTCDate());
+		let de2 = data11.getUTCFullYear() +'-'+(data11.getUTCMonth()+1 > 9 ? data11.getUTCMonth()+1 : '0'+(data11.getUTCMonth()+1))+'-'+(data11.getUTCDate() > 9 ? data11.getUTCDate() : '0'+data11.getUTCDate());
+		let ate2 = data22.getUTCFullYear() +'-'+(data22.getUTCMonth()+1 > 9 ? data22.getUTCMonth()+1 : '0'+(data22.getUTCMonth()+1))+'-'+(data22.getUTCDate()> 9 ? data22.getUTCDate() : '0'+data22.getUTCDate());
 		this.dados.de = de2;this.dados.ate = ate2;
   		return true;
   	}

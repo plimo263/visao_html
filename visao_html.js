@@ -645,7 +645,7 @@ Tabela.prototype.removeRegistro = function(id, valor){
 	return indiceARemover;
 }
 // Metodo usado para ajudar no filtro da tabela realizando o calculo do rodape automaticamente
-Tabela.prototype.atualizaRodape = function(arrCampos, arrMonetarios){
+Tabela.prototype.atualizaRodape = function(arrCampos, arrMonetarios, fn){
 	// Valida para ver se os dois sao arrays e o campos tem que ser do mesmo tamanho ou menor que 
 	// o de monetarios
 	if(!Array.isArray(arrCampos) || !Array.isArray(arrMonetarios)){
@@ -706,6 +706,8 @@ Tabela.prototype.atualizaRodape = function(arrCampos, arrMonetarios){
 				$(`#${ref.id}_wrapper .dataTables_scrollFootInner tfoot tr`).children().eq(i).text(somas[i]);	
 			}
 		}
+		// Se tiver sido repassado a funcao execute-a
+		if(typeof fn === "function") fn(); 
 		// Ajustando os campos
 		$.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
 	});

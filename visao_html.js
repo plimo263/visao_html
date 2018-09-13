@@ -1399,9 +1399,13 @@ function converter(valor){
             recebeConvertido += valorReverso[i];
             x += 1
         }
-    }
-    //# Reverte novamente a string para o formato de ordem original
-    let valor2 = 'R$ '+recebeConvertido.split("").reverse().join("");
+	}
+	//# Reverte novamente a string para o formato de ordem original
+	let valor2 = recebeConvertido.split("").reverse();
+	if(valor2[0] === '.'){valor2[0] = '';}
+	else if(valor2[0] === '-' && valor2[1] === '.'){ valor2[1] = '';}
+
+    valor2 = 'R$ '+valor2.join("");
     return valor2;
 
 };

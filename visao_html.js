@@ -563,7 +563,7 @@ Tabela.prototype.baixarEmExcel = function(nomeArmazenamentoLocal, localParaBaixa
 	    // Verificamos se temos dados no armazenamento interno
 	    let asColunasSelecionadas = [];
 	    if(localStorage.getItem(nomeArmazenamentoLocal)){
-	      asColunasSelecionadas = JSON.parse(localStorage.getItem('colunas_selecionadas'));
+	      asColunasSelecionadas = JSON.parse(localStorage.getItem(nomeArmazenamentoLocal));
 	    }
 	    // Recupera todas as colunas e permite o usuario a escolher quais ele quer
 	    let tempA = '';let entrada = '<input class="checa_colunas" type="checkbox" value="indice" /> VALOR<br/>';

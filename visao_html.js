@@ -76,7 +76,7 @@ Img.prototype.getImg = function(){
 // Classe que instancia uma tabela
 var Tabela = function(cabecalho, corpo, classe, id, classeCabecalho){
 	this._rodape = [];  // Rodape
-	this._cabecalho; // Atributo do cabecalho
+	this._cabecalho = ''; // Atributo do cabecalho
 	this._classeCabecalho = classeCabecalho; // Define uma classe para o cabecalho
 	this._corpo = Array.isArray(corpo)  && Array.isArray(corpo[0]) ? corpo : [[]];  // Define um corpo
 	this._estiloTd = ''; // Recebe estilos do TD
@@ -367,22 +367,49 @@ Tabela.prototype.removeColuna = function(index){
 // Metodo usado para converter os monetarios da tabela <>
 Tabela.prototype.converterMonetario = function(index){
 	let valido = true;
-	// Verifica se a coluna existe
-	this._validaIndice(index, "NAO FOI POSSIVEL CONVERTER");
-	// O indice existe, vamos fazer um loop para converter o corpo em monetario
-	this._corpo.forEach((e1, i1) => {
-		// Se o valor nao for um number, vamos dizer que nao foi possivel converter
-		if(typeof e1[index] === "number"){
-			this._corpo[i1][index] = converter(parseFloat(e1[index]).toFixed(2));
-		} else if(e1[index].search('R\\$') != -1){// Ja foi convertido
-			console.log('NAO PRECISA CONVERTER, JA E UM NUMERO');
-		} else {
-			console.log('NÃO FOI POSSIVEL CONVERTER POIS A COLUNA INFORMADA NAO E UM NUMERO');
-			valido = false;
-		}
-	});
-	// Tudo correto, retorne true.
-	return valido;
+	if(typeof index !== "number" && !Array.isArray(index)){
+		console.error('PARAMETRO ENVIADO NAO E UM NUMERO E NEM MESMO UM ARRAY');
+		return false;
+	}
+
+	if(typeof index === "number"){
+		// Verifica se a coluna existe
+		this._validaIndice(index, "NAO FOI POSSIVEL CONVERTER");
+		// O indice existe, vamos fazer um loop para converter o corpo em monetario
+		this._corpo.forEach((e1, i1) => {
+			// Se o valor nao for um number, vamos dizer que nao foi possivel converter
+			if(typeof e1[index] === "number"){
+				this._corpo[i1][index] = converter(parseFloat(e1[index]).toFixed(2));
+			} else if(e1[index].search('R\\$') != -1){// Ja foi convertido
+				console.log('NAO PRECISA CONVERTER, JA E UM NUMERO');
+			} else {
+				console.log('NÃO FOI POSSIVEL CONVERTER POIS A COLUNA INFORMADA NAO E UM NUMERO');
+				valido = false;
+			}
+		});
+		// Tudo correto, retorne true.
+		return valido;
+	}else {
+		// O indice existe, vamos fazer um loop para converter o corpo em monetario
+		this._corpo.forEach((e1, i1) => {
+			// Passe por cada valor do array index
+			index.forEach(num=>{
+				// Verifica se a coluna existe
+				this._validaIndice(num, "NAO FOI POSSIVEL CONVERTER");
+				// Se o valor nao for um number, vamos dizer que nao foi possivel converter
+				if(typeof e1[num] === "number"){
+					this._corpo[i1][num] = converter(parseFloat(e1[num]).toFixed(2));
+				} else if(e1[num].search('R\\$') != -1){// Ja foi convertido
+					console.log('NAO PRECISA CONVERTER, JA E UM NUMERO');
+				} else {
+					console.log('NÃO FOI POSSIVEL CONVERTER POIS A COLUNA INFORMADA NAO E UM NUMERO');
+					valido = false;
+				}
+			});
+		});
+		// Tudo correto, retorne true.
+		return valido;
+	}
 }
 // Metodo usado para converter valores para Percentuais de 1 casa <>
 Tabela.prototype.converterPercentual = function(index){
@@ -423,8 +450,6 @@ Tabela.prototype.filtro = function(palavra){
 Tabela.prototype.getColuna = function(indice) {
 	if(typeof indice !== "number"){
 		throw new SyntaxError('FAVOR INFORMAR UM INDICE INICIANDO DO ZERO.');
-		console.log('FAVOR INFORMAR UM INDICE INICIANDO DO ZERO.');
-		return false;
 	}
 	let arrTemp = [];
 	this._corpo.forEach(e1=>{
@@ -680,8 +705,6 @@ Tabela.prototype.atualizaRodape = function(arrCampos, arrMonetarios, fn){
 			// Ja desconverte e soma os campos monetarios
 			if(arrMonetarios.length > 0){
 				arrMonetarios.forEach(e=>{
-					somas;
-					//somas[e] = somas[e] ? somas[e] : 0;
 					let vl1 = desconverter($(this).children().eq(e).text());
 					let valorAtual = parseFloat( vl1 );
 					//somas[e] += parseFloat( desconverter($(this).children().eq(e).text()) );
@@ -750,7 +773,7 @@ Botao.prototype.getBotao = function(){
 var Selecao = function(nome, classe, id){
 	this.itens = [];
 	this.nome = nome;
-	this.autoSelecionado;
+	this.autoSelecionado = '';
 	ClasseId.call(this, "",classe, id);
 };
 
@@ -1452,10 +1475,11 @@ Usuario.prototype.getLojaParaUrl = function(){
 // Classe usada para criar e manipular uma barra de progresso
 var BarraDeProgresso = function(){
       this.contador = 0;
-      this.barra = '<div class="campo_barra"><p class="text-center">\
-      Aguarde, estamos atualizando os dados</p><div class="progress">\
-      <div class="progress-bar progress-bar-striped active" role="progressbar" \
-      aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:1%">0%</div></div></div>';
+      this.barra = `<div class="campo_barra"><p class="text-center">
+      Aguarde, estamos atualizando os dados</p><div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" 
+	  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:1%">0%</div></div></div>
+	  `;
       this.alvo = '';
       this.tempoIntervalo = 0;
 };
@@ -1512,11 +1536,11 @@ function desconverter(valor){
 
 // Objeto que controla as acoes da pagina
 var Controlador = function(){
-	this._refAjax;
-    this.grupos;
-    this.lojas;
-    this.de;
-    this.ate;
+	this._refAjax = '';
+    this.grupos = '';
+    this.lojas = '';
+    this.de = '';
+    this.ate = '';
     this.barra = new BarraDeProgresso();
     this.opcoesDataTable = {
            "bPaginate": false,"ordering" : true,

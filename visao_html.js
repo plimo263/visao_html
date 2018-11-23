@@ -843,7 +843,7 @@ DivRow.prototype.addDiv = function(conteudo, tamanho, clas, ide){
 }
 DivRow.prototype.getDivRow = function(){
 	// Realizar um loop e criar o corpo da divRow, retorna-lo
-	let di = '<div class="row">';
+	let di = `<div id="${this.id}" class="row ${this.classe}">`;
 	this.corpo.forEach(function(e){
 		di += `<div class="col-sm-${e[1]} ${e[2]}" id="${e[3]}">${e[0]}</div>`;
 	});

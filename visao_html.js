@@ -940,6 +940,25 @@ Vendedor.prototype.setNome = function(nome){
 	this.nome = nome;
 };
 Vendedor.prototype.getVendedor = function(){
+	let vend; // Representa como um vendedor é exibido
+	// Verificando a forma como o vendedor deve ser exibido, se é imagem ou nome
+	vend = this.isImagem ? `<img class="img img-circle" style="width:48px;height:48px;" title="${this.nome}" 
+	src="${this.imagem}" alt="${this.nome}" />${this.nome.split(' ')[0]}` : 
+	'<span class="glyphicon glyphicon-user"> </span> '+this.nome;
+	return `${vend}<time style="font-weight:bold" class="text-danger">${this.tempoAtendimento}</time>`;
+	/*
+	if(this.isImagem){
+		vend += '<p id="'+this.id+'">';
+		vend += '<img class="img img-circle" style="width:48px;height:48px;" title="'+this.nome+'" src="'+this.imagem+'" alt="'+this.nome+'" />'+this.nome.split(' ')[0];
+	} else{
+		vend += '<p id="'+this.id+'" imagem="'+this.imagem+'" title="'+this.nome+'"><span class="glyphicon glyphicon-user"> </span> '+this.nome;
+	}
+	vend += ' <time style="font-weight:bold" class="text-danger">'+this.tempoAtendimento+'</time></p>';
+	return vend;
+	*/
+
+};
+Vendedor.prototype.getVendedorFull = function(){
 	var vend = ""; // Representa como um vendedor é exibido
 	// Verificando a forma como o vendedor deve ser exibido, se é imagem ou nome
 	if(this.isImagem){
@@ -952,6 +971,7 @@ Vendedor.prototype.getVendedor = function(){
 	return vend;
 
 };
+
 Vendedor.prototype.iniciaAtendimento = function(){
 	// Inicia o atendimento, definindo o tempo de atendimento
 	var hora = new Date();
@@ -969,6 +989,7 @@ Vendedor.prototype.finalizaAtendimento = function(){
 	var hora = new Date();
 	//this.tempoFinalizaAtendimento = (hora.getHours()<10?'0':'')+hora.getHours()+':'+(hora.getMinutes()<10?'0':'')+hora.getMinutes();
 	this.tempoFinalizaAtendimento = new Date().toLocaleTimeString('pt-br');
+	
 };
 
 Vendedor.prototype.trocaExibicao = function(){
@@ -983,6 +1004,7 @@ Vendedor.prototype.trocaExibicao = function(){
 	}
 
 };
+
 
 // CLASSE QUE GERA OBJETO PARA CRIAR GRAFICOS
 var Grafico = function(dados, opcoes, classe, id){

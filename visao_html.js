@@ -955,17 +955,20 @@ Vendedor.prototype.getVendedor = function(){
 Vendedor.prototype.iniciaAtendimento = function(){
 	// Inicia o atendimento, definindo o tempo de atendimento
 	var hora = new Date();
-	this.tempoAtendimento = (hora.getHours()<10?'0':'')+hora.getHours()+':'+(hora.getMinutes()<10?'0':'')+hora.getMinutes();
+	//this.tempoAtendimento = (hora.getHours()<10?'0':'')+hora.getHours()+':'+(hora.getMinutes()<10?'0':'')+hora.getMinutes();
+	this.tempoAtendimento = new Date().toLocaleTimeString('pt-br');
 	$('#'+this.id).find('time').html(this.tempoAtendimento);
 	// Registrando a data do atendimento
-	this.dataAtendimento = hora.getUTCFullYear() +'-'+(hora.getUTCMonth()+1)+'-'+hora.getUTCDate();
+	//this.dataAtendimento = hora.getUTCFullYear() +'-'+(hora.getUTCMonth()+1)+'-'+hora.getUTCDate();
+	this.dataAtendimento = new Date().toLocaleDateString('pt-br').split('/').reverse().join('-');
 
 };
 
 Vendedor.prototype.finalizaAtendimento = function(){
 	// Registra tempo de finalizacao do atendimento
 	var hora = new Date();
-	this.tempoFinalizaAtendimento = (hora.getHours()<10?'0':'')+hora.getHours()+':'+(hora.getMinutes()<10?'0':'')+hora.getMinutes();
+	//this.tempoFinalizaAtendimento = (hora.getHours()<10?'0':'')+hora.getHours()+':'+(hora.getMinutes()<10?'0':'')+hora.getMinutes();
+	this.tempoFinalizaAtendimento = new Date().toLocaleTimeString('pt-br');
 };
 
 Vendedor.prototype.trocaExibicao = function(){
